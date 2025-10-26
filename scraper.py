@@ -37,54 +37,46 @@ def limpar_texto(texto):
 
 # --- Funções de Processamento do Conteúdo (BLOCO A BLOCO) ---
 
-def pre_processar_html_conteudo(conteudo):
-    """Extrai URLs de imagem e limpa tags de formatação."""
+def extrair_imagens_e_limpar_html(conteudo):
+    """Extrai URLs de imagem e remove as tags flutuantes para não atrapalhar a ordem do texto."""
     lista_imagens_conteudo = []
-
+    
     for elemento in conteudo.find_all(True):
-        # 1. Lógica para extrair imagens (banners internos)
+        # Lógica para extrair imagens e remover divs flutuantes
         if elemento.get('class') and 'artigo-img-wrap' in elemento.get('class'):
             img_tag = elemento.find('img')
             if img_tag and img_tag.get('src'):
                 url_imagem = completar_url(img_tag.get('src'), URL_BASE_FUNCULTURAL)
                 if url_imagem:
                     lista_imagens_conteudo.append(url_imagem)
-            elemento.decompose() # Remove a div flutuante após extrair
-
-        # 2. Lógica para Tags de Formatação: Adiciona espaço ao redor de strong/em
+            elemento.decompose() # Remove a div flutuante após processar
+        
+        # Preserva o texto e adiciona um espaço entre tags de formatação
         elif elemento.name in ['strong', 'em', 'span', 'b', 'i']:
             elemento.replace_with(elemento.get_text(strip=True) + ' ')
-    
+
     return lista_imagens_conteudo
 
 def classificar_blocos_de_texto(conteudo):
-    """Itera e classifica o texto restante como PARAGRAPH ou SUBTITLE, removendo repetições."""
+    """Itera e classifica o texto restante como PARAGRAPH ou SUBTITLE."""
     blocos_de_conteudo = []
-    textos_vistos_hash = set()
-    
-    # 1. Pré-limpeza: Remove tags que não são <p> ou <div> para simplificar a iteração
-    for elemento in conteudo.find_all(True):
-        if elemento.name not in ['p', 'div', 'h2', 'h3']:
-            # Pega o texto da tag e a substitui por ele mesmo
-            elemento.replace_with(elemento.get_text(strip=True) + ' ')
+    textos_vistos_hash = set() # Para remover duplicação
 
-    # 2. Itera sobre os parágrafos e divs que restaram
+    # Itera sobre os parágrafos e divs que restaram (na ordem correta)
     for elemento in conteudo.find_all(['p', 'div', 'h2', 'h3']): 
         texto_html = elemento.decode_contents().strip()
         
         if texto_html:
-            # Pega o texto limpo para classificação
             texto_limpo = limpar_texto(elemento.get_text(strip=True))
 
-            # Filtro: Remove blocos curtos (lixo HTML)
-            if len(texto_limpo.split()) < 10:
+            # Filtro 1: Remove blocos muito curtos (lixo HTML)
+            if len(texto_limpo.split()) < 5:
                 continue
-
-            # Cria um hash do trecho inicial do texto para identificar duplicação
+                
+            # Filtro 2: Remoção de Duplicação por Hash (Conteúdo Similar)
             trecho_hash = texto_limpo[:len(texto_limpo) // 3] 
-            
             if trecho_hash in textos_vistos_hash:
-                continue # Pula se já vimos este trecho
+                continue 
 
             # 3. Classificação
             is_subtitle = len(texto_limpo) < 60 and texto_limpo.isupper() 
@@ -104,10 +96,11 @@ def raspar_detalhes_funcultural(url_detalhes):
     if not soup_detalhes: return []
 
     conteudo = soup_detalhes.find('article', class_='noticia-conteudo')
+    
     if not conteudo: return []
     
     # 1. Pré-processamento e Extração de Imagens
-    lista_imagens_conteudo = pre_processar_html_conteudo(conteudo)
+    lista_imagens_conteudo = extrair_imagens_e_limpar_html(conteudo)
     
     # 2. Classificação de Blocos de Texto
     blocos_de_conteudo_texto = classificar_blocos_de_texto(conteudo)
@@ -142,6 +135,7 @@ def raspar_detalhes_funcultural(url_detalhes):
         
     return blocos_finais
 
+# --- Processamento de Lista (Mantido) ---
 def processar_par_blocos_funcultural(bloco_img, bloco_txt):
     """Extrai dados e busca detalhes para um par de blocos."""
     img_tag = bloco_img.find('img')
