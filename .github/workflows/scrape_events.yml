@@ -1,152 +1,47 @@
-import requests
-from bs4 import BeautifulSoup
-import json
-import time
+# Nome do Workflow
+name: Raspar Eventos Culturais 
 
-# --- Configurações ---
-API_FILE_NAME = "eventos.json"
-URL_BASE_FUNCULTURAL = "https://funcultural.portovelho.ro.gov.br"
-URL_NOTICIAS_FUNCULTURAL = f"{URL_BASE_FUNCULTURAL}/noticias"
-NUMERO_DE_PAGINAS_FUNCULTURAL = 3 # Quantas páginas da lista de notícias buscar
+# Gatilhos
+on:
+  schedule:
+    - cron: '0 3 * * *' # 0h em Rondônia
+  workflow_dispatch:
 
-# --- Funções Auxiliares ---
+# Permissões
+permissions:
+  contents: write 
 
-def obter_soup(url):
-    """Baixa e parseia o HTML de uma URL, tratando erros de conexão."""
-    try:
-        response = requests.get(url, timeout=10) # Timeout de 10s
-        response.raise_for_status() # Verifica se houve erro HTTP (4xx ou 5xx)
-        return BeautifulSoup(response.content, 'html.parser')
-    except requests.exceptions.RequestException as e:
-        print(f"    Erro ao acessar {url}: {e}")
-        return None
+# Tarefas
+jobs:
+  scrape: 
+    runs-on: ubuntu-latest 
 
-def limpar_texto(texto):
-    """Remove espaços extras e linhas em branco."""
-    if texto:
-        return ' '.join(texto.split())
-    return ""
+    steps: 
+      # 1. Baixa o código
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-def completar_url(url_relativa, base_url):
-    """Garante que uma URL seja absoluta."""
-    if not url_relativa:
-        return None
-    if url_relativa.startswith('http'):
-        return url_relativa
-    if url_relativa.startswith('/'):
-        return f"{base_url}{url_relativa}"
-    return None # Ignora URLs mal formadas ou data URIs
+      # 2. Configura Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x' 
 
-# --- Função Principal de Raspagem ---
+      # 3. Instala dependências
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
 
-def raspar_detalhes_funcultural(url_detalhes):
-    """Raspa descrição e imagens da página de detalhes."""
-    soup_detalhes = obter_soup(url_detalhes)
-    if not soup_detalhes:
-        return "", [] # Retorna vazio se a página não carregar
+      # 4. Roda o scraper
+      - name: Run scraper
+        run: python scraper.py
 
-    descricao_completa = ""
-    lista_imagens_conteudo = []
-
-    conteudo = soup_detalhes.find('article', class_='noticia-conteudo')
-    if conteudo:
-        # Pega a descrição
-        paragrafos = conteudo.find_all('p')
-        textos_paragrafos = [limpar_texto(p.text) for p in paragrafos]
-        descricao_completa = '\n\n'.join(filter(None, textos_paragrafos)) # Junta textos não vazios
-
-        # Pega imagens do conteúdo
-        imagens = conteudo.find_all('img')
-        for img in imagens:
-            src = img.get('src')
-            url_imagem = completar_url(src, URL_BASE_FUNCULTURAL)
-            if url_imagem:
-                lista_imagens_conteudo.append(url_imagem)
-
-    return descricao_completa, lista_imagens_conteudo
-
-def raspar_funcultural():
-    """Raspa as N primeiras páginas da lista de notícias da Funcultural."""
-    print(f"Iniciando raspagem da Funcultural (Páginas 1 a {NUMERO_DE_PAGINAS_FUNCULTURAL})...")
-    lista_de_eventos_total = []
-
-    for page_num in range(1, NUMERO_DE_PAGINAS_FUNCULTURAL + 1):
-        url_pagina_atual = f"{URL_NOTICIAS_FUNCULTURAL}?page={page_num}"
-        print(f"  Raspando página: {url_pagina_atual}")
-        soup_lista = obter_soup(url_pagina_atual)
-        if not soup_lista:
-            continue # Pula para a próxima página se houver erro
-
-        blocos_de_dados = soup_lista.find_all('div', class_='resultado-pesquisa')
-        eventos_nesta_pagina = 0
-
-        # Processa os blocos em pares (imagem + texto)
-        for i in range(0, len(blocos_de_dados), 2):
-            bloco_img = blocos_de_dados[i]
-            if i + 1 >= len(blocos_de_dados): continue # Garante que existe o par de texto
-            bloco_txt = blocos_de_dados[i+1]
-
-            # Extrai dados do bloco de imagem
-            img_tag = bloco_img.find('img')
-            src_banner_relativo = img_tag['src'] if img_tag else None
-            link_imagem_banner = completar_url(src_banner_relativo, URL_BASE_FUNCULTURAL)
-
-            # Extrai dados do bloco de texto
-            titulo_tag = bloco_txt.find('div', class_='titulo-noticia-pesquisa')
-            titulo_texto = limpar_texto(titulo_tag.text) if titulo_tag else "Título não encontrado"
-
-            link_tag = bloco_txt.find('a')
-            link_evento_relativo = link_tag['href'] if link_tag else None
-            link_evento_completo = completar_url(link_evento_relativo, URL_BASE_FUNCULTURAL)
-
-            if not link_evento_completo or not link_imagem_banner:
-                 print(f"    Aviso: Ignorando item sem link de evento ou imagem principal ({titulo_texto})")
-                 continue # Pula este item se faltar informação essencial
-
-            print(f"    Processando: {titulo_texto}")
-
-            # Busca detalhes (descrição e imagens internas)
-            descricao_completa, imagens_do_conteudo = raspar_detalhes_funcultural(link_evento_completo)
-            time.sleep(0.3) # Pequena pausa após buscar detalhes
-
-            # Define a descrição final (completa ou curta como fallback)
-            descricao_final = descricao_completa
-            if not descricao_final:
-                 desc_tag_curta = bloco_txt.find('div', class_='descricao-noticia')
-                 descricao_final = limpar_texto(desc_tag_curta.text) if desc_tag_curta else ""
-
-            # Monta o dicionário do evento
-            evento = {
-                "titulo": titulo_texto,
-                "descricao": descricao_final,
-                "imagem_url": link_imagem_banner, # Imagem principal do card
-                "link_evento": link_evento_completo,
-                "fonte": "Funcultural",
-                "imagens_conteudo": imagens_do_conteudo # Lista de imagens internas
-            }
-
-            lista_de_eventos_total.append(evento)
-            eventos_nesta_pagina += 1
-
-        print(f"    Página {page_num}: {eventos_nesta_pagina} eventos processados.")
-        if page_num < NUMERO_DE_PAGINAS_FUNCULTURAL:
-             time.sleep(1) # Pausa maior entre páginas da lista
-
-    print(f"Funcultural (Total): {len(lista_de_eventos_total)} eventos encontrados.")
-    return lista_de_eventos_total
-
-# --- Execução Principal ---
-def main():
-    print("Iniciando robô agregador de cultura...")
-    eventos_totais = raspar_funcultural() # Apenas Funcultural por enquanto
-
-    # Salva o resultado no arquivo JSON
-    try:
-        with open(API_FILE_NAME, 'w', encoding='utf-8') as f:
-            json.dump(eventos_totais, f, ensure_ascii=False, indent=4)
-        print(f"\nSucesso! A 'API' foi criada/atualizada em '{API_FILE_NAME}' com {len(eventos_totais)} eventos.")
-    except IOError as e:
-        print(f"\nErro ao salvar o arquivo JSON '{API_FILE_NAME}': {e}")
-
-if __name__ == "__main__":
-    main()
+      # 5. Faz commit e push (se houver mudanças)
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name 'github-actions[bot]' 
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add eventos.json 
+          git diff --staged --quiet || git commit -m "Atualiza eventos culturais via Action"
+          git push

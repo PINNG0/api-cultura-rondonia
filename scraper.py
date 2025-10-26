@@ -8,12 +8,12 @@ import re
 API_FILE_NAME = "eventos.json"
 URL_BASE_FUNCULTURAL = "https://funcultural.portovelho.ro.gov.br"
 URL_NOTICIAS_FUNCULTURAL = f"{URL_BASE_FUNCULTURAL}/noticias"
-NUMERO_DE_PAGINAS_FUNCULTURAL = 3 
+NUMERO_DE_PAGINAS_FUNCULTURAL = 3
 
-# --- Funções Auxiliares ---
+# --- Funções Auxiliares Comuns ---
 
 def obter_soup(url):
-    """Baixa e parseia o HTML de uma URL."""
+    """Baixa e parseia o HTML de uma URL, tratando erros."""
     try:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
@@ -23,66 +23,109 @@ def obter_soup(url):
         return None
 
 def completar_url(url_relativa, base_url):
-    """Garante que uma URL seja absoluta."""
+    """Garante que uma URL é absoluta."""
     if not url_relativa: return None
     if url_relativa.startswith('http'): return url_relativa
     if url_relativa.startswith('/'): return f"{base_url}{url_relativa}"
     return None
 
-def limpar_descricao(texto):
-    """Remove padrões de créditos de foto e limpa espaços extras."""
-    # Remove padrões de crédito
+def limpar_texto(texto):
+    """Limpa créditos de foto e remove espaços duplicados."""
     texto = re.sub(r'(Fotos|Texto):\s*[^.\n]+', '', texto, flags=re.IGNORECASE)
-    # Remove espaços duplicados
     texto = re.sub(r'\s{2,}', ' ', texto).strip()
     return texto
 
-# --- Função Principal de Raspagem ---
+# --- Funções de Processamento do Conteúdo  ---
+
+def pre_processar_html_conteudo(conteudo):
+    """Extrai URLs de imagem e limpa tags de formatação."""
+    lista_imagens_conteudo = []
+
+    for elemento in conteudo.find_all(True):
+        # 1. Lógica para extrair imagens (banners internos)
+        if elemento.get('class') and 'artigo-img-wrap' in elemento.get('class'):
+            img_tag = elemento.find('img')
+            if img_tag and img_tag.get('src'):
+                url_imagem = completar_url(img_tag.get('src'), URL_BASE_FUNCULTURAL)
+                if url_imagem:
+                    lista_imagens_conteudo.append(url_imagem)
+            elemento.decompose() # Remove a div flutuante após extrair
+        
+        # 2. Lógica para Tags de Formatação: Adiciona espaço ao redor de strong/em
+        elif elemento.name in ['strong', 'em', 'span', 'b', 'i']:
+            # Substitui a tag pelo seu texto + um espaço para forçar a separação
+            elemento.replace_with(elemento.get_text(strip=True) + ' ')
+    
+    return lista_imagens_conteudo
+
+def classificar_blocos_de_texto(conteudo):
+    """Itera e classifica o texto restante como PARAGRAPH ou SUBTITLE."""
+    blocos_de_conteudo = []
+    
+    # Itera sobre os parágrafos e divs que restaram (na ordem correta)
+    for elemento in conteudo.find_all(['p', 'div', 'h2', 'h3']): 
+        texto_html = elemento.decode_contents().strip()
+        
+        if texto_html:
+            # Pega o texto limpo para classificação
+            texto_limpo = limpar_texto(elemento.get_text(strip=True))
+
+            # VERIFICAÇÃO CHAVE: Classifica como SUBTITLE (curto e todo em CAIXA ALTA)
+            is_subtitle = len(texto_limpo) < 60 and texto_limpo.isupper() 
+
+            # Adiciona o bloco
+            blocos_de_conteudo.append({
+                "type": "SUBTITLE" if is_subtitle else "PARAGRAPH",
+                "content": texto_html # Mantém o HTML para o Android renderizar formatação
+            })
+            
+    return blocos_de_conteudo
 
 def raspar_detalhes_funcultural(url_detalhes):
-    """Raspa descrição e URLs de imagens do conteúdo, limpando o HTML problemático."""
+    """Coordena a raspagem de detalhes (Bloco a Bloco)."""
     soup_detalhes = obter_soup(url_detalhes)
-    if not soup_detalhes: return "", []
+    if not soup_detalhes: return []
 
-    lista_imagens_conteudo = []
-    descricao_completa = ""
-    
     conteudo = soup_detalhes.find('article', class_='noticia-conteudo')
+    if not conteudo: return []
     
-    if conteudo:
-        # 1. Extrai Imagens e Pré-processamento (Resolve Colagem)
-        for elemento in conteudo.find_all(True): # Itera sobre TODAS as tags
-            # Lógica para remover a tag de imagem e extrair a URL
-            if elemento.get('class') and 'artigo-img-wrap' in elemento.get('class'):
-                img_tag = elemento.find('img')
-                if img_tag and img_tag.get('src'):
-                     url_imagem = completar_url(img_tag.get('src'), URL_BASE_FUNCULTURAL)
-                     if url_imagem:
-                        lista_imagens_conteudo.append(url_imagem)
-                elemento.decompose() # Remove a tag flutuante
-
-            # Lógica para Tags de Formatação: Substitui por seu texto + ESPAÇO
-            elif elemento.name in ['strong', 'em', 'span', 'b', 'i']:
-                # Substitui a tag pelo seu texto + um espaço para forçar a separação
-                elemento.replace_with(elemento.get_text(strip=True) + ' ')
-
-        # 2. Extração Final do Texto (Agora Limpo e Ordenado)
-        textos_paragrafos = []
+    # 1. Extração de Imagens e Limpeza de HTML (Resolve ordem e colagem)
+    lista_imagens_conteudo = pre_processar_html_conteudo(conteudo)
+    
+    # 2. Classificação de Blocos de Texto
+    blocos_de_conteudo_texto = classificar_blocos_de_texto(conteudo)
+    
+    # 3. Intercalação (Insere imagens a cada 2 parágrafos)
+    blocos_finais = []
+    imagem_index = 0
+    paragrafo_contador = 0
+    
+    for bloco in blocos_de_conteudo_texto:
+        if bloco['type'] == 'PARAGRAPH':
+            blocos_finais.append(bloco)
+            paragrafo_contador += 1
+            
+            # Insere uma imagem a cada 2 parágrafos
+            if paragrafo_contador % 2 == 0 and imagem_index < len(lista_imagens_conteudo):
+                blocos_finais.append({
+                    "type": "IMAGE_URL",
+                    "content": lista_imagens_conteudo[imagem_index]
+                })
+                imagem_index += 1
+        else:
+            blocos_finais.append(bloco) # Adiciona subtítulos normalmente
+            
+    # Adiciona imagens restantes no final
+    while imagem_index < len(lista_imagens_conteudo):
+        blocos_finais.append({
+            "type": "IMAGE_URL",
+            "content": lista_imagens_conteudo[imagem_index]
+        })
+        imagem_index += 1
         
-        # Agora, iteramos sobre os parágrafos e divs que restaram
-        for bloco in conteudo.find_all(['p', 'div']): 
-            paragrafo_limpo = bloco.get_text(strip=True)
-            if paragrafo_limpo:
-                textos_paragrafos.append(paragrafo_limpo)
+    return blocos_finais
 
-        # Junta tudo com o separador \n\n (que será convertido em <br> no Android)
-        descricao_bruta = '\n\n'.join(textos_paragrafos)
-
-        # 3. Limpeza Final
-        descricao_completa = limpar_descricao(descricao_bruta)
-
-    return descricao_completa, lista_imagens_conteudo
-
+# --- Processamento de Lista (Mantido) ---
 def processar_par_blocos_funcultural(bloco_img, bloco_txt):
     """Extrai dados e busca detalhes para um par de blocos."""
     img_tag = bloco_img.find('img')
@@ -99,21 +142,16 @@ def processar_par_blocos_funcultural(bloco_img, bloco_txt):
     if not link_evento_completo or not link_imagem_banner: return None
 
     print(f"    Processando: {titulo_texto}")
-    descricao_completa, imagens_do_conteudo = raspar_detalhes_funcultural(link_evento_completo)
+    # Chama a função principal de extração de blocos
+    blocos_de_conteudo = raspar_detalhes_funcultural(link_evento_completo)
     time.sleep(0.3) 
-
-    descricao_final = descricao_completa
-    if not descricao_final:
-         desc_tag_curta = bloco_txt.find('div', class_='descricao-noticia')
-         descricao_final = desc_tag_curta.text.strip() if desc_tag_curta else ""
 
     return {
         "titulo": titulo_texto,
-        "descricao": descricao_final,
+        "blocos_conteudo": blocos_de_conteudo, # O NOVO CAMPO DE BLOCOS
         "imagem_url": link_imagem_banner,
         "link_evento": link_evento_completo,
-        "fonte": "Funcultural",
-        "imagens_conteudo": imagens_do_conteudo
+        "fonte": "Funcultural"
     }
 
 def raspar_funcultural():
