@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import json
 import time
 import re
+import os
 
 # --- Configurações ---
 API_FILE_NAME = "eventos.json"
@@ -23,10 +24,16 @@ def obter_soup(url):
         return None
 
 def completar_url(url_relativa, base_url):
-    """Garante que uma URL seja absoluta."""
+    """Garante que uma URL seja absoluta e usa HTTPS para compatibilidade Android."""
     if not url_relativa: return None
-    if url_relativa.startswith('http'): return url_relativa
-    if url_relativa.startswith('/'): return f"{base_url}{url_relativa}"
+    
+    if url_relativa.startswith('http'): 
+        return url_relativa.replace('http://', 'https://')
+        
+    if url_relativa.startswith('/'):
+        base_url_https = base_url.replace('http://', 'https://')
+        return f"{base_url_https}{url_relativa}"
+        
     return None
 
 def limpar_texto(texto):
@@ -38,7 +45,7 @@ def limpar_texto(texto):
 # --- Funções de Processamento do Conteúdo (BLOCO A BLOCO) ---
 
 def pre_processar_html_conteudo(conteudo):
-    """Extrai URLs de imagem e limpa tags de formatação."""
+    """Extrai URLs de imagem e limpa tags de formatação no conteúdo."""
     lista_imagens_conteudo = []
 
     for elemento in conteudo.find_all(True):
@@ -49,129 +56,93 @@ def pre_processar_html_conteudo(conteudo):
                 url_imagem = completar_url(img_tag.get('src'), URL_BASE_FUNCULTURAL)
                 if url_imagem:
                     lista_imagens_conteudo.append(url_imagem)
-            elemento.decompose() # Remove a div flutuante após extrair
-
-        # 2. Lógica para Tags de Formatação: Adiciona espaço ao redor de strong/em
+            elemento.decompose() # Remove a div flutuante
+        
+        # 2. Lógica para Tags de Formatação: Adiciona espaço ao redor
         elif elemento.name in ['strong', 'em', 'span', 'b', 'i']:
-            # Substitui o texto da tag por ele mesmo + um espaço (resolve colagem)
             elemento.replace_with(elemento.get_text(strip=True) + ' ')
     
     return lista_imagens_conteudo
 
-def classificar_blocos_de_texto(conteudo):
-    """Itera e classifica o texto restante como PARAGRAPH ou SUBTITLE, removendo repetições."""
-    blocos_de_conteudo = []
-    textos_vistos_hash = set() # Para remover duplicação
+def classificar_blocos_de_texto(conteudo, lista_imagens_conteudo):
+    """Itera e classifica blocos, inserindo imagens (intercalação)."""
+    blocos_finais = []
+    textos_vistos_hash = set()
+    imagem_index = 0
+    paragrafo_contador = 0
 
-    # Itera sobre os parágrafos e divs que restaram (na ordem correta)
     for elemento in conteudo.find_all(['p', 'div', 'h2', 'h3']): 
         texto_html = elemento.decode_contents().strip()
         
         if texto_html:
             texto_limpo = limpar_texto(elemento.get_text(strip=True))
 
-            # Filtro 1: Remove blocos curtos (lixo HTML)
+            # Filtro 1: Remove blocos curtos
             if len(texto_limpo.split()) < 5:
                 continue
                 
-            # Filtro 2: Remoção de Duplicação Agressiva (Hash)
-            # Usa o hash de 50 caracteres (o filtro mais agressivo)
+            # Filtro 2: Remoção de Duplicação por Hash
             trecho_hash = re.sub(r'[\W_]+', '', texto_limpo.lower())[:50] 
             
-            # --- CORREÇÃO: Limpeza contra duplicação de texto longo ---
-            # Verifica se o texto limpo contém algum trecho de texto que já foi visto
             is_duplicate = False
             for seen_hash in textos_vistos_hash:
-                if trecho_hash.startswith(seen_hash) or seen_hash.startswith(trecho_hash):
+                if trecho_hash.startswith(seen_hash): # Simplificação do filtro de duplicação
                     is_duplicate = True
                     break
             
             if is_duplicate:
-                continue # Pula se for duplicado
-            # --- FIM DA CORREÇÃO ---
+                continue 
 
-
-            # 3. Classificação
+            # Classificação
             is_subtitle = len(texto_limpo) < 60 and texto_limpo.isupper() 
             
             # Adiciona o bloco
-            blocos_de_conteudo.append({
+            blocos_finais.append({
                 "type": "SUBTITLE" if is_subtitle else "PARAGRAPH",
-                "content": texto_html # Mantém o HTML para o Android renderizar
+                "content": texto_html
             })
-            textos_vistos_hash.add(trecho_hash) # Adiciona o trecho para o conjunto de vistos
+            textos_vistos_hash.add(trecho_hash)
             
-  
-    return blocos_de_conteudo
+            # Intercalação de Imagens (Insere imagem a cada 2 parágrafos)
+            if not is_subtitle:
+                paragrafo_contador += 1
+                if paragrafo_contador % 2 == 0 and imagem_index < len(lista_imagens_conteudo):
+                    blocos_finais.append({
+                        "type": "IMAGE_URL",
+                        "content": lista_imagens_conteudo[imagem_index]
+                    })
+                    imagem_index += 1
+        
+    # Adiciona imagens restantes no final
+    while imagem_index < len(lista_imagens_conteudo):
+        blocos_finais.append({
+            "type": "IMAGE_URL",
+            "content": lista_imagens_conteudo[imagem_index]
+        })
+        imagem_index += 1
+        
+    return blocos_finais
 
 def raspar_detalhes_funcultural(url_detalhes):
-    """Raspa descrição e URLs de imagens do conteúdo, limpando o HTML problemático."""
+    """Coordena a raspagem de detalhes (Complexidade 21 -> Reduzida)."""
     soup_detalhes = obter_soup(url_detalhes)
     if not soup_detalhes: return []
 
-    lista_imagens_conteudo = []
-    blocos_finais = []
-    
     conteudo = soup_detalhes.find('article', class_='noticia-conteudo')
+    if not conteudo: return []
     
-    if conteudo:
+    # 1. Pré-processamento e Extração de Imagens
+    lista_imagens_conteudo = pre_processar_html_conteudo(conteudo)
+    
+    # 2. Classificação e Intercalação de Blocos
+    blocos_finais = classificar_blocos_de_texto(conteudo, lista_imagens_conteudo)
         
-        # 1. Pré-processamento e Limpeza (Antes de Iterar)
-        # Remove a tag de crédito que pode atrapalhar a ordem
-        for credito in conteudo.find_all('p', string=re.compile(r'Texto:|Fotos:')):
-            credito.decompose()
-        
-        # Itera sobre todos os elementos dentro do artigo para classificá-los
-        textos_vistos_hash = set()
-        paragrafo_contador = 0
-        imagem_index = 0
-        
-        # Itera sobre os parágrafos e divs que restaram (na ordem correta)
-        for elemento in conteudo.find_all(['p', 'div', 'h2', 'h3']):
-            
-            # --- Lógica de Imagem (Se for um bloco de imagem) ---
-            if elemento.get('class') and 'artigo-img-wrap' in elemento.get('class'):
-                img_tag = elemento.find('img')
-                if img_tag and img_tag.get('src'):
-                    url_imagem = completar_url(img_tag.get('src'), URL_BASE_FUNCULTURAL)
-                    if url_imagem:
-                        # Adiciona o Bloco de Imagem
-                        blocos_finais.append({
-                            "type": "IMAGE_URL",
-                            "content": url_imagem
-                        })
-                # Remove o elemento para não ser processado como texto na próxima iteração
-                elemento.decompose()
-                continue
-            
-            # --- Lógica de Texto ---
-            texto_html = elemento.decode_contents().strip()
-            
-            if texto_html:
-                texto_limpo = limpar_texto(elemento.get_text(strip=True))
-
-                # Filtro: Remove blocos curtos (lixo HTML)
-                if len(texto_limpo.split()) < 5: continue
-
-                # Filtro: Remoção de Duplicação Agressiva (Hash)
-                trecho_hash = re.sub(r'[\W_]+', '', texto_limpo.lower())[:50] 
-                is_duplicate = trecho_hash in textos_vistos_hash
-                
-                if is_duplicate: continue
-
-                # 3. Classificação
-                is_subtitle = len(texto_limpo) < 60 and texto_limpo.isupper() 
-
-                # Adiciona o bloco de texto
-                blocos_finais.append({
-                    "type": "SUBTITLE" if is_subtitle else "PARAGRAPH",
-                    "content": texto_html 
-                })
-                textos_vistos_hash.add(trecho_hash)
-                
     return blocos_finais
+
 def processar_par_blocos_funcultural(bloco_img, bloco_txt):
-    """Extrai dados e busca detalhes para um par de blocos."""
+    """Extrai dados e busca detalhes para um par de blocos (Complexidade 36 -> Reduzida)."""
+    
+    # Extração de Título e Banner
     img_tag = bloco_img.find('img')
     src_banner_relativo = img_tag['src'] if img_tag else None
     link_imagem_banner = completar_url(src_banner_relativo, URL_BASE_FUNCULTURAL)
@@ -186,13 +157,14 @@ def processar_par_blocos_funcultural(bloco_img, bloco_txt):
     if not link_evento_completo or not link_imagem_banner: return None
 
     print(f"    Processando: {titulo_texto}")
+    
     # Chama a função principal de extração de blocos
     blocos_de_conteudo = raspar_detalhes_funcultural(link_evento_completo)
     time.sleep(0.3) 
 
     return {
         "titulo": titulo_texto,
-        "blocos_conteudo": blocos_de_conteudo, # O NOVO CAMPO DE BLOCOS
+        "blocos_conteudo": blocos_de_conteudo,
         "imagem_url": link_imagem_banner,
         "link_evento": link_evento_completo,
         "fonte": "Funcultural"
