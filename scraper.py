@@ -60,36 +60,36 @@ def pre_processar_html_conteudo(conteudo):
 def classificar_blocos_de_texto(conteudo):
     """Itera e classifica o texto restante como PARAGRAPH ou SUBTITLE, removendo repetições."""
     blocos_de_conteudo = []
-    # Usamos um conjunto para armazenar hashes de trechos de texto, evitando duplicação
-    textos_vistos_hash = set() 
+    textos_vistos_hash = set()
     
-    # Itera sobre os parágrafos e divs que restaram (na ordem correta)
+    # 1. Pré-limpeza: Remove tags que não são <p> ou <div> para simplificar a iteração
+    for elemento in conteudo.find_all(True):
+        if elemento.name not in ['p', 'div', 'h2', 'h3']:
+            # Pega o texto da tag e a substitui por ele mesmo
+            elemento.replace_with(elemento.get_text(strip=True) + ' ')
+
+    # 2. Itera sobre os parágrafos e divs que restaram
     for elemento in conteudo.find_all(['p', 'div', 'h2', 'h3']): 
         texto_html = elemento.decode_contents().strip()
         
         if texto_html:
-            # 1. Pega o texto limpo para classificação
+            # Pega o texto limpo para classificação
             texto_limpo = limpar_texto(elemento.get_text(strip=True))
 
-            # 2. VERIFICAÇÃO DE DUPLICAÇÃO (Melhorada)
-            # Remove blocos com menos de 10 palavras para evitar lixo HTML
+            # Filtro: Remove blocos curtos (lixo HTML)
             if len(texto_limpo.split()) < 10:
                 continue
 
-            # Cria um hash do primeiro terço do texto (o suficiente para identificar duplicação)
+            # Cria um hash do trecho inicial do texto para identificar duplicação
             trecho_hash = texto_limpo[:len(texto_limpo) // 3] 
             
             if trecho_hash in textos_vistos_hash:
-                # print(f"AVISO: Bloco duplicado removido: {texto_limpo[:30]}...")
                 continue # Pula se já vimos este trecho
 
             # 3. Classificação
             is_subtitle = len(texto_limpo) < 60 and texto_limpo.isupper() 
             
-            if re.match(r'^<.+>.*</.>$', texto_html, re.IGNORECASE):
-               is_subtitle = False
-
-            # Adiciona o bloco e o hash
+            # Adiciona o bloco
             blocos_de_conteudo.append({
                 "type": "SUBTITLE" if is_subtitle else "PARAGRAPH",
                 "content": texto_html # Mantém o HTML para o Android renderizar
