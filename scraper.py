@@ -31,49 +31,56 @@ def completar_url(url_relativa, base_url):
 
 def limpar_descricao(texto):
     """Remove padrões de créditos de foto e limpa espaços extras."""
+    # Remove padrões de crédito
     texto = re.sub(r'(Fotos|Texto):\s*[^.\n]+', '', texto, flags=re.IGNORECASE)
+    # Remove espaços duplicados
     texto = re.sub(r'\s{2,}', ' ', texto).strip()
     return texto
 
 # --- Função Principal de Raspagem ---
 
 def raspar_detalhes_funcultural(url_detalhes):
-    """Raspa descrição e URLs de imagens do conteúdo."""
+    """Raspa descrição e URLs de imagens do conteúdo, limpando o HTML problemático."""
     soup_detalhes = obter_soup(url_detalhes)
     if not soup_detalhes: return "", []
 
     lista_imagens_conteudo = []
+    descricao_completa = ""
+    
     conteudo = soup_detalhes.find('article', class_='noticia-conteudo')
     
     if conteudo:
-        # 1. Extrai imagens e remove tags flutuantes
-        for img_div in conteudo.find_all('div', class_='artigo-img-wrap'):
-            img_tag = img_div.find('img')
-            if img_tag and img_tag.get('src'):
-                 url_imagem = completar_url(img_tag.get('src'), URL_BASE_FUNCULTURAL)
-                 if url_imagem:
-                    lista_imagens_conteudo.append(url_imagem)
-            
-            img_div.decompose()
+        # 1. Extrai Imagens e Pré-processamento (Resolve Colagem)
+        for elemento in conteudo.find_all(True): # Itera sobre TODAS as tags
+            # Lógica para remover a tag de imagem e extrair a URL
+            if elemento.get('class') and 'artigo-img-wrap' in elemento.get('class'):
+                img_tag = elemento.find('img')
+                if img_tag and img_tag.get('src'):
+                     url_imagem = completar_url(img_tag.get('src'), URL_BASE_FUNCULTURAL)
+                     if url_imagem:
+                        lista_imagens_conteudo.append(url_imagem)
+                elemento.decompose() # Remove a tag flutuante
 
-        # 2. Extração de Texto (Preserva o HTML interno)
+            # Lógica para Tags de Formatação: Substitui por seu texto + ESPAÇO
+            elif elemento.name in ['strong', 'em', 'span', 'b', 'i']:
+                # Substitui a tag pelo seu texto + um espaço para forçar a separação
+                elemento.replace_with(elemento.get_text(strip=True) + ' ')
+
+        # 2. Extração Final do Texto (Agora Limpo e Ordenado)
         textos_paragrafos = []
         
-        # Itera sobre os parágrafos, mantendo o HTML interno
-        for p_tag in conteudo.find_all(['p', 'div']): # Inclui DIVs, pois alguns textos estão em DIVs
-            # Usa decode_contents para manter tags internas (<strong>, <em>)
-            paragrafo_html = p_tag.decode_contents().strip() 
-            if paragrafo_html:
-                textos_paragrafos.append(paragrafo_html)
+        # Agora, iteramos sobre os parágrafos e divs que restaram
+        for bloco in conteudo.find_all(['p', 'div']): 
+            paragrafo_limpo = bloco.get_text(strip=True)
+            if paragrafo_limpo:
+                textos_paragrafos.append(paragrafo_limpo)
 
-        # 3. Junta tudo com o separador \n\n
+        # Junta tudo com o separador \n\n (que será convertido em <br> no Android)
         descricao_bruta = '\n\n'.join(textos_paragrafos)
+
+        # 3. Limpeza Final
         descricao_completa = limpar_descricao(descricao_bruta)
-        
-        # 4. Limpeza de HTML Duplicado (Opcional: remove tags que sobraram)
-        descricao_completa = descricao_completa.replace("<strong>", "<b>").replace("</strong>", "</b>")
-        descricao_completa = descricao_completa.replace("<em>", "<i>").replace("</em>", "</i>")
-        
+
     return descricao_completa, lista_imagens_conteudo
 
 def processar_par_blocos_funcultural(bloco_img, bloco_txt):
