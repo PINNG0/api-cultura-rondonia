@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import time
+import re # Novo: para remover o nome do fotógrafo
 
 # --- Configurações ---
 API_FILE_NAME = "eventos.json"
@@ -12,7 +13,7 @@ NUMERO_DE_PAGINAS_FUNCULTURAL = 3
 # --- Funções Auxiliares ---
 
 def obter_soup(url):
-    """Baixa e parseia o HTML de uma URL, tratando erros."""
+    """Baixa e parseia o HTML de uma URL."""
     try:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
@@ -21,10 +22,6 @@ def obter_soup(url):
         print(f"    Erro ao acessar {url}: {e}")
         return None
 
-def limpar_texto(texto):
-    """Remove espaços extras e linhas em branco."""
-    return ' '.join(texto.split()) if texto else ""
-
 def completar_url(url_relativa, base_url):
     """Garante que uma URL seja absoluta."""
     if not url_relativa: return None
@@ -32,20 +29,29 @@ def completar_url(url_relativa, base_url):
     if url_relativa.startswith('/'): return f"{base_url}{url_relativa}"
     return None
 
+def limpar_descricao(texto):
+    """Remove nomes de fotógrafos e espaços extras."""
+    # Regex para remover padrões de crédito (Ex: "Fotos: Fulano de Tal")
+    texto = re.sub(r'Fotos:\s*[^.\n]+', '', texto, flags=re.IGNORECASE)
+    # Remove múltiplos espaços em branco e quebras de linha que sobraram
+    return texto.strip()
+
+# --- Função Principal de Raspagem ---
+
 def raspar_detalhes_funcultural(url_detalhes):
-    """Raspa descrição e imagens da página de detalhes."""
+    """Raspa descrição completa e URLs de imagens do conteúdo."""
     soup_detalhes = obter_soup(url_detalhes)
     if not soup_detalhes: return "", []
 
-    descricao_completa = ""
     lista_imagens_conteudo = []
     conteudo = soup_detalhes.find('article', class_='noticia-conteudo')
-
+    
     if conteudo:
-        paragrafos = conteudo.find_all('p')
-        textos_paragrafos = [limpar_texto(p.text) for p in paragrafos]
-        descricao_completa = '\n\n'.join(filter(None, textos_paragrafos))
+        # CORREÇÃO: Usa get_text(separator) para evitar palavras coladas
+        descricao_bruta = conteudo.get_text(separator=' ', strip=True)
+        descricao_completa = limpar_descricao(descricao_bruta)
 
+        # Pega imagens do conteúdo
         imagens = conteudo.find_all('img')
         for img in imagens:
             src = img.get('src')
@@ -55,15 +61,14 @@ def raspar_detalhes_funcultural(url_detalhes):
 
     return descricao_completa, lista_imagens_conteudo
 
-# --- NOVA FUNÇÃO: Processa um par de blocos ---
 def processar_par_blocos_funcultural(bloco_img, bloco_txt):
-    """Extrai dados de um par (imagem+texto) e busca detalhes."""
+    """Extrai dados e busca detalhes para um par de blocos."""
     img_tag = bloco_img.find('img')
     src_banner_relativo = img_tag['src'] if img_tag else None
     link_imagem_banner = completar_url(src_banner_relativo, URL_BASE_FUNCULTURAL)
 
     titulo_tag = bloco_txt.find('div', class_='titulo-noticia-pesquisa')
-    titulo_texto = limpar_texto(titulo_tag.text) if titulo_tag else "Título não encontrado"
+    titulo_texto = titulo_tag.text.strip() if titulo_tag else "Título não encontrado"
 
     link_tag = bloco_txt.find('a')
     link_evento_relativo = link_tag['href'] if link_tag else None
@@ -71,16 +76,16 @@ def processar_par_blocos_funcultural(bloco_img, bloco_txt):
 
     if not link_evento_completo or not link_imagem_banner:
          print(f"    Aviso: Ignorando item sem link ou imagem ({titulo_texto})")
-         return None # Retorna None se faltar informação essencial
+         return None
 
     print(f"    Processando: {titulo_texto}")
     descricao_completa, imagens_do_conteudo = raspar_detalhes_funcultural(link_evento_completo)
-    time.sleep(0.3) # Pausa após buscar detalhes
+    time.sleep(0.3) 
 
     descricao_final = descricao_completa
     if not descricao_final:
          desc_tag_curta = bloco_txt.find('div', class_='descricao-noticia')
-         descricao_final = limpar_texto(desc_tag_curta.text) if desc_tag_curta else ""
+         descricao_final = desc_tag_curta.text.strip() if desc_tag_curta else ""
 
     return {
         "titulo": titulo_texto,
@@ -91,9 +96,8 @@ def processar_par_blocos_funcultural(bloco_img, bloco_txt):
         "imagens_conteudo": imagens_do_conteudo
     }
 
-# --- Função principal de raspagem (AGORA MAIS SIMPLES) ---
 def raspar_funcultural():
-    """Raspa as N primeiras páginas da lista de notícias da Funcultural."""
+    """Gerencia a raspagem de múltiplas páginas da Funcultural."""
     print(f"Iniciando raspagem da Funcultural (Páginas 1 a {NUMERO_DE_PAGINAS_FUNCULTURAL})...")
     lista_de_eventos_total = []
 
@@ -111,9 +115,8 @@ def raspar_funcultural():
             if i + 1 >= len(blocos_de_dados): continue
             bloco_txt = blocos_de_dados[i+1]
 
-            # Chama a nova função para processar o par
             evento = processar_par_blocos_funcultural(bloco_img, bloco_txt)
-            if evento: # Adiciona apenas se a função retornar um evento válido
+            if evento:
                 lista_de_eventos_total.append(evento)
                 eventos_nesta_pagina += 1
 
