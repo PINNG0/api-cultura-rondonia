@@ -48,27 +48,47 @@ def pre_processar_html_conteudo(conteudo):
         if not p.get_text(strip=True):
             p.decompose()
     return imgs
-
 def classificar_blocos_de_texto(conteudo, lista_imagens):
-    blocos, vistos, img_idx, par_cont = [], set(), 0, 0
-    for e in conteudo.find_all(['p', 'h2', 'h3']):
-        txt_html = e.decode_contents().strip()
+    """
+    Classifica o conteúdo do artigo em blocos de texto (SUBTITLE/PARAGRAPH)
+    e intercala com blocos de imagem.
+    """
+    blocos, img_idx, par_cont = [], 0, 0
+    # Elementos de bloco que contêm texto principal
+    elementos_de_texto = conteudo.find_all(['p', 'h2', 'h3', 'blockquote', 'li'])
+
+    for e in elementos_de_texto:
         txt_limpo = limpar_texto(e.get_text(strip=True))
-        if len(txt_limpo.split()) < 3 or txt_limpo.lower() in ["texto:", "fotos:"]:
+
+        # Evita blocos muito curtos ou apenas marcadores de autoria
+        if len(txt_limpo.split()) < 3 or txt_limpo.lower().startswith(("texto:", "fotos:", "fonte:")):
             continue
-        h = re.sub(r'[\W_]+', '', txt_limpo.lower())[:50]
-        if h in vistos: continue
-        is_sub = (e.name in ['h2','h3'] or (e.find('strong') and len(txt_limpo.split()) <=8))
+        
+        # O uso de decode_contents() aqui pode ser problemático se houver tags
+        # não fechadas ou malformadas. Usaremos get_text() para o conteúdo e formatamos.
+        
+        txt_html = ''.join(str(child) for child in e.children if child.name is not None)
+        if not txt_html: # Se não houver tags, pega o texto puro
+             txt_html = txt_limpo
+
+        # Heurística para subtítulo: h2, h3 ou parágrafo com poucas palavras em negrito
+        is_sub = (e.name in ['h2', 'h3'] or 
+                  (e.name == 'p' and e.find('strong') and len(txt_limpo.split()) <= 10))
+        
         blocos.append({"type": "SUBTITLE" if is_sub else "PARAGRAPH", "content": txt_html})
-        vistos.add(h)
+        
         if not is_sub:
             par_cont += 1
+            # Intercalar imagem a cada 2 parágrafos
             if par_cont % 2 == 0 and img_idx < len(lista_imagens):
                 blocos.append({"type": "IMAGE_URL", "content": lista_imagens[img_idx]})
                 img_idx += 1
+        
+    # Adicionar quaisquer imagens restantes no final
     while img_idx < len(lista_imagens):
         blocos.append({"type": "IMAGE_URL", "content": lista_imagens[img_idx]})
         img_idx += 1
+        
     return blocos
 
 def raspar_detalhes_funcultural(url):
