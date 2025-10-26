@@ -8,12 +8,12 @@ import re
 API_FILE_NAME = "eventos.json"
 URL_BASE_FUNCULTURAL = "https://funcultural.portovelho.ro.gov.br"
 URL_NOTICIAS_FUNCULTURAL = f"{URL_BASE_FUNCULTURAL}/noticias"
-NUMERO_DE_PAGINAS_FUNCULTURAL = 3
+NUMERO_DE_PAGINAS_FUNCULTURAL = 3 
 
 # --- Funções Auxiliares Comuns ---
 
 def obter_soup(url):
-    """Baixa e parseia o HTML de uma URL, tratando erros."""
+    """Baixa e parseia o HTML de uma URL, tratando erros de conexão."""
     try:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
@@ -23,19 +23,19 @@ def obter_soup(url):
         return None
 
 def completar_url(url_relativa, base_url):
-    """Garante que uma URL é absoluta."""
+    """Garante que uma URL seja absoluta."""
     if not url_relativa: return None
     if url_relativa.startswith('http'): return url_relativa
     if url_relativa.startswith('/'): return f"{base_url}{url_relativa}"
     return None
 
 def limpar_texto(texto):
-    """Limpa créditos de foto e remove espaços duplicados."""
+    """Remove padrões de créditos de foto e limpa espaços duplicados."""
     texto = re.sub(r'(Fotos|Texto):\s*[^.\n]+', '', texto, flags=re.IGNORECASE)
     texto = re.sub(r'\s{2,}', ' ', texto).strip()
     return texto
 
-# --- Funções de Processamento do Conteúdo  ---
+# --- Funções de Processamento do Conteúdo (BLOCO A BLOCO) ---
 
 def pre_processar_html_conteudo(conteudo):
     """Extrai URLs de imagem e limpa tags de formatação."""
@@ -50,10 +50,9 @@ def pre_processar_html_conteudo(conteudo):
                 if url_imagem:
                     lista_imagens_conteudo.append(url_imagem)
             elemento.decompose() # Remove a div flutuante após extrair
-        
+
         # 2. Lógica para Tags de Formatação: Adiciona espaço ao redor de strong/em
         elif elemento.name in ['strong', 'em', 'span', 'b', 'i']:
-            # Substitui a tag pelo seu texto + um espaço para forçar a separação
             elemento.replace_with(elemento.get_text(strip=True) + ' ')
     
     return lista_imagens_conteudo
@@ -61,23 +60,31 @@ def pre_processar_html_conteudo(conteudo):
 def classificar_blocos_de_texto(conteudo):
     """Itera e classifica o texto restante como PARAGRAPH ou SUBTITLE."""
     blocos_de_conteudo = []
-    
-    # Itera sobre os parágrafos e divs que restaram (na ordem correta)
+    textos_vistos = set() # Para remover duplicação
+
     for elemento in conteudo.find_all(['p', 'div', 'h2', 'h3']): 
         texto_html = elemento.decode_contents().strip()
         
         if texto_html:
-            # Pega o texto limpo para classificação
             texto_limpo = limpar_texto(elemento.get_text(strip=True))
 
+            # Filtro: Remove textos muito curtos ou duplicados
+            if len(texto_limpo) < 10 or texto_limpo in textos_vistos:
+                 continue
+            
             # VERIFICAÇÃO CHAVE: Classifica como SUBTITLE (curto e todo em CAIXA ALTA)
             is_subtitle = len(texto_limpo) < 60 and texto_limpo.isupper() 
+
+            # Lógica para garantir que não classificamos tags soltas como subtítulo
+            if is_subtitle and re.match(r'^<.+>.*</.>$', texto_limpo, re.IGNORECASE):
+               is_subtitle = False
 
             # Adiciona o bloco
             blocos_de_conteudo.append({
                 "type": "SUBTITLE" if is_subtitle else "PARAGRAPH",
-                "content": texto_html # Mantém o HTML para o Android renderizar formatação
+                "content": texto_html # Mantém o HTML para o Android renderizar
             })
+            textos_vistos.add(texto_limpo)
             
     return blocos_de_conteudo
 
@@ -89,7 +96,7 @@ def raspar_detalhes_funcultural(url_detalhes):
     conteudo = soup_detalhes.find('article', class_='noticia-conteudo')
     if not conteudo: return []
     
-    # 1. Extração de Imagens e Limpeza de HTML (Resolve ordem e colagem)
+    # 1. Pré-processamento e Extração de Imagens
     lista_imagens_conteudo = pre_processar_html_conteudo(conteudo)
     
     # 2. Classificação de Blocos de Texto
@@ -125,7 +132,6 @@ def raspar_detalhes_funcultural(url_detalhes):
         
     return blocos_finais
 
-# --- Processamento de Lista (Mantido) ---
 def processar_par_blocos_funcultural(bloco_img, bloco_txt):
     """Extrai dados e busca detalhes para um par de blocos."""
     img_tag = bloco_img.find('img')
