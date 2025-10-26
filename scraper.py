@@ -58,10 +58,10 @@ def extrair_imagens_e_limpar_html(conteudo):
     return lista_imagens_conteudo
 
 def classificar_blocos_de_texto(conteudo):
-    """Itera e classifica o texto restante como PARAGRAPH ou SUBTITLE."""
+    """Itera e classifica o texto restante como PARAGRAPH ou SUBTITLE, removendo repetições."""
     blocos_de_conteudo = []
-    textos_vistos_hash = set() # Para remover duplicação
-
+    textos_vistos_hash = set()
+    
     # Itera sobre os parágrafos e divs que restaram (na ordem correta)
     for elemento in conteudo.find_all(['p', 'div', 'h2', 'h3']): 
         texto_html = elemento.decode_contents().strip()
@@ -69,14 +69,17 @@ def classificar_blocos_de_texto(conteudo):
         if texto_html:
             texto_limpo = limpar_texto(elemento.get_text(strip=True))
 
-            # Filtro 1: Remove blocos muito curtos (lixo HTML)
-            if len(texto_limpo.split()) < 5:
+            # Filtro 1: Remove blocos curtos (lixo HTML)
+            if len(texto_limpo.split()) < 5: # Aumenta para 5 palavras
                 continue
                 
-            # Filtro 2: Remoção de Duplicação por Hash (Conteúdo Similar)
-            trecho_hash = texto_limpo[:len(texto_limpo) // 3] 
+            # Filtro 2: Remoção de Duplicação Agressiva (Hash)
+            # Usa os 50 primeiros caracteres, removendo pontuação e espaço para ser mais robusto
+            trecho_hash = re.sub(r'[\W_]+', '', texto_limpo.lower())[:50] 
+            
             if trecho_hash in textos_vistos_hash:
-                continue 
+                 # print(f"AVISO: Duplicação removida: {texto_limpo[:30]}...")
+                 continue
 
             # 3. Classificação
             is_subtitle = len(texto_limpo) < 60 and texto_limpo.isupper() 
