@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import time
-import re # Novo: para remover o nome do fotógrafo
+import re
 
 # --- Configurações ---
 API_FILE_NAME = "eventos.json"
@@ -30,16 +30,17 @@ def completar_url(url_relativa, base_url):
     return None
 
 def limpar_descricao(texto):
-    """Remove nomes de fotógrafos e espaços extras."""
-    # Regex para remover padrões de crédito (Ex: "Fotos: Fulano de Tal")
-    texto = re.sub(r'Fotos:\s*[^.\n]+', '', texto, flags=re.IGNORECASE)
-    # Remove múltiplos espaços em branco e quebras de linha que sobraram
-    return texto.strip()
+    """Remove padrões de créditos de foto e limpa espaços extras."""
+    # Remove padrões de crédito (Ex: "Fotos: Fulano de Tal")
+    texto = re.sub(r'(Fotos|Texto):\s*[^.\n]+', '', texto, flags=re.IGNORECASE)
+    # Remove múltiplos espaços em branco e substitui por um único espaço
+    texto = re.sub(r'\s+', ' ', texto).strip()
+    return texto
 
 # --- Função Principal de Raspagem ---
 
 def raspar_detalhes_funcultural(url_detalhes):
-    """Raspa descrição completa e URLs de imagens do conteúdo."""
+    """Raspa descrição e imagens da página de detalhes."""
     soup_detalhes = obter_soup(url_detalhes)
     if not soup_detalhes: return "", []
 
@@ -47,17 +48,24 @@ def raspar_detalhes_funcultural(url_detalhes):
     conteudo = soup_detalhes.find('article', class_='noticia-conteudo')
     
     if conteudo:
-        # CORREÇÃO: Usa get_text(separator) para evitar palavras coladas
-        descricao_bruta = conteudo.get_text(separator=' ', strip=True)
+        # AQUI: Remove os blocos de imagem flutuantes ANTES de extrair o texto,
+        # forçando o Beautiful Soup a ler o texto na ordem correta.
+        for img_div in conteudo.find_all('div', class_='artigo-img-wrap'):
+            # 1. Extrai a URL da imagem antes de remover a div
+            img_tag = img_div.find('img')
+            if img_tag and img_tag.get('src'):
+                 url_imagem = completar_url(img_tag.get('src'), URL_BASE_FUNCULTURAL)
+                 if url_imagem:
+                    lista_imagens_conteudo.append(url_imagem)
+            
+            img_div.decompose() # Remove a tag flutuante do HTML
+        
+        # 2. Pega o texto completo da tag mãe. 
+        # O separator=' \n\n ' é a chave para a legibilidade no Android.
+        descricao_bruta = conteudo.get_text(separator=' \n\n ', strip=True)
+        
+        # 3. Faz a limpeza final do texto
         descricao_completa = limpar_descricao(descricao_bruta)
-
-        # Pega imagens do conteúdo
-        imagens = conteudo.find_all('img')
-        for img in imagens:
-            src = img.get('src')
-            url_imagem = completar_url(src, URL_BASE_FUNCULTURAL)
-            if url_imagem:
-                lista_imagens_conteudo.append(url_imagem)
 
     return descricao_completa, lista_imagens_conteudo
 
@@ -75,7 +83,6 @@ def processar_par_blocos_funcultural(bloco_img, bloco_txt):
     link_evento_completo = completar_url(link_evento_relativo, URL_BASE_FUNCULTURAL)
 
     if not link_evento_completo or not link_imagem_banner:
-         print(f"    Aviso: Ignorando item sem link ou imagem ({titulo_texto})")
          return None
 
     print(f"    Processando: {titulo_texto}")
