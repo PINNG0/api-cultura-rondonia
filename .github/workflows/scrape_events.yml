@@ -1,0 +1,63 @@
+# 1. Nome do Robô (para você identificar)
+name: Raspar Eventos Culturais 
+
+# 2. Gatilhos: Quando o robô deve trabalhar?
+on:
+  # Gatilho A: Agendamento (Schedule)
+  schedule:
+    # Formato CRON: Minuto Hora Dia Mês DiaDaSemana (UTC)
+    # '0 3 * * *' significa: 0 minutos, 3 horas (UTC), todo dia, todo mês, toda semana.
+    # 3:00 UTC é meia-noite no fuso de Rondônia (-4).
+    - cron: '0 3 * * *' 
+  # Gatilho B: Manual (Workflow Dispatch)
+  # Isso adiciona um botão "Run workflow" na aba "Actions" do seu GitHub
+  # para você poder rodar o robô quando quiser, além do agendamento.
+  workflow_dispatch:
+
+# 3. Tarefas (Jobs): O que o robô vai fazer?
+jobs:
+  # Nome da tarefa (pode ser qualquer nome)
+  scrape:
+    # Onde rodar: Em um computador virtual com Linux (Ubuntu) fornecido pelo GitHub
+    runs-on: ubuntu-latest 
+
+    # Passos (Steps): A sequência de comandos que o robô vai executar
+    steps:
+      # Passo 1: Baixar o Código
+      # Pega o código do seu repositório (o scraper.py) para a máquina virtual.
+      - name: Checkout repository 
+        uses: actions/checkout@v3
+
+      # Passo 2: Preparar o Ambiente Python
+      # Instala o Python na máquina virtual.
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x' 
+
+      # Passo 3: Instalar as Ferramentas do Robô
+      # Roda os comandos pip install para instalar 'requests' e 'beautifulsoup4'.
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      # Passo 4: Executar o Trabalho Principal!
+      # Roda o seu script 'scraper.py'. Isso vai gerar o 'eventos.json' na máquina virtual.
+      - name: Run scraper
+        run: python scraper.py
+
+      # Passo 5: Salvar o Resultado de Volta no GitHub
+      # Usa comandos Git DENTRO da máquina virtual para enviar o novo 'eventos.json'.
+      - name: Commit and push if changed
+        run: |
+          # Configura o Git para dizer que foi o "robô" que fez a mudança
+          git config --global user.name 'github-actions[bot]' 
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          # Adiciona apenas o arquivo JSON ao "pacote"
+          git add eventos.json 
+          # Verifica se o JSON realmente mudou. Se não mudou, não faz commit.
+          # Se mudou, cria o commit com uma mensagem padrão.
+          git diff --staged --quiet || git commit -m "Atualiza eventos culturais via Action"
+          # Envia o commit (o novo JSON) de volta para o seu repositório (branch 'main').
+          git push
