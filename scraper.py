@@ -29,13 +29,16 @@ def normalize_text(s):
     return s
 
 def generate_id(ev):
-    key = (ev.get("titulo", "") + "|" + ev.get("link_evento", "") + "|" + ev.get("imagem_url","")).encode("utf-8")
-    return hashlib.sha1(key).hexdigest()
+    # Gera id determinístico baseado apenas no título e no link (alinha com dedupe)
+    key = (ev.get("titulo", "") + "|" + ev.get("link_evento", "")).strip()
+    key_norm = normalize_text(key)
+    return hashlib.sha1(key_norm.encode("utf-8")).hexdigest()
 
 # ---------- HTTP / utilitários ----------
 def obter_soup(url):
     try:
-        response = requests.get(url, timeout=10)
+        headers = {"User-Agent": "Mozilla/5.0 (compatible; scraper/1.0)"}
+        response = requests.get(url, timeout=10, headers=headers)
         response.raise_for_status()
         return BeautifulSoup(response.content, 'html.parser')
     except requests.exceptions.RequestException as e:
@@ -43,13 +46,19 @@ def obter_soup(url):
         return None
 
 def completar_url(url_relativa, base_url):
-    if not url_relativa: return None
-    if url_relativa.startswith('http'):
+    if not url_relativa:
+        return None
+    url_relativa = url_relativa.strip()
+    # já é absoluta
+    if url_relativa.startswith('http://') or url_relativa.startswith('https://'):
         return url_relativa.replace('http://', 'https://')
+    # relativa absoluta ao host
     if url_relativa.startswith('/'):
-        base_url_https = base_url.replace('http://', 'https://')
-        return f"{base_url_https}{url_relativa}"
-    return None
+        base = base_url.rstrip('/')
+        return f"{base}{url_relativa}"
+    # caminho relativo sem slash inicial
+    base = base_url.rstrip('/')
+    return f"{base}/{url_relativa}"
 
 def limpar_texto(texto):
     texto = re.sub(r'(Fotos|Foto|Texto):\s*[^.\n]+', '', texto, flags=re.IGNORECASE)
@@ -79,7 +88,7 @@ def should_remove_element(element):
 # ---------- Processamento do conteúdo do artigo ----------
 def pre_processar_html_conteudo(conteudo):
     lista_imagens_conteudo = []
-    for elemento in conteudo.children:  # iterável direto, sem list()
+    for elemento in list(conteudo.children):  # lista para evitar alteração durante iteração
         if not is_tag(elemento):
             continue
         classes = elemento.get('class', [])
@@ -154,15 +163,16 @@ def processar_par_blocos_funcultural(bloco_img, bloco_txt):
     link_imagem_banner = completar_url(src_banner_relativo, URL_BASE_FUNCULTURAL)
 
     titulo_tag = bloco_txt.find('div', class_='titulo-noticia-pesquisa')
-    titulo_texto = titulo_tag.text.strip() if titulo_tag else "Título não encontrado"
+    titulo_texto = titulo_tag.get_text(strip=True) if titulo_tag else "Título não encontrado"
 
     link_tag = bloco_txt.find('a')
     link_evento_relativo = link_tag['href'] if link_tag and link_tag.get('href') else None
     link_evento_completo = completar_url(link_evento_relativo, URL_BASE_FUNCULTURAL)
 
-    if not link_evento_completo or not link_imagem_banner:
+    if not link_evento_completo:
         return None
 
+    # evita duplicação entre páginas por URL
     if link_evento_completo in EVENTOS_URL_VISTAS:
         print(f"Evento já visto, pulando: {titulo_texto}")
         return None
@@ -174,10 +184,11 @@ def processar_par_blocos_funcultural(bloco_img, bloco_txt):
     if not blocos_de_conteudo:
         return None
 
+    # imagem opcional: se não houver banner válido, aceita None (não impede dedupe)
     return {
         "titulo": normalize_text(titulo_texto),
         "blocos_conteudo": blocos_de_conteudo,
-        "imagem_url": link_imagem_banner,
+        "imagem_url": link_imagem_banner or "",
         "link_evento": link_evento_completo,
         "fonte": "Funcultural"
     }
@@ -196,11 +207,22 @@ def raspar_funcultural():
         blocos_de_dados = soup_lista.find_all('div', class_='resultado-pesquisa')
         eventos_nesta_pagina = 0
 
-        for i in range(0, len(blocos_de_dados), 2):
+        # Emparelhar blocos: percorre em passos de 2 quando a estrutura for par, mas tenta fallback se não estiver
+        i = 0
+        while i < len(blocos_de_dados):
             bloco_img = blocos_de_dados[i]
-            if i + 1 >= len(blocos_de_dados):
+            bloco_txt = None
+            if i + 1 < len(blocos_de_dados):
+                bloco_txt = blocos_de_dados[i + 1]
+                i += 2
+            else:
+                # fallback: tentar extrair link/título do mesmo bloco se não houver par
+                bloco_txt = blocos_de_dados[i]
+                i += 1
+
+            if not bloco_txt:
                 continue
-            bloco_txt = blocos_de_dados[i+1]
+
             evento = processar_par_blocos_funcultural(bloco_img, bloco_txt)
             if evento:
                 lista_de_eventos_total.append(evento)
@@ -212,7 +234,7 @@ def raspar_funcultural():
 
     print(f"Total antes de dedupe: {len(lista_de_eventos_total)}")
 
-    # dedupe final e geração de id
+    # dedupe final e geração de id (chave usada: titulo + link_evento)
     unique_map = {}
     for ev in lista_de_eventos_total:
         chave = (ev.get("titulo", "") + "|" + ev.get("link_evento", "")).strip()
@@ -231,7 +253,7 @@ def raspar_funcultural():
     eventos_unicos = list(unique_map.values())
     print(f"Total após dedupe: {len(eventos_unicos)}")
 
-    # salva index leve e arquivos individuais
+    # salva index leve e arquivos individuais (verifica existência antes de escrever)
     index_list = []
     for ev in eventos_unicos:
         ev_summary = {
@@ -244,8 +266,11 @@ def raspar_funcultural():
         index_list.append(ev_summary)
         filename = os.path.join(API_DIR, f"{ev['id']}.json")
         try:
-            with open(filename, 'w', encoding='utf-8') as f:
-                json.dump(ev, f, ensure_ascii=False, indent=2)
+            if os.path.exists(filename):
+                print(f" Arquivo já existe, pulando: {filename}")
+            else:
+                with open(filename, 'w', encoding='utf-8') as f:
+                    json.dump(ev, f, ensure_ascii=False, indent=2)
         except IOError as e:
             print(f" Erro ao salvar {filename}: {e}")
 
@@ -267,6 +292,9 @@ def raspar_funcultural():
 
 def main():
     print("Iniciando robô agregador de cultura...")
+    # reset EVENTOS_URL_VISTAS ao iniciar run para evitar vazamento entre execuções
+    global EVENTOS_URL_VISTAS
+    EVENTOS_URL_VISTAS = set()
     eventos_totais = raspar_funcultural()
     print(f"Sucesso! API local criada com {len(eventos_totais)} eventos na pasta '{API_DIR}'.")
 
