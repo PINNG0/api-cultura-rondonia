@@ -1,47 +1,82 @@
-# Nome do Workflow
-name: Raspar Eventos Culturais 
+name: Raspar Eventos Culturais
 
-# Gatilhos
 on:
   schedule:
     - cron: '0 3 * * *' # 0h em Rondônia
   workflow_dispatch:
 
-# Permissões
 permissions:
-  contents: write 
+  contents: write
 
-# Tarefas
 jobs:
-  scrape: 
-    runs-on: ubuntu-latest 
+  scrape:
+    runs-on: ubuntu-latest
 
-    steps: 
-      # 1. Baixa o código
+    steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      # 2. Configura Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x' 
+          python-version: '3.x'
 
-      # 3. Instala dependências
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4
 
-      # 4. Roda o scraper
       - name: Run scraper
-        run: python scraper.py
-
-      # 5. Faz commit e push (se houver mudanças)
-      - name: Commit and push if changed
         run: |
-          git config --global user.name 'github-actions[bot]' 
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add eventos.json 
-          git diff --staged --quiet || git commit -m "Atualiza eventos culturais via Action"
-          git push
+          # Ajuste o comando se o seu scraper usar outro arquivo ou args
+          python scraper.py
+
+      - name: Prepare docs folder and copy outputs
+        run: |
+          mkdir -p docs/api_output
+          # adaptar caminhos caso seu scraper grave em outro local
+          if [ -f api_output/eventos.json ]; then
+            cp -f api_output/eventos.json docs/api_output/eventos.json
+          fi
+          if [ -f api_output/eventos_index.json ]; then
+            cp -f api_output/eventos_index.json docs/api_output/eventos_index.json
+          fi
+
+      - name: Commit output only if changed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # stage files we expect to publish
+          git add docs/api_output/eventos.json docs/api_output/eventos_index.json || true
+
+          # if nothing staged, exit early
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          # compute local staged hash
+          LOCAL_HASH=""
+          if [ -f docs/api_output/eventos.json ]; then
+            LOCAL_HASH=$(sha1sum docs/api_output/eventos.json | cut -d' ' -f1)
+          fi
+
+          # compute remote hash safely (empty if file absent)
+          REMOTE_HASH=""
+          if git ls-remote --exit-code origin main >/dev/null 2>&1; then
+            REMOTE_HASH=$(git show origin/main:docs/api_output/eventos.json 2>/dev/null | sha1sum 2>/dev/null | cut -d' ' -f1 || echo "")
+          fi
+
+          # if hashes equal, skip commit
+          if [ -n "$LOCAL_HASH" ] && [ "$LOCAL_HASH" = "$REMOTE_HASH" ]; then
+            echo "Remote already has identical file, skipping commit"
+            exit 0
+          fi
+
+          git commit -m "Atualiza eventos culturais via Action"
+          git push origin HEAD:main
