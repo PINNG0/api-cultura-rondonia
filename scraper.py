@@ -87,11 +87,17 @@ def should_remove_element(element):
 
 # ---------- Processamento do conteúdo do artigo ----------
 def pre_processar_html_conteudo(conteudo):
+    """
+    Remove wrappers previsíveis, extrai imagens encontradas em wrappers
+    e retorna lista de URLs de imagens encontradas no conteúdo.
+    Também decompõe (remove) esses wrappers do conteúdo para evitar duplicação.
+    """
     lista_imagens_conteudo = []
     for elemento in list(conteudo.children):  # lista para evitar alteração durante iteração
         if not is_tag(elemento):
             continue
         classes = elemento.get('class', [])
+        # wrapper de imagem usado em alguns templates
         if classes and 'artigo-img-wrap' in classes:
             url = extract_image_from_wrapper(elemento)
             if url:
@@ -104,19 +110,29 @@ def pre_processar_html_conteudo(conteudo):
     return lista_imagens_conteudo
 
 def build_text_block(element):
+    """
+    Retorna dicionário com hash, block e flag se é subtitle.
+    Ignora blocos muito curtos (menos de ~5 palavras).
+    Mantém o conteúdo HTML original (decode_contents) para preservar imagens inline quando for o bloco grande.
+    """
     texto_html = element.decode_contents().strip()
     texto_limpo = limpar_texto(element.get_text(strip=True))
     if not texto_limpo or len(texto_limpo.split()) < 5:
         return None
     trecho_hash = re.sub(r'[\W_]+', '', texto_limpo.lower())[:80]
-    is_subtitle = element.name in ['h2', 'h3'] or element.find(['strong', 'em'])
+    is_subtitle = element.name in ['h2', 'h3'] or bool(element.find(['strong', 'em']))
     return {
         "hash": trecho_hash,
         "block": {"type": "SUBTITLE" if is_subtitle else "PARAGRAPH", "content": texto_html},
+        "plain": texto_limpo,
         "is_subtitle": is_subtitle
     }
 
 def intercalate_images(blocos, imagens):
+    """
+    Intercala imagens entre parágrafos: insere uma imagem (como bloco PARAGRAPH com tag img)
+    a cada dois parágrafos não-subtitle. Mantém a ordem das imagens restantes ao fim.
+    """
     result = []
     img_i = 0
     para_count = 0
@@ -125,17 +141,27 @@ def intercalate_images(blocos, imagens):
         if not item["is_subtitle"]:
             para_count += 1
             if para_count % 2 == 0 and img_i < len(imagens):
-                result.append({"type": "IMAGE_URL", "content": imagens[img_i]})
+                # insere como bloco HTML com tag img para manter compatibilidade com o app que espera HTML
+                img_html = f'<img src="{imagens[img_i]}" />'
+                result.append({"type": "PARAGRAPH", "content": img_html})
                 img_i += 1
     while img_i < len(imagens):
-        result.append({"type": "IMAGE_URL", "content": imagens[img_i]})
+        img_html = f'<img src="{imagens[img_i]}" />'
+        result.append({"type": "PARAGRAPH", "content": img_html})
         img_i += 1
     return result
 
 def classificar_blocos_de_texto(conteudo, lista_imagens_conteudo):
+    """
+    Constrói blocos a partir de <p>, <div>, <h2>, <h3>.
+    Se detectar um "bloco grande" (um único elemento que contém praticamente todo o texto),
+    retornará somente esse bloco (mantendo imagens inline). Caso contrário, retorna blocos fragmentados
+    intercalados com imagens extraídas.
+    """
     temp_blocks = []
     seen_hashes = set()
-    for elemento in conteudo.find_all(['p', 'div', 'h2', 'h3']):
+    # busca elementos relevantes na ordem do DOM
+    for elemento in conteudo.find_all(['p', 'div', 'h2', 'h3'], recursive=False):
         built = build_text_block(elemento)
         if not built:
             continue
@@ -143,7 +169,53 @@ def classificar_blocos_de_texto(conteudo, lista_imagens_conteudo):
             continue
         seen_hashes.add(built["hash"])
         temp_blocks.append(built)
+
+    # Se não encontrou blocos detectáveis por esse critério, tenta varredura profunda como fallback
+    if not temp_blocks:
+        for elemento in conteudo.find_all(['p', 'div', 'h2', 'h3']):
+            built = build_text_block(elemento)
+            if not built:
+                continue
+            if built["hash"] in seen_hashes:
+                continue
+            seen_hashes.add(built["hash"])
+            temp_blocks.append(built)
+
+    # Se ainda vazio, devolve imagens encontradas em wrappers (cada uma como bloco)
+    if not temp_blocks and lista_imagens_conteudo:
+        result = []
+        for img in lista_imagens_conteudo:
+            img_html = f'<img src="{img}" />'
+            result.append({"type": "PARAGRAPH", "content": img_html})
+        return result
+
+    # Determina se existe um bloco que representa o conteúdo "agregado/grande"
+    # Critério: bloco com texto limpo muito maior que a média / segundo maior.
+    lengths = [len(b["plain"]) for b in temp_blocks]
+    if lengths:
+        max_len = max(lengths)
+        sorted_lengths = sorted(lengths, reverse=True)
+        second_len = sorted_lengths[1] if len(sorted_lengths) > 1 else 0
+        avg_len = sum(lengths) / len(lengths)
+        # LIMIAR: se o maior bloco tem > 600 caracteres ou é > 1.6x o segundo maior e > 300, consideramos agregado
+        if max_len >= 600 or (max_len >= 300 and max_len > 1.6 * max(second_len, avg_len)):
+            # encontra o bloco que tem max_len e retorna apenas ele (preservando seu HTML que pode conter img)
+            for b in temp_blocks:
+                if len(b["plain"]) == max_len:
+                    # garantir que imagens extraídas ainda sejam adicionadas ao final apenas se não estão inline no bloco
+                    bloco_unico = [b["block"]]
+                    # verifica se o bloco contém <img>; se não contiver e houver imagens extraídas, adiciona-as depois
+                    if '<img' not in (b["block"]["content"] or "").lower():
+                        for img in lista_imagens_conteudo:
+                            img_html = f'<img src="{img}" />'
+                            bloco_unico.append({"type": "PARAGRAPH", "content": img_html})
+                    return bloco_unico
+
+    # Caso não seja bloco grande: converte temp_blocks em lista intercalada com imagens
     return intercalate_images(temp_blocks, lista_imagens_conteudo)
+
+
+# ---------------- PARTE 2 (raspagem de lista e detalhes) ----------------
 
 def raspar_detalhes_funcultural(url_detalhes):
     soup_detalhes = obter_soup(url_detalhes)
@@ -151,7 +223,10 @@ def raspar_detalhes_funcultural(url_detalhes):
         return []
     conteudo = soup_detalhes.find('article', class_='noticia-conteudo')
     if not conteudo:
-        return []
+        # fallback: tentar buscar por .content ou .article-content
+        conteudo = soup_detalhes.find('div', class_='content') or soup_detalhes.find('div', class_='article-content')
+        if not conteudo:
+            return []
     lista_imagens_conteudo = pre_processar_html_conteudo(conteudo)
     blocos_finais = classificar_blocos_de_texto(conteudo, lista_imagens_conteudo)
     return blocos_finais
