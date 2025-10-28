@@ -33,10 +33,9 @@ jobs:
           # Ajuste o comando se o seu scraper usar outro arquivo ou args
           python scraper.py
 
-      - name: Prepare docs folder and copy outputs
+            - name: Prepare docs folder and copy outputs
         run: |
           mkdir -p docs/api_output
-          # adaptar caminhos caso seu scraper grave em outro local
           if [ -f api_output/eventos.json ]; then
             cp -f api_output/eventos.json docs/api_output/eventos.json
           fi
@@ -50,29 +49,25 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # stage files we expect to publish
           git add docs/api_output/eventos.json docs/api_output/eventos_index.json || true
 
-          # if nothing staged, exit early
+          # sai sem commitar se nada estiver staged
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
           fi
 
-          # compute local staged hash
-          LOCAL_HASH=""
+          # calcula hash local
           if [ -f docs/api_output/eventos.json ]; then
             LOCAL_HASH=$(sha1sum docs/api_output/eventos.json | cut -d' ' -f1)
+          else
+            LOCAL_HASH=""
           fi
 
-          # compute remote hash safely (empty if file absent)
-          REMOTE_HASH=""
-          if git ls-remote --exit-code origin main >/dev/null 2>&1; then
-            REMOTE_HASH=$(git show origin/main:docs/api_output/eventos.json 2>/dev/null | sha1sum 2>/dev/null | cut -d' ' -f1 || echo "")
-          fi
+          # calcula hash remoto (vazio se não existir)
+          REMOTE_HASH=$(git show origin/main:docs/api_output/eventos.json 2>/dev/null | sha1sum 2>/dev/null | cut -d' ' -f1 || echo "")
 
-          # if hashes equal, skip commit
+          # se idêntico, não commita
           if [ -n "$LOCAL_HASH" ] && [ "$LOCAL_HASH" = "$REMOTE_HASH" ]; then
             echo "Remote already has identical file, skipping commit"
             exit 0
