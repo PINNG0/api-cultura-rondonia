@@ -7,11 +7,18 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: raspar-eventos-culturais
+  cancel-in-progress: false
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-
+    outputs:
+      docs-created: ${{ steps.check-docs.outputs.has_docs }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,7 +38,6 @@ jobs:
 
       - name: Run scraper
         run: |
-          # Ajuste o comando se o seu scraper usar outro arquivo ou args
           python scraper.py
 
       - name: Prepare docs folder and copy outputs
@@ -45,6 +51,7 @@ jobs:
           fi
 
       - name: Commit output only if changed
+        id: commit-output
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -56,8 +63,10 @@ jobs:
           git add docs/api_output/eventos.json docs/api_output/eventos_index.json || true
           if git diff --cached --quiet; then
             echo "No changes to commit"
+            echo "has_docs=false" >> $GITHUB_OUTPUT
             exit 0
           fi
+          # compare hashes to avoid needless commits (robusto em runners Linux)
           if [ -f docs/api_output/eventos.json ]; then
             LOCAL_HASH=$(sha1sum docs/api_output/eventos.json | cut -d' ' -f1)
           else
@@ -66,7 +75,59 @@ jobs:
           REMOTE_HASH=$(git show origin/main:docs/api_output/eventos.json 2>/dev/null | sha1sum 2>/dev/null | cut -d' ' -f1 || echo "")
           if [ -n "$LOCAL_HASH" ] && [ "$LOCAL_HASH" = "$REMOTE_HASH" ]; then
             echo "Remote already has identical file, skipping commit"
+            echo "has_docs=false" >> $GITHUB_OUTPUT
             exit 0
           fi
           git commit -m "Atualiza eventos culturais via Action"
           git push origin HEAD:main
+          echo "has_docs=true" >> $GITHUB_OUTPUT
+
+      - name: Set output for docs-created
+        id: check-docs
+        run: |
+          # o passo anterior escreveu GITHUB_OUTPUT; ler e exportar
+          if [ "${{ steps.commit-output.outputs.has_docs }}" = "true" ]; then
+            echo "has_docs=true" > tmp_has_docs
+          else
+            # se não houve commit, mas docs existem localmente, ainda queremos deploy
+            if [ -f docs/api_output/eventos.json ]; then
+              echo "has_docs=true" > tmp_has_docs
+            else
+              echo "has_docs=false" > tmp_has_docs
+            fi
+          fi
+          cat tmp_has_docs
+        continue-on-error: false
+      - name: Export docs-created output
+        run: |
+          HAS_DOCS=$(cat tmp_has_docs | cut -d'=' -f2 || true)
+          echo "has_docs=${HAS_DOCS}" >> $GITHUB_OUTPUT
+
+  upload-pages:
+    needs: scrape
+    if: needs.scrape.outputs.docs-created == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository (for safety)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure docs exists
+        run: |
+          if [ ! -d docs ]; then
+            echo "No docs directory; aborting upload" >&2
+            exit 1
+          fi
+
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: docs
+
+  deploy-pages:
+    needs: upload-pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
