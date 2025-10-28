@@ -17,6 +17,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: true
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -33,7 +34,7 @@ jobs:
           # Ajuste o comando se o seu scraper usar outro arquivo ou args
           python scraper.py
 
-            - name: Prepare docs folder and copy outputs
+      - name: Prepare docs folder and copy outputs
         run: |
           mkdir -p docs/api_output
           if [ -f api_output/eventos.json ]; then
@@ -49,29 +50,23 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch --no-tags origin main
+          git checkout main
+          git reset --hard origin/main
           git add docs/api_output/eventos.json docs/api_output/eventos_index.json || true
-
-          # sai sem commitar se nada estiver staged
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
           fi
-
-          # calcula hash local
           if [ -f docs/api_output/eventos.json ]; then
             LOCAL_HASH=$(sha1sum docs/api_output/eventos.json | cut -d' ' -f1)
           else
             LOCAL_HASH=""
           fi
-
-          # calcula hash remoto (vazio se não existir)
           REMOTE_HASH=$(git show origin/main:docs/api_output/eventos.json 2>/dev/null | sha1sum 2>/dev/null | cut -d' ' -f1 || echo "")
-
-          # se idêntico, não commita
           if [ -n "$LOCAL_HASH" ] && [ "$LOCAL_HASH" = "$REMOTE_HASH" ]; then
             echo "Remote already has identical file, skipping commit"
             exit 0
           fi
-
           git commit -m "Atualiza eventos culturais via Action"
           git push origin HEAD:main
