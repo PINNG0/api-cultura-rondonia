@@ -1,8 +1,9 @@
 import requests
 from bs4 import BeautifulSoup, Tag
 import json, time, re, os, unicodedata, hashlib
+import subprocess
 
-# Config
+# Configura diretórios e URLs
 API_DIR = os.path.abspath("api_output")
 API_INDEX_FILE = os.path.join(API_DIR, "eventos_index.json")
 API_LIST_FILE = os.path.join(API_DIR, "eventos.json")
@@ -12,7 +13,7 @@ URL_NOTICIAS = f"{URL_BASE}/noticias"
 EVENTOS_URL_VISTAS = set()
 os.makedirs(API_DIR, exist_ok=True)
 
-# Texto limpo
+# Normaliza texto removendo tags e espaços
 def norm_text(s):
     if not s: return ""
     s = unicodedata.normalize("NFKC", s)
@@ -20,12 +21,12 @@ def norm_text(s):
     s = s.replace('\xa0',' ')
     return re.sub(r'\s+', ' ', s).strip()
 
-# ID único
+# Gera hash único para cada evento
 def gen_id(ev):
     key = (ev.get("titulo","") + "|" + ev.get("link_evento","")).strip()
     return hashlib.sha1(norm_text(key).encode('utf-8')).hexdigest()
 
-# HTML da página
+# Obtém HTML da página
 def get_soup(url):
     try:
         h = {"User-Agent":"Mozilla/5.0 (scraper)"}
@@ -36,7 +37,7 @@ def get_soup(url):
         print("Erro acessar:", url, e)
         return None
 
-# Corrige URL
+# Corrige URLs relativas
 def complete_url(u, base=URL_BASE):
     if not u: return None
     u = u.strip()
@@ -45,13 +46,13 @@ def complete_url(u, base=URL_BASE):
     base = base.rstrip('/')
     return f"{base}{u}" if u.startswith('/') else f"{base}/{u}"
 
-# Remove tags
+# Remove tags HTML simples
 def clean_text_simple(html):
     if not html: return ""
     t = re.sub(r'(?s)<[^>]+>', ' ', html)
     return re.sub(r'\s+', ' ', t).strip()
 
-# Limpa conteúdo
+# Extrai imagens e limpa elementos inúteis
 def preproc_content(article):
     imgs = []
     for child in list(article.children):
@@ -66,7 +67,7 @@ def preproc_content(article):
         if child.name == 'p' and not child.get_text(strip=True): child.decompose(); continue
     return imgs
 
-# Cria bloco
+# Cria bloco de conteúdo com tipo e texto limpo
 def build_block(elem):
     html = elem.decode_contents().strip()
     plain = clean_text_simple(elem.get_text(strip=True))
@@ -74,7 +75,7 @@ def build_block(elem):
     is_title = elem.name in ['h2','h3'] or bool(elem.find(['strong','em']))
     return {"type": "SUBTITLE" if is_title else "PARAGRAPH", "content": html, "plain": plain, "is_subtitle": is_title}
 
-# Intercala imagens
+# Insere imagens entre parágrafos
 def interleave_images(blocks, imgs):
     out = []; img_i = 0; para_count = 0
     for b in blocks:
@@ -97,6 +98,7 @@ def classify_blocks(article, imgs):
         h = re.sub(r'[\W_]+','', b["plain"].lower())[:80]
         if h in seen: continue
         seen.add(h); blocks.append(b)
+
     if not blocks:
         for e in article.find_all(['p','div','h2','h3']):
             b = build_block(e)
@@ -104,8 +106,10 @@ def classify_blocks(article, imgs):
             h = re.sub(r'[\W_]+','', b["plain"].lower())[:80]
             if h in seen: continue
             seen.add(h); blocks.append(b)
+
     if not blocks and imgs:
         return [{"type":"PARAGRAPH","content":f'<img src="{i}" />'} for i in imgs]
+
     lengths = [len(b["plain"]) for b in blocks]
     if lengths:
         max_len = max(lengths)
@@ -119,8 +123,10 @@ def classify_blocks(article, imgs):
                     if '<img' not in (b["content"] or "").lower():
                         for i in imgs: single.append({"type":"PARAGRAPH","content":f'<img src="{i}" />'})
                     return single
+
     return interleave_images(blocks, imgs)
 
+# Raspagem detalhada de uma notícia
 def scrape_details(url):
     soup = get_soup(url)
     if not soup: return []
@@ -129,6 +135,7 @@ def scrape_details(url):
     imgs = preproc_content(article)
     return classify_blocks(article, imgs)
 
+# Processa par imagem + texto
 def process_pair(img_block, txt_block):
     img_tag = img_block.find('img') if img_block else None
     banner_rel = img_tag['src'] if img_tag and img_tag.get('src') else None
@@ -148,6 +155,7 @@ def process_pair(img_block, txt_block):
     if not blocks: return None
     return {"titulo": norm_text(title), "blocos_conteudo": blocks, "imagem_url": banner or "", "link_evento": link, "fonte": "Funcultural"}
 
+# Raspagem de todas as páginas
 def scrape_all():
     print("Iniciando raspagem")
     all_events = []
@@ -191,58 +199,65 @@ def scrape_all():
     print("Total após dedupe:", len(events))
     return events
 
+# Salva arquivos e copia para docs/ e pages/
 def save_only(events, remove_individual=True):
-    index = []
-    for ev in events:
-        index.append({
-            "id": ev["id"],
-            "titulo": ev["titulo"],
-            "imagem_url": ev.get("imagem_url",""),
-            "link_evento": ev.get("link_evento",""),
-            "fonte": ev.get("fonte","")
-        })
 
-    if remove_individual:
-        for fn in os.listdir(API_DIR):
-            if re.fullmatch(r'[0-9a-f]{40}\.json', fn):
-                try: os.remove(os.path.join(API_DIR, fn))
-                except OSError: pass
+    os.makedirs(API_DIR, exist_ok=True)
 
+    with open(API_LIST_FILE, 'w', encoding='utf-8') as f:
+        json.dump(events, f, ensure_ascii=False, indent=2)
+
+    index = [{"id": ev["id"], "titulo": ev["titulo"], "imagem_url": ev["imagem_url"], "link_evento": ev["link_evento"], "fonte": ev["fonte"]} for ev in events]
+    with open(API_INDEX_FILE, 'w', encoding='utf-8') as f:
+        json.dump(index, f, ensure_ascii=False, indent=2)
+
+    print("Salvo:", API_LIST_FILE, "e", API_INDEX_FILE)
+
+    # Copia para docs/api_output
     try:
-        with open(API_INDEX_FILE, 'w', encoding='utf-8') as f:
-            json.dump(index, f, ensure_ascii=False, indent=2)
-        with open(API_LIST_FILE, 'w', encoding='utf-8') as f:
-            json.dump(events, f, ensure_ascii=False, indent=2)
-        print("Salvo:", API_LIST_FILE, "e", API_INDEX_FILE)
-    except IOError as e:
-        print("Erro salvar arquivos:", e)
+        docs_dir = os.path.abspath("docs/api_output")
+        os.makedirs(docs_dir, exist_ok=True)
+        for fname in ["eventos.json", "eventos_index.json"]:
+            src = os.path.join(API_DIR, fname)
+            dst = os.path.join(docs_dir, fname)
+            with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+                fdst.write(fsrc.read())
+        print("Arquivos copiados para:", docs_dir)
+    except Exception as e:
+        print("Erro ao copiar para docs/api_output:", e)
 
-def main():
-    print("Start")
-    if os.path.exists(LOCKFILE):
-        print("Outra instância em execução. Abortando."); return
-    open(LOCKFILE, 'w').close()
+    # Copia para pages/
     try:
-        evs = scrape_all()
-        save_only(evs, remove_individual=True)
-        print("Concluído. Eventos:", len(evs))
-    finally:
-        try: os.remove(LOCKFILE)
-        except OSError: pass
+        pages_dir = os.path.abspath("pages")
+        os.makedirs(pages_dir, exist_ok=True)
+        for fname in ["eventos.json", "eventos_index.json"]:
+            src = os.path.join(API_DIR, fname)
+            dst = os.path.join(pages_dir, fname)
+            with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+                fdst.write(fsrc.read())
+        print("Arquivos copiados para:", pages_dir)
+    except Exception as e:
+        print("Erro ao copiar para pages/:", e)
 
-
-# Copia os arquivos para a pasta pages/
+# Commit e push automático local
 try:
-    pages_dir = os.path.abspath("pages")
-    os.makedirs(pages_dir, exist_ok=True)
-    for fname in ["eventos.json", "eventos_index.json"]:
-        src = os.path.join(API_DIR, fname)
-        dst = os.path.join(pages_dir, fname)
-        with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
-            fdst.write(fsrc.read())
-    print("Arquivos copiados para:", pages_dir)
+    subprocess.run(["git", "add", "."], check=True)
+    subprocess.run(["git", "commit", "-m", "Atualiza dados raspados localmente"], check=True)
+    subprocess.run(["git", "push", "origin", "main"], check=True)
+    print("Commit e push automático concluído.")
 except Exception as e:
-    print("Erro ao copiar para pages/:", e)
+    print("Erro ao enviar para o Git:", e)
 
+# Executa tudo
 if __name__ == "__main__":
-    main()
+    if os.path.exists(LOCKFILE):
+        print("Já está rodando. Abortando.")
+        exit(1)
+    try:
+        with open(LOCKFILE, 'w') as f: f.write("running")
+        eventos = scrape_all()
+        save_only(eventos)
+        print("Concluído. Eventos:", len(eventos))
+    finally:
+        if os.path.exists(LOCKFILE):
+            os.remove(LOCKFILE)
