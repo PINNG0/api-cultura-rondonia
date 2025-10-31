@@ -52,7 +52,7 @@ Este projeto é dividido em três partes principais:
 - [x] **App:** Estrutura base do Android (Retrofit, Adapters, Layouts) implementada
 - [x] **App:** Ordenação por data de publicação
 - [ ] **App:** Tela de detalhes do evento
-- [ ] **App:** Filtro por palavra-chave ou tipo de evento
+- [x] **App:** Filtro por palavra-chave ou tipo de evento
 
 ---
 
