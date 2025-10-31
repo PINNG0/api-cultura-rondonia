@@ -283,14 +283,21 @@ def save_only(events, remove_individual=True):
         print("Erro ao copiar para pages/:", e)
 
 # Commit e push automático local
+
 def run_git_operations():
     try:
         subprocess.run(["git", "add", "."], check=True)
         subprocess.run(["git", "commit", "-m", "Atualiza dados raspados localmente, incluindo data de exibição"], check=True)
         subprocess.run(["git", "push", "origin", "main"], check=True)
-        print("Commit e push automático concluído.")
-    except Exception as e:
-        print("Erro ao enviar para o Git:", e)
+        print("✅ Commit e push automático concluído.")
+    except subprocess.CalledProcessError as e:
+        print("⚠️ Push falhou, tentando rebase com pull...")
+        try:
+            subprocess.run(["git", "pull", "origin", "main", "--rebase"], check=True)
+            subprocess.run(["git", "push", "origin", "main"], check=True)
+            print("✅ Rebase e push concluídos após conflito remoto.")
+        except Exception as e2:
+            print("❌ Erro ao tentar rebase e push:", e2)
 
 # Executa tudo
 if __name__ == "__main__":
