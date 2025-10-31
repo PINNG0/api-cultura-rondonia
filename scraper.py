@@ -184,7 +184,7 @@ def process_pair(img_block, txt_block):
         "imagem_url": banner or "", 
         "link_evento": link, 
         "fonte": "Funcultural",
-        "data_exibicao": data_exibicao # <-- CAMPO ADICIONADO
+        "data_exibicao": data_exibicao 
     }
 
 # Raspagem de todas as páginas
@@ -243,8 +243,6 @@ def scrape_all():
 
 # Salva arquivos e copia para docs/ e pages/
 def save_only(events, remove_individual=True):
-    # Lógica de save e push (mantida como a última versão)
-    # ...
     
     os.makedirs(API_DIR, exist_ok=True)
 
