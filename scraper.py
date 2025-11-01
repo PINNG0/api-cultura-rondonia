@@ -6,7 +6,9 @@ from scraping.html_generator import gerar_html_arquivos_por_ano
 import os
 
 if __name__ == "__main__":
-    if os.path.exists(LOCKFILE):
+    RODANDO_NO_GITHUB = os.getenv("GITHUB_ACTIONS") == "true"
+
+    if os.path.exists(LOCKFILE) and not RODANDO_NO_GITHUB:
         print("⚠️ Já está rodando. Abortando.")
         exit(1)
 
