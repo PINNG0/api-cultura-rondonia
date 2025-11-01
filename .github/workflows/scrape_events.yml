@@ -40,16 +40,6 @@ jobs:
         run: |
           python scraper.py
 
-      - name: Prepare docs folder and copy outputs
-        run: |
-          mkdir -p docs/api_output
-          if [ -f api_output/eventos.json ]; then
-            cp -f api_output/eventos.json docs/api_output/eventos.json
-          fi
-          if [ -f api_output/eventos_index.json ]; then
-            cp -f api_output/eventos_index.json docs/api_output/eventos_index.json
-          fi
-
       - name: Commit output only if changed
         id: commit-output
         env:
@@ -60,18 +50,13 @@ jobs:
           git fetch --no-tags origin main
           git checkout main
           git reset --hard origin/main
-          git add docs/api_output/eventos.json docs/api_output/eventos_index.json || true
+          git add docs/api_output/eventos.json docs/api_output/index.json || true
           if git diff --cached --quiet; then
             echo "No changes to commit"
             echo "has_docs=false" >> $GITHUB_OUTPUT
             exit 0
           fi
-          # compare hashes to avoid needless commits (robusto em runners Linux)
-          if [ -f docs/api_output/eventos.json ]; then
-            LOCAL_HASH=$(sha1sum docs/api_output/eventos.json | cut -d' ' -f1)
-          else
-            LOCAL_HASH=""
-          fi
+          LOCAL_HASH=$(sha1sum docs/api_output/eventos.json | cut -d' ' -f1 || echo "")
           REMOTE_HASH=$(git show origin/main:docs/api_output/eventos.json 2>/dev/null | sha1sum 2>/dev/null | cut -d' ' -f1 || echo "")
           if [ -n "$LOCAL_HASH" ] && [ "$LOCAL_HASH" = "$REMOTE_HASH" ]; then
             echo "Remote already has identical file, skipping commit"
@@ -85,19 +70,13 @@ jobs:
       - name: Set output for docs-created
         id: check-docs
         run: |
-          # o passo anterior escreveu GITHUB_OUTPUT; ler e exportar
-          if [ "${{ steps.commit-output.outputs.has_docs }}" = "true" ]; then
+          if [ -f docs/api_output/eventos.json ]; then
             echo "has_docs=true" > tmp_has_docs
           else
-            # se não houve commit, mas docs existem localmente, ainda queremos deploy
-            if [ -f docs/api_output/eventos.json ]; then
-              echo "has_docs=true" > tmp_has_docs
-            else
-              echo "has_docs=false" > tmp_has_docs
-            fi
+            echo "has_docs=false" > tmp_has_docs
           fi
           cat tmp_has_docs
-        continue-on-error: false
+
       - name: Export docs-created output
         run: |
           HAS_DOCS=$(cat tmp_has_docs | cut -d'=' -f2 || true)
@@ -118,7 +97,6 @@ jobs:
           if [ ! -d docs ]; then
             echo "No docs directory; aborting upload" >&2
             exit 1
-          fi
 
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v1
