@@ -5,16 +5,13 @@ from scraping.processor import classify_blocks, preproc_content
 from scraping.parser import norm_text, gen_id
 
 def scrape_details(url):
-    print(f"🔗 Acessando detalhes: {url}")
     soup = get_soup(url)
     if not soup:
-        print("⚠️ Erro ao carregar detalhes.")
         return []
     article = soup.find('article', class_='noticia-conteudo') or \
               soup.find('div', class_='content') or \
               soup.find('div', class_='article-content')
     if not article:
-        print("⚠️ Conteúdo principal não encontrado.")
         return []
     imgs = preproc_content(article)
     return classify_blocks(article, imgs)
@@ -42,7 +39,6 @@ def process_pair(img_block, txt_block):
     if not blocks:
         return None
 
-    print(f"✅ Evento coletado: {title}")
     return {
         "titulo": norm_text(title),
         "blocos_conteudo": blocks,
@@ -71,6 +67,7 @@ def scrape_all():
             print("⚠️ Nenhum resultado encontrado nesta página.")
             break
 
+        eventos_pagina = []
         i = 0
         while i < len(results):
             img_b = results[i]
@@ -78,7 +75,10 @@ def scrape_all():
             i += 2 if i+1 < len(results) else 1
             ev = process_pair(img_b, txt_b)
             if ev:
-                all_events.append(ev)
+                eventos_pagina.append(ev)
+
+        print(f"✅ Página {pagina} concluída. Eventos coletados: {len(eventos_pagina)}")
+        all_events.extend(eventos_pagina)
 
         next_page = soup.select_one(f'ul.pagination a[href*="page={pagina + 1}"]')
         if not next_page and pagina >= 3:
