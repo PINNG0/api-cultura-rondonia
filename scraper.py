@@ -127,7 +127,7 @@ def classify_blocks(article, imgs):
     if not blocks and imgs:
         return [{"type":"IMAGE_URL","content":i} for i in imgs]
 
-    # Lógica de agrupamento de blocos grandes (mantida)
+    # Lógica de agrupamento de blocos grandes 
     lengths = [len(b["plain"]) for b in blocks]
     if lengths:
         max_len = max(lengths)
