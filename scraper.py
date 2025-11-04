@@ -38,7 +38,8 @@ if __name__ == "__main__":
 
             html_anos = gerar_html_arquivos_por_ano()
             if "<!-- anos -->" in conteudo:
-                novo_conteudo = conteudo.replace("<!-- anos -->", f"<!-- anos -->\n{html_anos}")
+                # Remove tudo após o marcador e insere os links atualizados
+                novo_conteudo = conteudo.split("<!-- anos -->")[0] + "<!-- anos -->\n" + html_anos
                 with open(index_path, "w", encoding="utf-8") as f:
                     f.write(novo_conteudo)
                 print("✅ HTML atualizado com os anos disponíveis.")
