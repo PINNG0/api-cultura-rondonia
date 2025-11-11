@@ -16,14 +16,17 @@ def scrape_details(url):
     imgs = preproc_content(article)
     return classify_blocks(article, imgs)
 
-def process_pair(img_block, txt_block):
-    img_tag = img_block.find('img') if img_block else None
-    banner_rel = img_tag['src'] if img_tag and img_tag.get('src') else None
+def process_single_block(bloco):
+    # Extrai imagem
+    img_tag = bloco.find('img')
+    banner_rel = img_tag['src'] if img_tag and img_tag.get('src') else ""
 
-    title_tag = txt_block.find('div', class_='titulo-noticia-pesquisa') if txt_block else None
+    # Extrai título
+    title_tag = bloco.find('div', class_='titulo-noticia-pesquisa')
     title = title_tag.get_text(strip=True) if title_tag else "Título não encontrado"
 
-    link_tag = txt_block.find('a') if txt_block else None
+    # Extrai link
+    link_tag = bloco.find('a')
     link_rel = link_tag['href'] if link_tag and link_tag.get('href') else None
     link = link_rel.strip() if link_rel else None
 
@@ -31,9 +34,11 @@ def process_pair(img_block, txt_block):
         return None
     EVENTOS_URL_VISTAS.add(link)
 
-    date_tag = txt_block.find('div', class_='datanot')
+    # Extrai data
+    date_tag = bloco.find('div', class_='datanot')
     data_exibicao = date_tag.get_text(strip=True) if date_tag else "Sem data"
 
+    # Raspagem do conteúdo detalhado
     blocks = scrape_details(link)
     sleep(0.25)
     if not blocks:
@@ -42,7 +47,7 @@ def process_pair(img_block, txt_block):
     return {
         "titulo": norm_text(title),
         "blocos_conteudo": blocks,
-        "imagem_url": banner_rel or "",
+        "imagem_url": banner_rel,
         "link_evento": link,
         "fonte": "Funcultural",
         "data_exibicao": data_exibicao
@@ -63,17 +68,14 @@ def scrape_all():
             break
 
         results = soup.find_all('div', class_='resultado-pesquisa')
+        print(f"🔍 Blocos encontrados: {len(results)}")
         if not results:
             print("⚠️ Nenhum resultado encontrado nesta página.")
             break
 
         eventos_pagina = []
-        i = 0
-        while i < len(results):
-            img_b = results[i]
-            txt_b = results[i+1] if i+1 < len(results) else results[i]
-            i += 2 if i+1 < len(results) else 1
-            ev = process_pair(img_b, txt_b)
+        for bloco in results:
+            ev = process_single_block(bloco)
             if ev:
                 eventos_pagina.append(ev)
 
