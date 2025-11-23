@@ -12,12 +12,13 @@ def rodando_no_github():
 
 def gerar_hash_eventos(eventos):
     """
-    Gera um hash único considerando os campos principais dos eventos,
-    incluindo a data de exibição.
+    Gera um hash único considerando os campos principais dos eventos.
+    CORREÇÃO: Incluída a ordenação pela ID para estabilizar e garantir a detecção de mudança.
     """
     normalizados = []
     for e in eventos:
         normalizados.append({
+            # Usamos o 'id' que é a chave de unicidade do evento
             "id": e.get("id"),
             "titulo": e.get("titulo"),
             "fonte": e.get("fonte"),
@@ -25,6 +26,15 @@ def gerar_hash_eventos(eventos):
             "imagem_url": e.get("imagem_url"),
             "data_exibicao": e.get("data_exibicao"),
         })
+
+    # 🔑 CORREÇÃO CRUCIAL: Ordena a lista de objetos pelo ID. 
+    # Isso garante que se houver UM NOVO EVENTO ou a ordem de raspagem mudar,
+    # o hash reflete a diferença real no conjunto de dados, e não apenas na ordem.
+    if normalizados:
+        # Usa .get("id", "") para evitar erros caso o 'id' esteja ausente
+        normalizados.sort(key=lambda x: x.get("id", ""))
+        
+    # Usa sort_keys=True para serializar as CHAVES dentro dos objetos de forma estável
     payload = json.dumps(normalizados, ensure_ascii=False, sort_keys=True)
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 

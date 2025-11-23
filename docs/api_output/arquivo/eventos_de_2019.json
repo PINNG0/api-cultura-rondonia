@@ -1,5 +1,19 @@
 [
   {
+    "titulo": "Ballet FUNCULTURAL dia 24 de Novembro",
+    "blocos_conteudo": [
+      {
+        "type": "PARAGRAPH",
+        "content": "<p>A Prefeitura de Porto Velho, através do Balé da Fundação Cultural (Funcultural), realizará no dia 24 de novembro a apresentação do espetáculo Floresta Amazônica, que acontecerá no Teatro Guaporé, com entrada franca.</p>\n<p>Como forma de propagar a arte da dança no município, o grupo de Balé da Funcultural, realizará a apresentação a partir das 18h, onde várias crianças poderão apresentar os seus talentos.</p>"
+      }
+    ],
+    "imagem_url": "/uploads/_thumbs/editor/capas/2019/11/1573659271ballet-com-patrocinio.jpg",
+    "link_evento": "https://funcultural.portovelho.ro.gov.br/artigo/26748/ballet-funcultural-dia-24-de-novembro",
+    "fonte": "Funcultural",
+    "data_exibicao": "há 6 anos",
+    "id": "f008617d5ebe6ea5c76afeb17c44750e36e16995"
+  },
+  {
     "titulo": "Dia Nacional da Cultura",
     "blocos_conteudo": [
       {
