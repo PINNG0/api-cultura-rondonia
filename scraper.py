@@ -1,5 +1,5 @@
 from scraping.runner import scrape_all
-from scraping.storage import save_only, run_git_operations
+from scraping.storage import save_only
 from scraping.config import LOCKFILE
 from scraping.archiver import ArquivadorEventos
 from scraping.html_generator import gerar_html_arquivos_por_ano
@@ -12,30 +12,11 @@ def rodando_no_github():
 
 def gerar_hash_eventos(eventos):
     """
-    Gera um hash único considerando os campos principais dos eventos.
-    CORREÇÃO: Incluída a ordenação pela ID para estabilizar e garantir a detecção de mudança.
+    Gera um hash único considerando TODOS os campos relevantes do evento.
+    Agora o hash é 100% determinístico mesmo em ordem diferente.
     """
-    normalizados = []
-    for e in eventos:
-        normalizados.append({
-            # Usamos o 'id' que é a chave de unicidade do evento
-            "id": e.get("id"),
-            "titulo": e.get("titulo"),
-            "fonte": e.get("fonte"),
-            "link_evento": e.get("link_evento"),
-            "imagem_url": e.get("imagem_url"),
-            "data_exibicao": e.get("data_exibicao"),
-        })
-
-    # 🔑 CORREÇÃO CRUCIAL: Ordena a lista de objetos pelo ID. 
-    # Isso garante que se houver UM NOVO EVENTO ou a ordem de raspagem mudar,
-    # o hash reflete a diferença real no conjunto de dados, e não apenas na ordem.
-    if normalizados:
-        # Usa .get("id", "") para evitar erros caso o 'id' esteja ausente
-        normalizados.sort(key=lambda x: x.get("id", ""))
-        
-    # Usa sort_keys=True para serializar as CHAVES dentro dos objetos de forma estável
-    payload = json.dumps(normalizados, ensure_ascii=False, sort_keys=True)
+    # serializa tudo com chaves ordenadas
+    payload = json.dumps(eventos, ensure_ascii=False, sort_keys=True)
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 if __name__ == "__main__":
@@ -60,24 +41,32 @@ if __name__ == "__main__":
         print("🧹 Arquivando eventos antigos...")
         ArquivadorEventos().arquivar()
 
-        print("🧩 Atualizando index.html com os anos disponíveis...")
+        print("🧩 Atualizando index.html...")
         index_path = "docs/index.html"
+        index_modificado = False
+
         if os.path.exists(index_path):
             with open(index_path, "r", encoding="utf-8") as f:
                 conteudo = f.read()
 
             html_anos = gerar_html_arquivos_por_ano()
             if "<!-- anos -->" in conteudo:
-                # Remove tudo após o marcador e insere os links atualizados
                 novo_conteudo = conteudo.split("<!-- anos -->")[0] + "<!-- anos -->\n" + html_anos
-                with open(index_path, "w", encoding="utf-8") as f:
-                    f.write(novo_conteudo)
-                print("✅ HTML atualizado com os anos disponíveis.")
+                if novo_conteudo != conteudo:
+                    index_modificado = True
+                    with open(index_path, "w", encoding="utf-8") as f:
+                        f.write(novo_conteudo)
+                    print("✅ index.html atualizado!")
+                else:
+                    print("✔ index.html sem mudanças.")
             else:
                 print("⚠️ Marcador <!-- anos --> não encontrado no index.html.")
+        else:
+            print("⚠️ index.html não encontrado.")
 
-        # 🔎 Verifica se houve mudança (incluindo data_exibicao)
-        print("🔎 Verificando mudanças...")
+        # ----- DETECÇÃO DE MUDANÇAS -----
+        print("🔎 Verificando mudanças nos dados...")
+
         novo_hash = gerar_hash_eventos(eventos)
         hash_path = ".cache/hash_eventos.txt"
         os.makedirs(".cache", exist_ok=True)
@@ -87,13 +76,22 @@ if __name__ == "__main__":
             with open(hash_path, "r", encoding="utf-8") as f:
                 antigo_hash = f.read().strip()
 
-        if antigo_hash != novo_hash:
-            print("📤 Mudança detectada. Enviando para o GitHub...")
-            run_git_operations()
-            with open(hash_path, "w", encoding="utf-8") as f:
-                f.write(novo_hash)
+        mudou_eventos = antigo_hash != novo_hash
+
+        if mudou_eventos:
+            print("📌 Dados dos eventos mudaram.")
         else:
-            print("🟡 Nenhuma mudança detectada. Push ignorado.")
+            print("✔ Eventos iguais ao último hash salvo.")
+
+        # Salva o novo hash (IMPORTANTE: sempre salvar após a execução)
+        with open(hash_path, "w", encoding="utf-8") as f:
+            f.write(novo_hash)
+
+        # LOG FINAL
+        if mudou_eventos or index_modificado:
+            print("📤 Mudanças detectadas. O GitHub Actions irá comitar.")
+        else:
+            print("🟡 Nenhuma mudança detectada. O GitHub Actions não enviará commit.")
 
         print("🎉 Processo finalizado com sucesso!")
 

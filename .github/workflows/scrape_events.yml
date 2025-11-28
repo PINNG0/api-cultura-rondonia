@@ -18,7 +18,7 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
     outputs:
-      docs-created: ${{ steps.check-docs.outputs.has_docs }}
+      docs-created: ${{ steps.commit-output.outputs.has_docs }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -37,8 +37,7 @@ jobs:
           pip install requests beautifulsoup4
 
       - name: Run scraper
-        run: |
-          python scraper.py
+        run: python scraper.py
 
       - name: Commit output only if changed
         id: commit-output
@@ -49,54 +48,28 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch --no-tags origin main
           git checkout main
-          git reset --hard origin/main
-          git add docs/api_output/*.json docs/api_output/arquivo/*.json || true
+
+          git add docs/api_output/*.json docs/api_output/arquivo/*.json 2>/dev/null || true
+
+          # Se nada mudou, não comitar
           if git diff --cached --quiet; then
             echo "No changes to commit"
             echo "has_docs=false" >> $GITHUB_OUTPUT
             exit 0
           fi
-          LOCAL_HASH=$(sha1sum docs/api_output/eventos.json | cut -d' ' -f1 || echo "")
-          REMOTE_HASH=$(git show origin/main:docs/api_output/eventos.json 2>/dev/null | sha1sum 2>/dev/null | cut -d' ' -f1 || echo "")
-          if [ -n "$LOCAL_HASH" ] && [ "$LOCAL_HASH" = "$REMOTE_HASH" ]; then
-            echo "Remote already has identical file, skipping commit"
-            echo "has_docs=false" >> $GITHUB_OUTPUT
-            exit 0
-          fi
+
           git commit -m "Atualiza eventos culturais via Action"
           git push origin HEAD:main
+
           echo "has_docs=true" >> $GITHUB_OUTPUT
-
-      - name: Set output for docs-created
-        id: check-docs
-        run: |
-          if [ -f docs/api_output/eventos.json ]; then
-            echo "has_docs=true" > tmp_has_docs
-          else
-            echo "has_docs=false" > tmp_has_docs
-          fi
-          cat tmp_has_docs
-
-      - name: Export docs-created output
-        run: |
-          HAS_DOCS=$(cat tmp_has_docs | cut -d'=' -f2 || true)
-          echo "has_docs=${HAS_DOCS}" >> $GITHUB_OUTPUT
 
   upload-pages:
     needs: scrape
     if: needs.scrape.outputs.docs-created == 'true'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository (for safety)
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Ensure docs exists
-        run: |
-          if [ ! -d docs ]; then
-            echo "No docs directory; aborting upload" >&2
-            exit 1
 
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v1
