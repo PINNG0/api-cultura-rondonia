@@ -2,81 +2,85 @@
 
 Aplicativo acadêmico desenvolvido para a disciplina de Programação para Dispositivos Móveis, com o objetivo de centralizar eventos e notícias culturais do estado de Rondônia, oferecendo ao cidadão uma plataforma moderna e acessível.
 
-🌐 O Problema
+🌐 Problema
 
-Eventos culturais são divulgados em portais distintos (Funcultural, Sejucel etc.) e não existe um hub único de acesso.
-O MuvRO resolve essa fragmentação coletando automaticamente essas informações e exibindo-as em uma experiência simples e útil.
+Eventos culturais são divulgados separadamente em portais como Funcultural e Sejucel, dificultando o acesso do público.
+
+O MuvRO resolve isso ao:
+
+✔️ Coletar dados automaticamente
+✔️ Organizar conteúdo
+✔️ Exibir tudo em uma experiência intuitiva
 
 🚀 Arquitetura do Projeto
 
-A solução segue um modelo de Múltiplas Camadas, apoiado por pipeline automatizado (CI/CD), Docker e atualização contínua de dados.
+A solução segue um modelo de múltiplas camadas, apoiado por automação CI/CD, Docker e atualização contínua de dados.
 
-🔹 1. Backend — Scraper & Data Pipeline
+🔹 1. Backend — Scraper & Pipeline
 
-Desenvolvido em Python
+Tecnologias e funções:
 
-Raspagem periódica das fontes culturais
+Python — desenvolvimento do robô coletor
+
+Raspagem periódica de portais culturais
 
 Limpeza de HTML, deduplicação e ordenação por timestamp
 
-Geração de:
+Geração automática de arquivos:
 
 eventos.json
 
 eventos_index.json
 
-Commit e push automático do conteúdo atualizado
+Commit e push automatizado para o repositório
 
-Infraestrutura e automação
+Infraestrutura utilizada:
 
 Docker — empacotamento do ambiente de scraping
 
-GitHub Actions — agendamento, execução do scraper, build da imagem
+GitHub Actions — agendamento, execução e deploy dos dados
 
-Snyk — análise SaaS de vulnerabilidades em requirements.txt
+Snyk — inspeção de pacotes Python (SaaS security)
 
 🔹 2. API Pública
 
-JSON hospedado em GitHub Pages
+JSON publicado via GitHub Pages
 
-Serve como uma API REST gratuita, acessível pelo app Android
+Serve como API REST gratuita, consumida pelo app
 
 🔹 3. Aplicativo Android — Frontend
 
-Desenvolvido em Java, seguindo a arquitetura MVVM:
+Desenvolvido em Java
 
-✔️ ViewModel e Repository para isolamento de lógica
-✔️ Retrofit para consumo remoto
-✔️ Room Database para cache offline-first
+Utiliza MVVM para separação de responsabilidades
 
-UI e UX
+Componentes principais:
 
-CoordinatorLayout + AppBarLayout com recolhimento total da barra superior
+✔️ ViewModel + Repository
+✔️ Retrofit — consumo remoto
+✔️ Room Database — cache e modo offline
+✔️ CoordinatorLayout + AppBarLayout
+✔️ RecyclerView (destaques horizontais + lista vertical)
+✔️ Glide — imagem e cache
 
-RecyclerView com destaques horizontais e lista vertical
+✨ Funcionalidades do Aplicativo
 
-Glide para carregamento e cache de imagens
-
-✨ Funcionalidades Principais
-
-✔️ Listagem organizada por data (novo → antigo)
+✔️ Lista de eventos ordenada por data
 ✔️ Cache offline com Room
-✔️ Favoritos persistentes — lista pessoal armazenada no dispositivo
-✔️ Busca integrada via SearchView no toolbar
-✔️ Compartilhamento direto — envia o link original do evento por Intent
-✔️ Experiência fluida com recolhimento total do header durante rolagem
+✔️ Sistema de favoritos
+✔️ Busca integrada via SearchView
+✔️ Compartilhamento direto via Intent
+✔️ UI com recolhimento dinâmico do cabeçalho
 
-🔧 Pipeline e DevOps (Atendendo requisitos da disciplina)
+🔧 Pipeline e DevOps
 
-O workflow .github/workflows/scrape_events.yml implementa:
+O workflow (.github/workflows/scrape_events.yml) implementa:
 
-Execução automática da raspagem (schedule e push)
+Execução automática do scraper
 
-Build da imagem Docker
+Build e execução da imagem Docker
 
-Execução do container com o scraper
-
-Validação via SaaS (Snyk)
+Análise de segurança SaaS
 
 Commit e publicação dos arquivos JSON via Pages
 
@@ -84,12 +88,12 @@ Commit e publicação dos arquivos JSON via Pages
 Recurso	Status
 Scraper Funcultural	✔️
 Scraper Sejucel	🚧
-JSON/API publicada via Pages	✔️
+API / JSON via Pages	✔️
 Retrofit + MVVM + Room	✔️
-Ordenação por timestamp	✔️
-Busca / SearchView	✔️
+Ordenação por data	✔️
+Busca integrada	✔️
 Favoritos	✔️
-Compartilhamento de eventos	✔️
+Compartilhamento	✔️
 Tela de detalhes	🚧
 📄 Licença
 
