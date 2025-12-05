@@ -2,11 +2,11 @@ name: Raspar Eventos Culturais
 
 on:
   schedule:
-    - cron: '0 3 * * *' # 0h em Rondônia
-  workflow_dispatch:
+    - cron: '0 3 * * *' # 0h em Rondônia (Execução automática diária)
+  workflow_dispatch: # Permite a execução manual na interface do GitHub
 
 permissions:
-  contents: write
+  contents: write # Permissão para commitar o JSON atualizado
   pages: write
   id-token: write
 
@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       docs-created: ${{ steps.commit-output.outputs.has_docs }}
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,19 +27,32 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      # REQUISITO 1: BUILD DA IMAGEM DOCKER (BULLDOG)
+      - name: Build da Imagem Docker
+        # Constrói a imagem Docker (o 'bulldog') a partir do Dockerfile
+        run: docker build -t cultural-scraper . 
+
+      # 2. ANÁLISE DE SAAS (Snyk)
+      - name: Configurar Node.js para Snyk
+        uses: actions/setup-node@v3
         with:
-          python-version: '3.x'
-
-      - name: Install dependencies
+          node-version: 16
+          
+      - name: Análise de SAAS (Snyk - Segurança de Dependências)
+        # Instala e executa o Snyk para verificar vulnerabilidades no requirements.txt
         run: |
-          python -m pip install --upgrade pip
-          pip install requests beautifulsoup4
+          npm install -g snyk
+          snyk test --file=requirements.txt --severity-threshold=high
+        env:
+          # Variável secreta do GitHub Secrets
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} 
+          
+      # 3. EMPACOTAMENTO/EXECUÇÃO VIA DOCKER
+      - name: Rodar Scraper via Contêiner Docker
+        # Executa o contêiner. O -v mapeia a pasta do GitHub para salvar o JSON gerado.
+        run: docker run --rm -v ${{ github.workspace }}:/app cultural-scraper
 
-      - name: Run scraper
-        run: python scraper.py
-
+      # 4. PRESERVAR FUNCIONALIDADE ORIGINAL (Commit do JSON)
       - name: Commit output only if changed
         id: commit-output
         env:
@@ -48,7 +62,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch --no-tags origin main
           git checkout main
-
+          
+          # Adiciona arquivos JSON alterados (MANTÉM O SEU DESTINO ORIGINAL)
           git add docs/api_output/*.json docs/api_output/arquivo/*.json 2>/dev/null || true
 
           # Se nada mudou, não comitar
@@ -58,7 +73,7 @@ jobs:
             exit 0
           fi
 
-          git commit -m "Atualiza eventos culturais via Action"
+          git commit -m "Atualiza eventos culturais via Action [skip ci]"
           git push origin HEAD:main
 
           echo "has_docs=true" >> $GITHUB_OUTPUT

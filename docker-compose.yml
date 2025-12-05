@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  # Define o serviço de scraping
+  scraper:
+    # Instrução para construir a imagem a partir do Dockerfile no diretório atual
+    build: . 
+    
+    # Nome do contêiner para fácil referência
+    container_name: muvro_scraper
+    
+    # Mapeia a pasta local atual (onde está o docker-compose.yml e o código) 
+    # para a pasta /app dentro do contêiner.
+    # Isso garante que o arquivo eventos.json gerado pelo CMD no Dockerfile 
+    # seja salvo na sua máquina local.
+    volumes:
+      - .:/app
+      
+    # O comando que será executado ao usar 'docker-compose up'. 
+    # Isso sobrescreve o CMD do Dockerfile e garante que o spider rode.
+    # Certifique-se de que 'scraper.py' inicia a raspagem.
+    command: python scraper.py 
+    
+    # Restarta automaticamente se houver falhas
+    restart: "on-failure"

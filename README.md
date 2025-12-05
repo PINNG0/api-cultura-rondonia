@@ -1,61 +1,97 @@
-# 🏛️ Cultura Rondônia - Agregador de Eventos
+🎭 MuvRO — Guia Cultural de Rondônia
 
-Este é um projeto acadêmico para a disciplina de Programação para Dispositivos Móveis. O objetivo é desenvolver um aplicativo Android nativo que sirva como um agregador de eventos culturais e notícias para o estado de Rondônia, com foco inicial em Porto Velho.
+Aplicativo acadêmico desenvolvido para a disciplina de Programação para Dispositivos Móveis, com o objetivo de centralizar eventos e notícias culturais do estado de Rondônia, oferecendo ao cidadão uma plataforma moderna e acessível.
 
-O aplicativo resolve o problema da informação fragmentada, onde eventos públicos são divulgados em múltiplos portais (como o da Funcultural e da Sejucel), mas não são centralizados em um único local de fácil acesso para o cidadão.
+🌐 O Problema
 
----
+Eventos culturais são divulgados em portais distintos (Funcultural, Sejucel etc.) e não existe um hub único de acesso.
+O MuvRO resolve essa fragmentação coletando automaticamente essas informações e exibindo-as em uma experiência simples e útil.
 
-## 🚀 Arquitetura do Projeto
+🚀 Arquitetura do Projeto
 
-Este projeto é dividido em três partes principais:
+A solução segue um modelo de Múltiplas Camadas, apoiado por pipeline automatizado (CI/CD), Docker e atualização contínua de dados.
 
- Este projeto é dividido em três partes principais:
-1. **Backend (O Robô Scraper):**  
-   Script em Python (`scraper.py`) que visita periodicamente os sites de notícias culturais (Funcultural, Sejucel) e raspa os dados (títulos, imagens, descrições, data de publicação). Inclui lógica de limpeza de HTML, deduplicação, interleaving de imagens e ordenação por data.  
-   Também realiza commit e push automático para o GitHub quando executado localmente.
+🔹 1. Backend — Scraper & Data Pipeline
 
-2.  **API (O JSON):**  
-   O scraper consolida os dados em `eventos.json` e `eventos_index.json`, hospedados via GitHub Pages.  
-   Servem como uma API RESTful gratuita, acessível publicamente
+Desenvolvido em Python
 
-3.  **Frontend (O App Android):**  
-   Aplicativo nativo em Java que consome os dados via Retrofit.  
-   Exibe os eventos em uma interface limpa com destaques, listas e ordenação por data de publicação.
-    
+Raspagem periódica das fontes culturais
 
-## 🛠️ Tecnologias Utilizadas
+Limpeza de HTML, deduplicação e ordenação por timestamp
 
-### Backend (Scraper)
- **Python 3**
- **Requests** – Requisições HTTP
- **BeautifulSoup4** – Parsing de HTML
- **Hashlib** – Geração de IDs únicos
- **Datetime** – Interpretação de datas relativas (ex: "há 1 semana")
- **Git subprocess** – Commit e push automático local
+Geração de:
 
+eventos.json
 
-### Frontend (Aplicativo Android)
-* **Java**
-* **Android SDK**
-* **Retrofit:** Para o consumo da API (JSON).
-* **Glide:** Para carregamento e cache de imagens (os banners dos eventos).
-* **RecyclerView:** Para exibir as listas de "Destaques" (horizontal) e "Próximos Eventos" (vertical).
-* **CardView:** Para o design dos itens da lista.
-**Ordenação por data** – Eventos mais recentes primeiro
+eventos_index.json
 
-## 🏁 Status do Projeto
+Commit e push automático do conteúdo atualizado
 
-- [x] **Backend:** Scraper da Funcultural completo com data de publicação
-- [ ] **Backend:** Adicionar scraper da Sejucel
-- [x] **API:** JSON hospedado com sucesso no GitHub Pages
-- [x] **App:** Estrutura base do Android (Retrofit, Adapters, Layouts) implementada
-- [x] **App:** Ordenação por data de publicação
-- [ ] **App:** Tela de detalhes do evento
-- [x] **App:** Filtro por palavra-chave ou tipo de evento
+Infraestrutura e automação
 
----
+Docker — empacotamento do ambiente de scraping
 
-## 📄 Licença
+GitHub Actions — agendamento, execução do scraper, build da imagem
 
-Este projeto está licenciado sob a **Licença MIT**. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+Snyk — análise SaaS de vulnerabilidades em requirements.txt
+
+🔹 2. API Pública
+
+JSON hospedado em GitHub Pages
+
+Serve como uma API REST gratuita, acessível pelo app Android
+
+🔹 3. Aplicativo Android — Frontend
+
+Desenvolvido em Java, seguindo a arquitetura MVVM:
+
+✔️ ViewModel e Repository para isolamento de lógica
+✔️ Retrofit para consumo remoto
+✔️ Room Database para cache offline-first
+
+UI e UX
+
+CoordinatorLayout + AppBarLayout com recolhimento total da barra superior
+
+RecyclerView com destaques horizontais e lista vertical
+
+Glide para carregamento e cache de imagens
+
+✨ Funcionalidades Principais
+
+✔️ Listagem organizada por data (novo → antigo)
+✔️ Cache offline com Room
+✔️ Favoritos persistentes — lista pessoal armazenada no dispositivo
+✔️ Busca integrada via SearchView no toolbar
+✔️ Compartilhamento direto — envia o link original do evento por Intent
+✔️ Experiência fluida com recolhimento total do header durante rolagem
+
+🔧 Pipeline e DevOps (Atendendo requisitos da disciplina)
+
+O workflow .github/workflows/scrape_events.yml implementa:
+
+Execução automática da raspagem (schedule e push)
+
+Build da imagem Docker
+
+Execução do container com o scraper
+
+Validação via SaaS (Snyk)
+
+Commit e publicação dos arquivos JSON via Pages
+
+📌 Status do Projeto
+Recurso	Status
+Scraper Funcultural	✔️
+Scraper Sejucel	🚧
+JSON/API publicada via Pages	✔️
+Retrofit + MVVM + Room	✔️
+Ordenação por timestamp	✔️
+Busca / SearchView	✔️
+Favoritos	✔️
+Compartilhamento de eventos	✔️
+Tela de detalhes	🚧
+📄 Licença
+
+Distribuído sob a MIT License.
+Consulte o arquivo LICENSE para mais informações.
