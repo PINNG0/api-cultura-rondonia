@@ -21,21 +21,21 @@
     }
 
     header {
-      background: linear-gradient(135deg, #512da8, #673ab7);
+      background: linear-gradient(135deg, #4527a0, #673ab7);
       color: white;
-      padding: 45px 20px;
+      padding: 50px 20px;
       text-align: center;
       box-shadow: 0 2px 6px rgba(0,0,0,0.25);
     }
 
     h1 {
       margin: 0;
-      font-size: 36px;
-      font-weight: 600;
+      font-size: 38px;
+      font-weight: 700;
     }
 
     header p {
-      margin-top: 10px;
+      margin-top: 12px;
       opacity: 0.95;
       font-size: 17px;
     }
@@ -44,6 +44,31 @@
       max-width: 900px;
       margin: 40px auto;
       padding: 0 20px;
+    }
+
+    /* --------------------------- */
+    /* Barra de busca              */
+    /* --------------------------- */
+    .search-box {
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 1px solid #bbb;
+      font-size: 16px;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    .search-box input:focus {
+      border-color: #673ab7;
+      box-shadow: 0 0 6px rgba(103,58,183,0.4);
     }
 
     /* --------------------------- */
@@ -85,6 +110,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .card li:last-child {
+      border-bottom: none;
     }
 
     .card a {
@@ -97,8 +128,13 @@
       text-decoration: underline;
     }
 
-    /* Botão copiar */
-    .copy-btn {
+    /* Botões */
+    .btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .copy-btn, .open-btn {
       background: #e0e0e0;
       border: none;
       padding: 6px 10px;
@@ -108,8 +144,14 @@
       transition: background .2s;
     }
 
-    .copy-btn:hover {
+    .copy-btn:hover, .open-btn:hover {
       background: #d5d5d5;
+    }
+
+    /* Feedback de cópia */
+    .copied {
+      background: #4caf50 !important;
+      color: white !important;
     }
 
     /* --------------------------- */
@@ -133,15 +175,30 @@
       .card h2 { color: #bb86fc; }
       a { color: #82b1ff; }
       footer { color: #aaa; }
-      .copy-btn { background: #333; color: #eee; }
-      .copy-btn:hover { background: #444; }
+      .copy-btn, .open-btn { background: #333; color: #eee; }
+      .copy-btn:hover, .open-btn:hover { background: #444; }
     }
   </style>
 
   <script>
-    function copiar(url) {
+    function copiar(url, btn) {
       navigator.clipboard.writeText(url);
-      alert("Link copiado!");
+      btn.classList.add("copied");
+      btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+      setTimeout(() => {
+        btn.classList.remove("copied");
+        btn.innerHTML = '<i class="fa-solid fa-copy"></i>';
+      }, 1200);
+    }
+
+    function filtrar() {
+      const termo = document.getElementById("busca").value.toLowerCase();
+      const itens = document.querySelectorAll("li");
+
+      itens.forEach(li => {
+        const texto = li.innerText.toLowerCase();
+        li.style.display = texto.includes(termo) ? "flex" : "none";
+      });
     }
   </script>
 </head>
@@ -155,75 +212,127 @@
 
   <div class="container">
 
+    <!-- Busca -->
+    <div class="search-box">
+      <input id="busca" type="text" placeholder="Buscar arquivos..." oninput="filtrar()">
+    </div>
+
+    <!-- Arquivos principais -->
     <div class="card">
       <h2><i class="fa-solid fa-folder-open"></i> Arquivos principais</h2>
       <ul>
         <li>
           <a href="api_output/eventos.json">eventos.json</a>
-          <button class="copy-btn" onclick="copiar('api_output/eventos.json')">
-            <i class="fa-solid fa-copy"></i>
-          </button>
+          <div class="btns">
+            <button class="open-btn" onclick="window.open('api_output/eventos.json')">
+              <i class="fa-solid fa-up-right-from-square"></i>
+            </button>
+            <button class="copy-btn" onclick="copiar('api_output/eventos.json', this)">
+              <i class="fa-solid fa-copy"></i>
+            </button>
+          </div>
         </li>
 
         <li>
           <a href="api_output/eventos_index.json">eventos_index.json</a>
-          <button class="copy-btn" onclick="copiar('api_output/eventos_index.json')">
-            <i class="fa-solid fa-copy"></i>
-          </button>
+          <div class="btns">
+            <button class="open-btn" onclick="window.open('api_output/eventos_index.json')">
+              <i class="fa-solid fa-up-right-from-square"></i>
+            </button>
+            <button class="copy-btn" onclick="copiar('api_output/eventos_index.json', this)">
+              <i class="fa-solid fa-copy"></i>
+            </button>
+          </div>
         </li>
       </ul>
     </div>
 
+    <!-- Arquivos por ano -->
     <div class="card">
       <h2><i class="fa-solid fa-calendar"></i> Arquivos por ano</h2>
       <ul>
         <li>
           <a href="api_output/arquivo/eventos_de_2024.json">Eventos de 2024</a>
-          <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2024.json')">
-            <i class="fa-solid fa-copy"></i>
-          </button>
+          <div class="btns">
+            <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2024.json')">
+              <i class="fa-solid fa-up-right-from-square"></i>
+            </button>
+            <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2024.json', this)">
+              <i class="fa-solid fa-copy"></i>
+            </button>
+          </div>
         </li>
 
         <li>
           <a href="api_output/arquivo/eventos_de_2023.json">Eventos de 2023</a>
-          <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2023.json')">
-            <i class="fa-solid fa-copy"></i>
-          </button>
+          <div class="btns">
+            <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2023.json')">
+              <i class="fa-solid fa-up-right-from-square"></i>
+            </button>
+            <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2023.json', this)">
+              <i class="fa-solid fa-copy"></i>
+            </button>
+          </div>
         </li>
 
         <li>
           <a href="api_output/arquivo/eventos_de_2022.json">Eventos de 2022</a>
-          <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2022.json')">
-            <i class="fa-solid fa-copy"></i>
-          </button>
+          <div class="btns">
+            <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2022.json')">
+              <i class="fa-solid fa-up-right-from-square"></i>
+            </button>
+            <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2022.json', this)">
+              <i class="fa-solid fa-copy"></i>
+            </button>
+          </div>
         </li>
 
         <li>
           <a href="api_output/arquivo/eventos_de_2021.json">Eventos de 2021</a>
-          <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2021.json')">
-            <i class="fa-solid fa-copy"></i>
-          </button>
+          <div class="btns">
+            <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2021.json')">
+              <i class="fa-solid fa-up-right-from-square"></i>
+            </button>
+            <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2021.json', this)">
+              <i class="fa-solid fa-copy"></i>
+            </button>
+          </div>
         </li>
 
         <li>
           <a href="api_output/arquivo/eventos_de_2020.json">Eventos de 2020</a>
-          <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2020.json')">
-            <i class="fa-solid fa-copy"></i>
-          </button>
+          <div class="btns">
+            <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2020.json')">
+              <i class="fa-solid fa-up-right-from-square"></i>
+            </button>
+            <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2020.json', this)">
+              <i class="fa-solid fa-copy"></i>
+            </button>
+          </div>
         </li>
 
         <li>
           <a href="api_output/arquivo/eventos_de_2019.json">Eventos de 2019</a>
-          <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2019.json')">
-            <i class="fa-solid fa-copy"></i>
-          </button>
+          <div class="btns">
+            <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2019.json')">
+              <i class="fa-solid fa-up-right-from-square"></i>
+            </button>
+            <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2019.json', this)">
+              <i class="fa-solid fa-copy"></i>
+            </button>
+          </div>
         </li>
 
         <li>
           <a href="api_output/arquivo/eventos_de_2018.json">Eventos de 2018</a>
-          <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2018.json')">
-            <i class="fa-solid fa-copy"></i>
-          </button>
+          <div class="btns">
+            <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2018.json')">
+              <i class="fa-solid fa-up-right-from-square"></i>
+            </button>
+            <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2018.json', this)">
+              <i class="fa-solid fa-copy"></i>
+            </button>
+          </div>
         </li>
       </ul>
     </div>
