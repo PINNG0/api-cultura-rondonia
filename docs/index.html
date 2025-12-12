@@ -4,25 +4,40 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>API Cultura Rondônia</title>
+
+  <!-- Ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
+    /* --------------------------- */
+    /* Estilos gerais              */
+    /* --------------------------- */
     body {
-      font-family: Arial, sans-serif;
+      font-family: "Segoe UI", Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background: #f5f5f5;
+      background: #eef0f7;
       color: #333;
     }
 
     header {
-      background: #4a148c;
+      background: linear-gradient(135deg, #512da8, #673ab7);
       color: white;
-      padding: 30px;
+      padding: 45px 20px;
       text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
     }
 
     h1 {
       margin: 0;
-      font-size: 32px;
+      font-size: 36px;
+      font-weight: 600;
+    }
+
+    header p {
+      margin-top: 10px;
+      opacity: 0.95;
+      font-size: 17px;
     }
 
     .container {
@@ -31,81 +46,185 @@
       padding: 0 20px;
     }
 
+    /* --------------------------- */
+    /* Cards                       */
+    /* --------------------------- */
     .card {
       background: white;
-      padding: 20px;
+      padding: 25px;
       margin-bottom: 30px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border-radius: 14px;
+      border: 1px solid #ddd;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
     }
 
     .card h2 {
       margin-top: 0;
-      color: #4a148c;
+      color: #4527a0;
       font-size: 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .card ul {
       list-style: none;
       padding-left: 0;
+      margin-top: 15px;
     }
 
     .card li {
-      margin: 10px 0;
+      margin: 12px 0;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .card a {
-      color: #4a148c;
+      color: #283593;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 600;
     }
 
     .card a:hover {
       text-decoration: underline;
     }
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-      color: #777;
+    /* Botão copiar */
+    .copy-btn {
+      background: #e0e0e0;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background .2s;
     }
 
+    .copy-btn:hover {
+      background: #d5d5d5;
+    }
+
+    /* --------------------------- */
+    /* Rodapé                      */
+    /* --------------------------- */
+    footer {
+      text-align: center;
+      padding: 25px;
+      margin-top: 40px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* --------------------------- */
+    /* Dark mode automático        */
+    /* --------------------------- */
     @media (prefers-color-scheme: dark) {
       body { background: #121212; color: #eee; }
-      .card { background: #1e1e1e; }
+      .card { background: #1e1e1e; border-color: #333; }
+      header { background: linear-gradient(135deg, #311b92, #512da8); }
       .card h2 { color: #bb86fc; }
-      a { color: #bb86fc; }
+      a { color: #82b1ff; }
+      footer { color: #aaa; }
+      .copy-btn { background: #333; color: #eee; }
+      .copy-btn:hover { background: #444; }
     }
   </style>
+
+  <script>
+    function copiar(url) {
+      navigator.clipboard.writeText(url);
+      alert("Link copiado!");
+    }
+  </script>
 </head>
+
 <body>
 
   <header>
-    <h1>API Cultura Rondônia</h1>
+    <h1><i class="fa-solid fa-database"></i> API Cultura Rondônia</h1>
     <p>Dados públicos atualizados automaticamente</p>
   </header>
 
   <div class="container">
 
     <div class="card">
-      <h2>Arquivos principais</h2>
+      <h2><i class="fa-solid fa-folder-open"></i> Arquivos principais</h2>
       <ul>
-        <li><a href="api_output/eventos.json">eventos.json</a> — arquivo completo</li>
-        <li><a href="api_output/eventos_index.json">eventos_index.json</a> — arquivo resumido</li>
+        <li>
+          <a href="api_output/eventos.json">eventos.json</a>
+          <button class="copy-btn" onclick="copiar('api_output/eventos.json')">
+            <i class="fa-solid fa-copy"></i>
+          </button>
+        </li>
+
+        <li>
+          <a href="api_output/eventos_index.json">eventos_index.json</a>
+          <button class="copy-btn" onclick="copiar('api_output/eventos_index.json')">
+            <i class="fa-solid fa-copy"></i>
+          </button>
+        </li>
       </ul>
     </div>
 
     <div class="card">
-      <h2>Arquivos por ano</h2>
+      <h2><i class="fa-solid fa-calendar"></i> Arquivos por ano</h2>
       <ul>
-        <li><a href="api_output/arquivo/eventos_de_2024.json">Eventos de 2024</a></li>
-        <li><a href="api_output/arquivo/eventos_de_2023.json">Eventos de 2023</a></li>
-        <li><a href="api_output/arquivo/eventos_de_2022.json">Eventos de 2022</a></li>
-        <li><a href="api_output/arquivo/eventos_de_2021.json">Eventos de 2021</a></li>
-        <li><a href="api_output/arquivo/eventos_de_2020.json">Eventos de 2020</a></li>
-        <li><a href="api_output/arquivo/eventos_de_2019.json">Eventos de 2019</a></li>
-        <li><a href="api_output/arquivo/eventos_de_2018.json">Eventos de 2018</a></li>
+        <li>
+          <a href="api_output/arquivo/eventos_de_2024.json">Eventos de 2024</a>
+          <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2024.json')">
+            <i class="fa-solid fa-copy"></i>
+          </button>
+        </li>
+
+        <li>
+          <a href="api_output/arquivo/eventos_de_2023.json">Eventos de 2023</a>
+          <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2023.json')">
+            <i class="fa-solid fa-copy"></i>
+          </button>
+        </li>
+
+        <li>
+          <a href="api_output/arquivo/eventos_de_2022.json">Eventos de 2022</a>
+          <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2022.json')">
+            <i class="fa-solid fa-copy"></i>
+          </button>
+        </li>
+
+        <li>
+          <a href="api_output/arquivo/eventos_de_2021.json">Eventos de 2021</a>
+          <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2021.json')">
+            <i class="fa-solid fa-copy"></i>
+          </button>
+        </li>
+
+        <li>
+          <a href="api_output/arquivo/eventos_de_2020.json">Eventos de 2020</a>
+          <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2020.json')">
+            <i class="fa-solid fa-copy"></i>
+          </button>
+        </li>
+
+        <li>
+          <a href="api_output/arquivo/eventos_de_2019.json">Eventos de 2019</a>
+          <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2019.json')">
+            <i class="fa-solid fa-copy"></i>
+          </button>
+        </li>
+
+        <li>
+          <a href="api_output/arquivo/eventos_de_2018.json">Eventos de 2018</a>
+          <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2018.json')">
+            <i class="fa-solid fa-copy"></i>
+          </button>
+        </li>
       </ul>
     </div>
 
