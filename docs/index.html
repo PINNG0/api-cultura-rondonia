@@ -1,27 +1,119 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Cultura Rondonia</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Cultura Rondônia</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    header {
+      background: #4a148c;
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: #4a148c;
+      font-size: 22px;
+    }
+
+    .card ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .card li {
+      margin: 10px 0;
+    }
+
+    .card a {
+      color: #4a148c;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .card a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      color: #777;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body { background: #121212; color: #eee; }
+      .card { background: #1e1e1e; }
+      .card h2 { color: #bb86fc; }
+      a { color: #bb86fc; }
+    }
+  </style>
 </head>
 <body>
 
-<h1>API Cultura Rondonia</h1>
+  <header>
+    <h1>API Cultura Rondônia</h1>
+    <p>Dados públicos atualizados automaticamente</p>
+  </header>
 
-<p><a href="api_output/eventos.json">Arquivo de eventos: eventos.json</a></p>
-<p><a href="api_output/eventos_index.json">Arquivo resumido: eventos_index.json</a></p>
+  <div class="container">
 
-<h2>Arquivos por ano</h2>
-<ul>
-    <li><a href="api_output/arquivo/eventos_de_2024.json">Eventos de 2024</a></li>
-    <li><a href="api_output/arquivo/eventos_de_2023.json">Eventos de 2023</a></li>
-    <li><a href="api_output/arquivo/eventos_de_2022.json">Eventos de 2022</a></li>
-    <li><a href="api_output/arquivo/eventos_de_2021.json">Eventos de 2021</a></li>
-    <li><a href="api_output/arquivo/eventos_de_2020.json">Eventos de 2020</a></li>
-    <li><a href="api_output/arquivo/eventos_de_2019.json">Eventos de 2019</a></li>
-    <li><a href="api_output/arquivo/eventos_de_2018.json">Eventos de 2018</a></li>
-</ul>
+    <div class="card">
+      <h2>Arquivos principais</h2>
+      <ul>
+        <li><a href="api_output/eventos.json">eventos.json</a> — arquivo completo</li>
+        <li><a href="api_output/eventos_index.json">eventos_index.json</a> — arquivo resumido</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Arquivos por ano</h2>
+      <ul>
+        <li><a href="api_output/arquivo/eventos_de_2024.json">Eventos de 2024</a></li>
+        <li><a href="api_output/arquivo/eventos_de_2023.json">Eventos de 2023</a></li>
+        <li><a href="api_output/arquivo/eventos_de_2022.json">Eventos de 2022</a></li>
+        <li><a href="api_output/arquivo/eventos_de_2021.json">Eventos de 2021</a></li>
+        <li><a href="api_output/arquivo/eventos_de_2020.json">Eventos de 2020</a></li>
+        <li><a href="api_output/arquivo/eventos_de_2019.json">Eventos de 2019</a></li>
+        <li><a href="api_output/arquivo/eventos_de_2018.json">Eventos de 2018</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <footer>
+    API Cultura Rondônia • Gerado automaticamente
+  </footer>
 
 </body>
 </html>
