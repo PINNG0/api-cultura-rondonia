@@ -9,6 +9,8 @@ O MuvRO resolve isso ao:
 
 ✔️ Coletar dados automaticamente ✔️ Padronizar e organizar o conteúdo ✔️ Exibir tudo em uma interface intuitiva ✔️ Disponibilizar uma API pública gratuita
 
+
+
 🚀 Arquitetura do Projeto
 A solução segue um modelo de múltiplas camadas, com automação CI/CD, Docker e atualização contínua dos dados.
     Scraper (Python) → Pipeline CI/CD → JSON API (GitHub Pages) → App Android (MVVM)
@@ -94,35 +96,20 @@ Deploy contínuo da API e da página
 
 📌 Status do Projeto
         Recurso	        |Status
-________________________________
 Scraper Funcultural	    | ✔️
-________________________________
 Scraper Sejucel	        | 🚧
-________________________________
-API / JSON via Pages    |	✔️
-________________________________
+API / JSON via Pages    | ✔️
 Página da API (nova UI) | ✔️
-________________________________
 Busca na API            | ✔️
-________________________________
-Botão copiar link	      | ✔️
-________________________________
+Botão copiar link	    | ✔️
 Botão abrir arquivo   	| ✔️
-________________________________
-Dark mode	              | ✔️
-________________________________
+Dark mode	            | ✔️
 Retrofit + MVVM + Room	| ✔️
-________________________________
 Ordenação por data	    | ✔️
-________________________________
 Busca integrada	        | ✔️
-________________________________
-Favoritos	              | ✔️
-________________________________
-Compartilhamento	      | ✔️
-________________________________
-Tela de detalhes	      | 🚧
-________________________________
+Favoritos	            | ✔️
+Compartilhamento	    | ✔️
+Tela de detalhes	    | ✔️
 
 
   🛠️ Como rodar o projeto (Scraper)
