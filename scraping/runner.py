@@ -4,6 +4,7 @@ from scraping.config import URL_NOTICIAS, EVENTOS_URL_VISTAS
 from scraping.fetch import get_soup
 from scraping.processor import classify_blocks, preproc_content
 from scraping.parser import norm_text, gen_id
+from scraping.tags import contar_tags
 
 
 def scrape_details(url):
@@ -25,15 +26,19 @@ def scrape_details(url):
 
 
 def process_single_block(bloco):
+    # extrai imagem
     img_tag = bloco.find('img')
     banner_rel = img_tag['src'] if img_tag and img_tag.get('src') else ""
 
+    # extrai título
     title_tag = bloco.find('div', class_='titulo-noticia-pesquisa')
     title = title_tag.get_text(strip=True) if title_tag else "Título não encontrado"
 
+    # extrai tag
     tag_tag = bloco.find('div', class_='tag-noticia')
     tag_evento = tag_tag.get_text(strip=True) if tag_tag else "Sem tag"
 
+    # extrai link
     link_tag = bloco.find('a')
     link_rel = link_tag['href'] if link_tag and link_tag.get('href') else None
     link = urljoin(URL_NOTICIAS, link_rel.strip()) if link_rel else None
@@ -43,9 +48,11 @@ def process_single_block(bloco):
 
     EVENTOS_URL_VISTAS.add(link)
 
+    # extrai data
     date_tag = bloco.find('div', class_='datanot')
     data_exibicao = date_tag.get_text(strip=True) if date_tag else "Sem data"
 
+    # coleta conteúdo detalhado
     blocks = scrape_details(link)
     sleep(0.25)
 
@@ -63,35 +70,32 @@ def process_single_block(bloco):
     }
 
 
-# ✅ Funções auxiliares para reduzir complexidade
 def load_page(pagina):
-    print(f"\n🔎 Raspando página {pagina}...")
+    # baixa página da listagem
     url = f"{URL_NOTICIAS}?page={pagina}"
     return get_soup(url)
 
 
 def extract_results(soup):
-    results = soup.find_all('div', class_='resultado-pesquisa')
-    print(f"🔍 Blocos encontrados: {len(results)}")
-    return results
+    # pega blocos de eventos
+    return soup.find_all('div', class_='resultado-pesquisa')
 
 
 def should_stop_pagination(soup):
+    # verifica fim da paginação
     if not soup:
         return True
-
     pagination = soup.find('ul', class_='pagination')
-    if pagination and len(pagination.find_all('li')) <= 1:
-        return True
-
-    return False
+    return pagination and len(pagination.find_all('li')) <= 1
 
 
 def get_next_page(soup, pagina):
+    # verifica se existe próxima página
     return soup.select_one(f'ul.pagination a[href*="page={pagina + 1}"]')
 
 
 def dedupe_events(all_events):
+    # remove duplicados por hash
     unique = {}
     for ev in all_events:
         h = gen_id(ev)
@@ -101,7 +105,6 @@ def dedupe_events(all_events):
     return list(unique.values())
 
 
-# ✅ Função principal agora simples (complexidade baixa)
 def scrape_all():
     all_events = []
     pagina = 1
@@ -110,28 +113,31 @@ def scrape_all():
         soup = load_page(pagina)
 
         if should_stop_pagination(soup):
-            print("🚫 Fim da paginação ou erro ao carregar página.")
             break
 
         results = extract_results(soup)
         if not results:
-            print("⚠️ Nenhum resultado encontrado nesta página.")
             break
 
         eventos_pagina = [
             ev for bloco in results if (ev := process_single_block(bloco))
         ]
 
-        print(f"✅ Página {pagina} concluída. Eventos coletados: {len(eventos_pagina)}")
         all_events.extend(eventos_pagina)
 
         if not get_next_page(soup, pagina) and pagina >= 3:
-            print("📄 Última página alcançada.")
             break
 
         pagina += 1
         sleep(1)
 
     eventos_unicos = dedupe_events(all_events)
-    print(f"\n🎉 Total de eventos únicos coletados: {len(eventos_unicos)}")
+
+    # gera estatísticas de tags
+    tags = contar_tags(eventos_unicos)
+
+    print("\nTags normalizadas encontradas:")
+    for tag, qtd in tags.most_common():
+        print(f"{tag}: {qtd}")
+
     return eventos_unicos
