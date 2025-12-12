@@ -1,28 +1,60 @@
+"""
+Parser de conteúdo da Funcultural.
+
+Responsável por:
+- Normalizar textos (remover HTML, espaços, caracteres especiais)
+- Extrair texto limpo de elementos HTML
+- Construir blocos estruturados (parágrafos e subtítulos)
+"""
+
 import re
 import unicodedata
-import hashlib
 
+
+# ---------------------------------------------------------
+# Normaliza texto:
+# - remove HTML
+# - normaliza unicode
+# - remove múltiplos espaços
+# ---------------------------------------------------------
 def norm_text(s):
-    if not s: return ""
+    if not s:
+        return ""
+
     s = unicodedata.normalize("NFKC", s)
-    s = re.sub(r'<[^>]*>', '', s)
-    s = s.replace('\xa0',' ')
-    return re.sub(r'\s+', ' ', s).strip()
+    s = re.sub(r"<[^>]*>", "", s)      # remove tags HTML
+    s = s.replace("\xa0", " ")         # remove NBSP
+    return re.sub(r"\s+", " ", s).strip()
 
+
+# ---------------------------------------------------------
+# Remove HTML e retorna texto simples
+# ---------------------------------------------------------
 def clean_text_simple(html):
-    if not html: return ""
-    t = re.sub(r'(?s)<[^>]+>', ' ', html)
-    return re.sub(r'\s+', ' ', t).strip()
+    if not html:
+        return ""
 
-def gen_id(ev):
-    key = (ev.get("titulo","") + "|" + ev.get("link_evento","")).strip()
-    return hashlib.sha1(norm_text(key).encode('utf-8')).hexdigest()
+    text = re.sub(r"(?s)<[^>]+>", " ", html)  # remove tags
+    return re.sub(r"\s+", " ", text).strip()
 
+
+# ---------------------------------------------------------
+# Constrói um bloco estruturado a partir de um elemento HTML
+# ---------------------------------------------------------
 def build_block(elem):
     html = elem.decode_contents().strip()
     plain = clean_text_simple(elem.get_text(strip=True))
-    if not plain or len(plain.split()) < 5: return None
-    is_title = elem.name in ['h2','h3'] or bool(elem.find(['strong','em']))
+
+    # ignora blocos muito curtos (ruído)
+    if not plain or len(plain.split()) < 5:
+        return None
+
+    # detecta subtítulos
+    is_title = (
+        elem.name in ["h2", "h3"] or
+        bool(elem.find(["strong", "em"]))
+    )
+
     return {
         "type": "SUBTITLE" if is_title else "PARAGRAPH",
         "content": html,

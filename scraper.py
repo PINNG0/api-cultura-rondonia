@@ -1,87 +1,119 @@
+"""
+Script principal do scraper da Funcultural.
+
+Responsável por:
+- Executar a raspagem de eventos
+- Detectar mudanças nos dados
+- Salvar arquivos JSON e atualizar index.html
+- Arquivar eventos antigos
+- Realizar commit automático (se necessário)
+"""
+
+import os
+import json
+import hashlib
+import subprocess
+import atexit
+import logging
+
 from scraping.runner import scrape_all
 from scraping.storage import save_only
 from scraping.config import LOCKFILE
 from scraping.archiver import ArquivadorEventos
 from scraping.html_generator import gerar_html_arquivos_por_ano
-import os
-import json
-import hashlib
-import subprocess # 💡 Adicionando subprocess para comandos Git
+from scraping.logging_config import configurar_logging
 
-# Arquivos que devem ser adicionados ao Git.
-# ATENÇÃO: Ajuste este caminho se seus JSONs estiverem em outro lugar.
+
+# ---------------------------------------------------------
+# Arquivos que devem ser adicionados ao Git
+# ---------------------------------------------------------
 FILES_TO_COMMIT = [
     "docs/api_output/eventos.json",
     "docs/api_output/arquivo/*.json",
     "docs/index.html",
-    ".cache/hash_eventos.txt"
+    ".cache/hash_eventos.txt",
 ]
 
-# Função auxiliar para verificar se o ambiente é o GitHub Actions
+
+# ---------------------------------------------------------
+# Verifica se está rodando no ambiente GitHub Actions
+# ---------------------------------------------------------
 def rodando_no_github():
-    # Retorna True se as variáveis de ambiente do GitHub Actions estiverem presentes
     return os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
 
-# Função para gerar hash (Mantida, mas não usada no bloco principal)
+
+# ---------------------------------------------------------
+# Gera hash determinístico dos eventos
+# ---------------------------------------------------------
 def gerar_hash_eventos(eventos):
-    # Serializa os dados de forma determinística
     payload = json.dumps(eventos, ensure_ascii=False, sort_keys=True)
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
+
+# ---------------------------------------------------------
+# Executa git add, commit e push
+# ---------------------------------------------------------
 def commit_and_push(commit_message, files):
-    """
-    Executa os comandos git add, commit e push.
-    """
     try:
-        # Adiciona os arquivos à área de stage
         for f in files:
             subprocess.run(["git", "add", f], check=True)
-            
-        # Verifica se há algo para commitar
+
         result = subprocess.run(["git", "diff", "--cached", "--quiet"], check=False)
-        
+
         if result.returncode != 0:
-            # Commita e envia
             subprocess.run(["git", "commit", "-m", commit_message], check=True)
             subprocess.run(["git", "push"], check=True)
-            print("✅ Commit e Push automáticos concluídos com sucesso!")
+            logging.info("✅ Commit e push automáticos concluídos com sucesso.")
             return True
         else:
-            print("✔ Nenhum arquivo alterado. Pulando commit.")
+            logging.info("✔ Nenhum arquivo alterado. Pulando commit.")
             return False
-            
+
     except subprocess.CalledProcessError as e:
-        print(f"❌ Erro ao executar comando Git: {e}")
+        logging.error("❌ Erro ao executar comando Git: %s", e)
         return False
 
 
+# ---------------------------------------------------------
+# Remove o lock automaticamente ao sair (mesmo em erro ou CTRL+C)
+# ---------------------------------------------------------
+def remove_lock():
+    if os.path.exists(LOCKFILE):
+        os.remove(LOCKFILE)
+
+
+atexit.register(remove_lock)
+
+
+# ---------------------------------------------------------
+# Execução principal
+# ---------------------------------------------------------
 if __name__ == "__main__":
-    # Verifica se deve ignorar o lockfile (sempre True no CI/CD)
+    configurar_logging()
     ignorar_lock = rodando_no_github()
 
-    # Verifica se há um lockfile (evita execuções simultâneas locais)
+    # Lockfile só é respeitado em ambiente local
     if os.path.exists(LOCKFILE) and not ignorar_lock:
-        print("⚠️ Já está rodando. Abortando.")
+        logging.warning("⚠️ Já está rodando. Abortando.")
         exit(1)
 
-    print("🚀 Iniciando raspagem de eventos...")
+    if not ignorar_lock:
+        with open(LOCKFILE, "w", encoding="utf-8") as f:
+            f.write("running")
+
+    logging.info("🚀 Iniciando raspagem de eventos...")
 
     try:
-        # Cria lockfile, ignorando se for o ambiente CI/CD
-        if not ignorar_lock:
-            with open(LOCKFILE, 'w') as f:
-                f.write("running")
-
-        # 1. Executa a raspagem
+        # 1. Raspagem
         eventos = scrape_all()
-        print(f"✅ Raspagem concluída. Eventos coletados: {len(eventos)}")
+        logging.info("✅ Raspagem concluída. Eventos coletados: %d", len(eventos))
 
-        # --- LÓGICA DE DETECÇÃO DE MUDANÇAS ---
-        print("🔎 Verificando mudanças nos dados...")
+        # 2. Verificação de mudanças
+        logging.info("🔎 Verificando mudanças nos dados...")
         novo_hash = gerar_hash_eventos(eventos)
         hash_path = ".cache/hash_eventos.txt"
         os.makedirs(".cache", exist_ok=True)
-        
+
         antigo_hash = None
         if os.path.exists(hash_path):
             with open(hash_path, "r", encoding="utf-8") as f:
@@ -89,19 +121,18 @@ if __name__ == "__main__":
 
         mudou_eventos = antigo_hash != novo_hash
 
-        # 2. Salva JSONs e Arquiva (Sempre salva para o CI/CD verificar, ou se mudou)
-        print("💾 Salvando arquivos...")
-        save_only(eventos) 
+        # 3. Salvamento e arquivamento
+        logging.info("💾 Salvando arquivos de eventos...")
+        save_only(eventos)
 
-        print("🧹 Arquivando eventos antigos...")
+        logging.info("🧹 Arquivando eventos antigos...")
         ArquivadorEventos().arquivar()
-        
-        # 3. Atualiza index.html (Define se houve modificação)
-        print("🧩 Atualizando index.html...")
+
+        # 4. Atualização do index.html
+        logging.info("🧩 Atualizando index.html...")
         index_path = "docs/index.html"
         index_modificado = False
-        
-        # --- LÓGICA DE GERAÇÃO HTML ---
+
         if os.path.exists(index_path):
             with open(index_path, "r", encoding="utf-8") as f:
                 conteudo = f.read()
@@ -113,35 +144,31 @@ if __name__ == "__main__":
                     index_modificado = True
                     with open(index_path, "w", encoding="utf-8") as f:
                         f.write(novo_conteudo)
-                    print("✅ index.html atualizado!")
+                    logging.info("✅ index.html atualizado!")
                 else:
-                    print("✔ index.html sem mudanças.")
+                    logging.info("✔ index.html sem mudanças.")
             else:
-                print("⚠️ Marcador <!-- anos --> não encontrado no index.html.")
+                logging.warning("⚠️ Marcador <!-- anos --> não encontrado no index.html.")
         else:
-            print("⚠️ index.html não encontrado.")
-        # --- FIM LÓGICA GERAÇÃO HTML ---
+            logging.warning("⚠️ index.html não encontrado.")
 
-        # 4. AÇÃO FINAL: Commit Automático APENAS se for execução local
+        # 5. Commit automático (somente local)
         if mudou_eventos or index_modificado:
-            print("📌 Mudanças detectadas. Preparando para commit...")
-            
-            # Salva o novo hash antes de commitar (se o commit falhar, o hash não é salvo)
+            logging.info("📌 Mudanças detectadas. Preparando para commit...")
+
             with open(hash_path, "w", encoding="utf-8") as f:
                 f.write(novo_hash)
-            
-            # Se não estiver no GitHub Actions, executa o commit local
+
             if not ignorar_lock:
                 commit_and_push("Dados de eventos atualizados (Execução Local)", FILES_TO_COMMIT)
             else:
-                 print("📤 Execução no CI/CD. O Actions fará o commit.")
-        
+                logging.info("📤 Execução no CI/CD. O Actions fará o commit.")
         else:
-            print("🟡 Nenhuma mudança detectada. Nenhuma ação de commit necessária.")
-            
-        print("🎉 Processo finalizado com sucesso!")
+            logging.info("🟡 Nenhuma mudança detectada. Nenhuma ação de commit necessária.")
+
+        logging.info("🎉 Processo finalizado com sucesso.")
 
     finally:
-        # Remove lockfile, se existir
+        # O remove_lock já está registrado no atexit, então aqui é só reforço
         if os.path.exists(LOCKFILE) and not ignorar_lock:
             os.remove(LOCKFILE)

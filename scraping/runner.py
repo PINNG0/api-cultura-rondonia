@@ -1,23 +1,33 @@
+"""
+Runner principal do scraper da Funcultural.
+
+Responsável por:
+- Carregar páginas da listagem de notícias
+- Extrair blocos de eventos
+- Processar cada evento individualmente
+- Coletar conteúdo detalhado da página interna
+- Normalizar dados e retornar a lista final de eventos
+"""
+
 from time import sleep
 from urllib.parse import urljoin
-from scraping.config import URL_NOTICIAS, EVENTOS_URL_VISTAS
+from scraping.config import URL_NOTICIAS
 from scraping.fetch import get_soup
 from scraping.processor import classify_blocks, preproc_content
-from scraping.parser import norm_text, gen_id
+from scraping.parser import norm_text
 from scraping.tags import contar_tags
 
 
+# ---------------------------------------------------------
+# Coleta o conteúdo detalhado da página interna do evento
+# ---------------------------------------------------------
 def scrape_details(url):
     soup = get_soup(url)
     if not soup:
         return []
 
-    article = (
-        soup.find('article', class_='noticia-conteudo')
-        or soup.find('div', class_='content')
-        or soup.find('div', class_='article-content')
-    )
-
+    # O site sempre usa essa estrutura para o conteúdo
+    article = soup.find('article', class_='noticia-conteudo')
     if not article:
         return []
 
@@ -25,37 +35,36 @@ def scrape_details(url):
     return classify_blocks(article, imgs)
 
 
+# ---------------------------------------------------------
+# Processa um único bloco da listagem (um card de evento)
+# ---------------------------------------------------------
 def process_single_block(bloco):
-    # extrai imagem
+    # imagem do card
     img_tag = bloco.find('img')
     banner_rel = img_tag['src'] if img_tag and img_tag.get('src') else ""
 
-    # extrai título
+    # título
     title_tag = bloco.find('div', class_='titulo-noticia-pesquisa')
     title = title_tag.get_text(strip=True) if title_tag else "Título não encontrado"
 
-    # extrai tag
+    # tag/categoria
     tag_tag = bloco.find('div', class_='tag-noticia')
     tag_evento = tag_tag.get_text(strip=True) if tag_tag else "Sem tag"
 
-    # extrai link
+    # link para a página interna
     link_tag = bloco.find('a')
     link_rel = link_tag['href'] if link_tag and link_tag.get('href') else None
     link = urljoin(URL_NOTICIAS, link_rel.strip()) if link_rel else None
 
-    if not link or link in EVENTOS_URL_VISTAS:
+    if not link:
         return None
 
-    EVENTOS_URL_VISTAS.add(link)
-
-    # extrai data
+    # data de exibição
     date_tag = bloco.find('div', class_='datanot')
     data_exibicao = date_tag.get_text(strip=True) if date_tag else "Sem data"
 
-    # coleta conteúdo detalhado
+    # conteúdo detalhado
     blocks = scrape_details(link)
-    sleep(0.25)
-
     if not blocks:
         return None
 
@@ -70,74 +79,60 @@ def process_single_block(bloco):
     }
 
 
+# ---------------------------------------------------------
+# Carrega uma página da listagem
+# ---------------------------------------------------------
 def load_page(pagina):
-    # baixa página da listagem
-    url = f"{URL_NOTICIAS}?page={pagina}"
-    return get_soup(url)
+    return get_soup(f"{URL_NOTICIAS}?page={pagina}")
 
 
+# ---------------------------------------------------------
+# Extrai os blocos de eventos da página
+# ---------------------------------------------------------
 def extract_results(soup):
-    # pega blocos de eventos
     return soup.find_all('div', class_='resultado-pesquisa')
 
 
-def should_stop_pagination(soup):
-    # verifica fim da paginação
-    if not soup:
-        return True
-    pagination = soup.find('ul', class_='pagination')
-    return pagination and len(pagination.find_all('li')) <= 1
-
-
+# ---------------------------------------------------------
+# Verifica se existe próxima página
+# ---------------------------------------------------------
 def get_next_page(soup, pagina):
-    # verifica se existe próxima página
     return soup.select_one(f'ul.pagination a[href*="page={pagina + 1}"]')
 
 
-def dedupe_events(all_events):
-    # remove duplicados por hash
-    unique = {}
-    for ev in all_events:
-        h = gen_id(ev)
-        if h not in unique:
-            ev["id"] = h
-            unique[h] = ev
-    return list(unique.values())
-
-
+# ---------------------------------------------------------
+# Runner principal — coleta todos os eventos
+# ---------------------------------------------------------
 def scrape_all():
     all_events = []
     pagina = 1
 
     while True:
         soup = load_page(pagina)
-
-        if should_stop_pagination(soup):
+        if not soup:
             break
 
         results = extract_results(soup)
         if not results:
             break
 
-        eventos_pagina = [
+        # processa todos os blocos da página
+        all_events.extend(
             ev for bloco in results if (ev := process_single_block(bloco))
-        ]
+        )
 
-        all_events.extend(eventos_pagina)
-
-        if not get_next_page(soup, pagina) and pagina >= 3:
+        # limite de segurança + fim da paginação
+        if pagina >= 3 or not get_next_page(soup, pagina):
             break
 
         pagina += 1
-        sleep(1)
+        sleep(0.1)  # mais rápido e suficiente
 
-    eventos_unicos = dedupe_events(all_events)
-
-    # gera estatísticas de tags
-    tags = contar_tags(eventos_unicos)
+    # estatísticas de tags
+    tags = contar_tags(all_events)
 
     print("\nTags normalizadas encontradas:")
     for tag, qtd in tags.most_common():
         print(f"{tag}: {qtd}")
 
-    return eventos_unicos
+    return all_events
