@@ -1,6 +1,7 @@
 [
   {
     "titulo": "Reunião no Prédio do Relógio define últimos ajustes para o Carnaval 2026",
+    "tag_evento": "FOLIA À VISTA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -15,6 +16,7 @@
   },
   {
     "titulo": "Celebração ao dia do samba movimenta o Mercado Cultural",
+    "tag_evento": "COMEMORAÇÃO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -29,6 +31,7 @@
   },
   {
     "titulo": "Mercado Cultural marca o Dia do Samba nesta quarta-feira (03)",
+    "tag_evento": "SOM REGIONAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -43,6 +46,7 @@
   },
   {
     "titulo": "Torcedores lotam espaço gastronômico para assistir à final da Libertadores",
+    "tag_evento": "VILA NATALINA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -57,6 +61,7 @@
   },
   {
     "titulo": "Pavilhão do Mel recebe visitantes e apresenta produção apícola de Porto Velho",
+    "tag_evento": "AGROTEC 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -71,6 +76,7 @@
   },
   {
     "titulo": "Pista de gelo é inaugurada no Parque da Cidade e reúne público em Porto Velho",
+    "tag_evento": "NATAL PORTO VELHO LUZ 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -85,6 +91,7 @@
   },
   {
     "titulo": "Reunião define estratégias de segurança para o carnaval 2026",
+    "tag_evento": "FOLIA ORGANIZADA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -99,6 +106,7 @@
   },
   {
     "titulo": "Agrotec 2025 começa hoje (27) na Estrada de Ferro Madeira-Mamoré",
+    "tag_evento": "INOVAÇÃO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -113,6 +121,7 @@
   },
   {
     "titulo": "Porto Velho Luz inicia programação de Natal neste sábado",
+    "tag_evento": "CULTURA E TRADIÇÃO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -127,6 +136,7 @@
   },
   {
     "titulo": "Shows marcam os quatro dias da Agrotec 2025",
+    "tag_evento": "VAI SER HIT!",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -141,6 +151,7 @@
   },
   {
     "titulo": "Sarau “Corpos que Falam, Vozes que Lutam” une arte, cultura e ativismo em Porto Velho",
+    "tag_evento": "CONSCIÊNCIA NEGRA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -155,6 +166,7 @@
   },
   {
     "titulo": "Centro Municipal Jorge Andrade reúne músicos e apaixonados por percussão em Porto Velho",
+    "tag_evento": "BATERA DAY",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -169,6 +181,7 @@
   },
   {
     "titulo": "Em noite de festa, Prefeitura de Porto Velho celebra o valor do servidor público",
+    "tag_evento": "NO MERCADO CULTURAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -183,6 +196,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho celebra o Dia do Servidor Público com festa no Mercado Cultural",
+    "tag_evento": "COMEMORAÇÃO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -197,6 +211,7 @@
   },
   {
     "titulo": "Servidores da Seinfra são contemplados com atividades recreativas desenvolvidas pela Semtel",
+    "tag_evento": "LAZER",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -211,6 +226,7 @@
   },
   {
     "titulo": "5a Conferência Municipal de Cultura planeja e fortalece a articulação cultural em Porto Velho",
+    "tag_evento": "EVENTO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -225,6 +241,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho celebra o Dia da MPB com show em homenagem a Maria Bethânia",
+    "tag_evento": "CULTURA BRASILEIRA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -239,6 +256,7 @@
   },
   {
     "titulo": "Prefeitura promove show especial em celebração ao Dia da MPB",
+    "tag_evento": "NESTA SEXTA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -253,6 +271,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho realiza a 5a Conferência Municipal de Cultura",
+    "tag_evento": "EVENTO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -267,6 +286,7 @@
   },
   {
     "titulo": "Festa no Parque da Cidade é sucesso de público com show gratuito do Mundo Bita",
+    "tag_evento": "DIA DAS CRIANÇAS",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -281,6 +301,7 @@
   },
   {
     "titulo": "Prefeitura apresenta balanço final do aniversário de Porto Velho",
+    "tag_evento": "SUCESSO DE PÚBLICO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -295,6 +316,7 @@
   },
   {
     "titulo": "Parceria da Prefeitura com a imprensa marca aniversário de 111 de Porto Velho",
+    "tag_evento": "COMUNICAÇÃO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -309,6 +331,7 @@
   },
   {
     "titulo": "Atrações musicais no Mercado Cultural marcam o encerramento do aniversário de Porto Velho",
+    "tag_evento": "111 ANOS",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -323,6 +346,7 @@
   },
   {
     "titulo": "Último dia de comemoração pelos 111 anos de Porto Velho tem esporte, lazer e festa no Mercado Cultural",
+    "tag_evento": "VALORIZAÇÃO HISTÓRICA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -337,6 +361,7 @@
   },
   {
     "titulo": "Show infantil 3 Palavrinhas encanta crianças e famílias no aniversário de Porto Velho",
+    "tag_evento": "111 ANOS",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -351,6 +376,7 @@
   },
   {
     "titulo": "Roda Literária celebra a cultura e destaca talentos locais nas comemorações dos 111 anos de Porto Velho",
+    "tag_evento": "VALORIZAÇÃO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -365,6 +391,7 @@
   },
   {
     "titulo": "Quarto dia de festa reúne cultura, literatura, ciência e diversão para toda a família",
+    "tag_evento": "ANIVERSÁRIO DE PVH",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -379,6 +406,7 @@
   },
   {
     "titulo": "Terceiro dia de festa de 111 anos celebra diversos ritmos regionais",
+    "tag_evento": "BEIRADÃO CULTURAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -393,6 +421,7 @@
   },
   {
     "titulo": "Beiradão Cultural anima o terceiro dia de festa com 12 horas de música",
+    "tag_evento": "111 ANOS DE PVH",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -407,6 +436,7 @@
   },
   {
     "titulo": "Aniversário de Porto Velho reúne milhares de pessoas em noite inesquecível com show de Joelma",
+    "tag_evento": "111 ANOS",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -421,6 +451,7 @@
   },
   {
     "titulo": "Distribuição do bolo dos 111 anos ocorreu de forma ordeira e satisfatória para a população de Porto Velho",
+    "tag_evento": "ANIVERSÁRIO DE PORTO VELHO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -435,6 +466,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho entrega Comenda Madeira-Mamoré a personalidades que contribuem para o desenvolvimento da cidade",
+    "tag_evento": "111 ANOS",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -449,6 +481,7 @@
   },
   {
     "titulo": "Praça Jonathas Pedrosa é entregue à sociedade durante aniversário da capital",
+    "tag_evento": "EM TEMPO RECORDE",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -463,6 +496,7 @@
   },
   {
     "titulo": "Confira os nomes dos sorteados na promoção Você + Joelma no Camarim",
+    "tag_evento": "PVH 111 ANOS",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -477,6 +511,7 @@
   },
   {
     "titulo": "Confira a programação do segundo dia das comemorações pelos 111 anos de Porto Velho",
+    "tag_evento": "ANIVERSÁRIO DE PVH",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -491,6 +526,7 @@
   },
   {
     "titulo": "Começa a montagem do maior bolo da região Norte para o aniversário de Porto Velho",
+    "tag_evento": "PVH 111 ANOS",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -505,6 +541,7 @@
   },
   {
     "titulo": "Estruturas começam a ser instaladas para a grande festa de aniversário de Porto Velho",
+    "tag_evento": "RUMO AOS 111 ANOS",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -519,6 +556,7 @@
   },
   {
     "titulo": "Grupo 3 Palavrinhas é atração na comemoração de 111 anos de Porto Velho",
+    "tag_evento": "PROGRAMAÇÃO INFANTIL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -533,6 +571,7 @@
   },
   {
     "titulo": "Cantora Joelma é uma das atrações confirmadas na comemoração de 111 anos de Porto Velho",
+    "tag_evento": "SHOW NACIONAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -547,6 +586,7 @@
   },
   {
     "titulo": "Aniversário de Porto Velho terá festa com doze horas de música ao vivo",
+    "tag_evento": "BEIRADÃO CULTURAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -561,6 +601,7 @@
   },
   {
     "titulo": "“Dia de Brincar” marcou o último sábado (13) para centenas de crianças da capital",
+    "tag_evento": "PARQUE DA CIDADE",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -575,6 +616,7 @@
   },
   {
     "titulo": "Festival da Vila Calderita reúne 10 mil pessoas em dois dias de festa",
+    "tag_evento": "CULTURA E LAZER",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -589,6 +631,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho valoriza cultura e garante apoio a eventos na capital",
+    "tag_evento": "ENTRETENIMENTO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -603,6 +646,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho disponibiliza estrutura e atrações artísticas para o Festival da Vila Calderita",
+    "tag_evento": "EVENTO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -617,6 +661,7 @@
   },
   {
     "titulo": "Prefeitura fomenta 19 eventos neste final de semana; confira a programação",
+    "tag_evento": "MOVIMENTO CULTURAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -631,6 +676,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho apoia agenda cultural e comunitária no mês de agosto",
+    "tag_evento": "AGENDA CULTURAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -645,6 +691,7 @@
   },
   {
     "titulo": "Circuito Junino de Porto Velho mantém o ritmo com apoio da Prefeitura",
+    "tag_evento": "VALORIZAÇÃO DA CULTURA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -659,6 +706,7 @@
   },
   {
     "titulo": "Com apoio da Prefeitura, Marcha para Jesus reúne multidão em Porto Velho",
+    "tag_evento": "FÉ",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -673,6 +721,7 @@
   },
   {
     "titulo": "Com apoio da Prefeitura, 11 arraiais animam o final de semana em várias regiões da capital",
+    "tag_evento": "PROGRAMAÇÃO CULTURAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -687,6 +736,7 @@
   },
   {
     "titulo": "Prefeitura apoia arraiais e valoriza a cultura regional em diversos pontos da capital",
+    "tag_evento": "RESGATE DAS TRADIÇÕES",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -701,6 +751,7 @@
   },
   {
     "titulo": "Alegria e tradição marcaram o Arraial do Mercado Cultural em Porto Velho",
+    "tag_evento": "FESTA JULINA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -715,6 +766,7 @@
   },
   {
     "titulo": "Arraial do Mercado Cultural começa nesta sexta-feira (25) com quadrilhas, shows e muita diversão",
+    "tag_evento": "VALORIZAÇÃO REGIONAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -729,6 +781,7 @@
   },
   {
     "titulo": "Arraial do Mercado Cultural acontece nos dias 25 e 26 de julho em Porto Velho",
+    "tag_evento": "FESTA JULINA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -743,6 +796,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho passa por processo de melhorias no atendimento à saúde do servidor",
+    "tag_evento": "SAÚDE DO SERVIDOR",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -757,6 +811,7 @@
   },
   {
     "titulo": "Evento apresenta dados de pesquisa inédita que revela hábitos culturais da população de Porto Velho",
+    "tag_evento": "APOIO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -771,6 +826,7 @@
   },
   {
     "titulo": "Porto Velho recebe reitores das universidades federais da região Norte",
+    "tag_evento": "APOIO INSTITUCIONAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -785,6 +841,7 @@
   },
   {
     "titulo": "Funcultural divulga resultado dos Projetos Selecionados em Chamamento Público com recursos da Lei Aldir Blanc",
+    "tag_evento": "FOMENTO À CULTURA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -799,6 +856,7 @@
   },
   {
     "titulo": "Feirantes de Porto Velho entram no clima das festas juninas e reforçam a venda de produtos típicos para esta época do ano",
+    "tag_evento": "TRADIÇÃO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -813,6 +871,7 @@
   },
   {
     "titulo": "III Arraial da Calderita acontece nos próximos dias 6 e 7 de junho",
+    "tag_evento": "CIRCUITO JUNINO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -827,6 +886,7 @@
   },
   {
     "titulo": "Funcultural divulga lista de resultado das inscrições de Editais de Chamamento Público",
+    "tag_evento": "FOMENTO À CULTURA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -841,6 +901,7 @@
   },
   {
     "titulo": "Funcultural publica resultado final de credenciamento de artistas e grupos culturais",
+    "tag_evento": "CULTURA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -855,6 +916,7 @@
   },
   {
     "titulo": "Arraial Flor de Cacto acontece de 30 de maio a 8 de junho, na zona Sul de Porto Velho",
+    "tag_evento": "CIRCUITO JUNINO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -869,6 +931,7 @@
   },
   {
     "titulo": "Vendedores ambulantes comemoram vendas no Arraiá da Prefs no Parque da Cidade",
+    "tag_evento": "GERAÇÃO DE RENDA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -883,6 +946,7 @@
   },
   {
     "titulo": "Cerca de 70 mil pessoas se encantaram com a primeira edição do Arraiá da Prefs no Parque da Cidade",
+    "tag_evento": "O MAIOR DO NORTE",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -897,6 +961,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho abre oficialmente o calendário junino no Parque da Cidade com o Arraiá da Prefs",
+    "tag_evento": "SUCESSO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -911,6 +976,7 @@
   },
   {
     "titulo": "Quadrilhas se preparam para encantar no Arraiá da Prefs",
+    "tag_evento": "FESTA JUNINA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -925,6 +991,7 @@
   },
   {
     "titulo": "Semusb prepara o Parque da Cidade para receber o público no Arraiá da Prefs",
+    "tag_evento": "LIMPEZA NO PARQUE",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -939,6 +1006,7 @@
   },
   {
     "titulo": "Bois-bumbás resgatam tradição e identidade cultural no Arraiá da Prefs",
+    "tag_evento": "VIVA A CULTURA POPULAR",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -953,6 +1021,7 @@
   },
   {
     "titulo": "Valorização dos artistas locais marca o Arraiá da Prefs",
+    "tag_evento": "CULTURA REGIONAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -967,6 +1036,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho inicia montagem da estrutura para a 1a edição do Arraiá da Prefs",
+    "tag_evento": "FESTA JUNINA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -981,6 +1051,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho divulga a programação do evento que inicia na próxima sexta-feira (23)",
+    "tag_evento": "ARRAIÁ DA PREFS",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -995,6 +1066,7 @@
   },
   {
     "titulo": "Sucessos nacionais, Ju Marques e Forró do Muído prometem grandes shows em Porto Velho",
+    "tag_evento": "ARRAIÁ DA PREFS",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1009,6 +1081,7 @@
   },
   {
     "titulo": "Prefeitura lança Arraiá da Prefs e divulga calendário junino",
+    "tag_evento": "MAIOR DO NORTE",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1023,6 +1096,7 @@
   },
   {
     "titulo": "Divulgado edital para credenciamento de seleção de espaços, ambientes e iniciativas artístico-culturais",
+    "tag_evento": "ALDIR BLANC",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1037,6 +1111,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho lança edital da Política Nacional Aldir Blanc para fomentar pontos de cultura",
+    "tag_evento": "CULTURA VIVA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1051,6 +1126,7 @@
   },
   {
     "titulo": "Prefeitura altera edital para seleção de projetos que terão recursos do Ministério da Cultura",
+    "tag_evento": "ERRATA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1065,6 +1141,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho publica alterações no edital de chamamento público que deve premiar entidades culturais",
+    "tag_evento": "ERRATA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1079,6 +1156,7 @@
   },
   {
     "titulo": "Festival do Trabalhador celebra data com alegria e cultura",
+    "tag_evento": "DIA DO TRABALHADOR",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1093,6 +1171,7 @@
   },
   {
     "titulo": "Prefeitura divulga edital para seleção de projetos culturais com apoio financeiro do Ministério da Cultura",
+    "tag_evento": "ALDIR BLANC",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1107,6 +1186,7 @@
   },
   {
     "titulo": "Prefeitura publica Edital de Chamamento Público com foco no desenvolvimento",
+    "tag_evento": "PONTOS DE CULTURA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1121,6 +1201,7 @@
   },
   {
     "titulo": "Resgate da cultura de Porto Velho e valorização dos artistas regionais",
+    "tag_evento": "ESPECIAL 100 DIAS",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1135,6 +1216,7 @@
   },
   {
     "titulo": "Inscrições para o credenciamento de artistas para eventos do Município encerram nesta sexta-feira (11)",
+    "tag_evento": "CULTURA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1149,6 +1231,7 @@
   },
   {
     "titulo": "Inscrições para o credenciamento de artistas para eventos da Funcultural são prorrogadas até dia 11 de abril",
+    "tag_evento": "CALENDÁRIO CULTURAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1163,6 +1246,7 @@
   },
   {
     "titulo": "Inscrições para credenciamento de artistas em diversas áreas culturais seguem até o dia 26",
+    "tag_evento": "VALORIZAÇÃO CULTURAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1177,6 +1261,7 @@
   },
   {
     "titulo": "Estão abertas as inscrições para credenciamento de artistas em diversas áreas culturais em Porto Velho",
+    "tag_evento": "VALORIZAÇÃO CULTURAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1191,6 +1276,7 @@
   },
   {
     "titulo": "Programação dos desfiles carnavalescos continua neste final de semana em Porto Velho",
+    "tag_evento": "CARNAVAL 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1205,6 +1291,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho divulga programação completa dos desfiles carnavalescos a partir desta quinta-feira (27)",
+    "tag_evento": "CARNAVAL 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1219,6 +1306,7 @@
   },
   {
     "titulo": "Prefeitura inicia festas momescas com segurança e sucesso de público",
+    "tag_evento": "CARNAVAL 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1233,6 +1321,7 @@
   },
   {
     "titulo": "Confira a programação dos blocos carnavalescos e alteração no itinerário dos ônibus para este final de semana",
+    "tag_evento": "CARNAVAL 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1247,6 +1336,7 @@
   },
   {
     "titulo": "Grupos folclóricos retomam espaços públicos após Prefeitura revogar proibição de utilização",
+    "tag_evento": "RESPEITO À CULTURA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1261,6 +1351,7 @@
   },
   {
     "titulo": "Curumim Folia leva alegria, música, fantasia e diversão para crianças no Mercado Cultural",
+    "tag_evento": "CARNAVAL 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1275,6 +1366,7 @@
   },
   {
     "titulo": "Baile Municipal abre o carnaval de Porto Velho e anima foliões com muita marchinha",
+    "tag_evento": "TRADIÇÃO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1289,6 +1381,7 @@
   },
   {
     "titulo": "Fantasias e adereços da Corte do Rei Momo são confeccionados por artistas de Porto Velho",
+    "tag_evento": "CARNAVAL 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1303,6 +1396,7 @@
   },
   {
     "titulo": "Baile Municipal e Curumim Folia abrem oficialmente o período momesco em Porto Velho",
+    "tag_evento": "CARNAVAL 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1317,6 +1411,7 @@
   },
   {
     "titulo": "Rei Momo e Rainha falam da expectativa para o Baile Municipal de Porto Velho",
+    "tag_evento": "CARNAVAL 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1331,6 +1426,7 @@
   },
   {
     "titulo": "Mercado Cultural já está sendo decorado para o Baile Municipal, a abertura oficial do carnaval em Porto Velho",
+    "tag_evento": "CARNAVAL 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1345,6 +1441,7 @@
   },
   {
     "titulo": "Baile Municipal abre oficialmente os festejos carnavalescos em Porto Velho no dia 15 de fevereiro, no Mercado Cultural",
+    "tag_evento": "CARNAVAL 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1359,6 +1456,7 @@
   },
   {
     "titulo": "Prefeitura divulga relação dos nomes escolhidos para a Corte do Rei Momo, costura e decoração",
+    "tag_evento": "CARNAVAL 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1373,6 +1471,7 @@
   },
   {
     "titulo": "Moradores do Morar Melhor recebem a 1a edição do projeto Vem com a Prefeitura",
+    "tag_evento": "CIDADANIA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1387,6 +1486,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho define estratégias para o período momesco",
+    "tag_evento": "CARNAVAL 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1401,6 +1501,7 @@
   },
   {
     "titulo": "Show de fogos e apresentações musicais encerram comemorações do aniversário de Porto Velho",
+    "tag_evento": "110 ANOS",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1415,6 +1516,7 @@
   },
   {
     "titulo": "Calendário Oficial do Carnaval 2025 é divulgado pela Prefeitura de Porto Velho",
+    "tag_evento": "PROGRAMAÇÃO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1429,6 +1531,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho lança edital para contratação de serviços especializados em decoração para o Baile Municipal",
+    "tag_evento": "CARNAVAL 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1443,6 +1546,7 @@
   },
   {
     "titulo": "Chamamento público seleciona costureiro para confecção das fantasias da Corte do Rei Momo",
+    "tag_evento": "CARNAVAL 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1457,6 +1561,7 @@
   },
   {
     "titulo": "Prefeitura de Porto Velho abre inscrição para selecionar a Corte do Rei Momo",
+    "tag_evento": "CARNAVAL 2025",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -1471,6 +1576,7 @@
   },
   {
     "titulo": "Município divulga regulamento para o carnaval de rua em 2025",
+    "tag_evento": "NORMAS",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",

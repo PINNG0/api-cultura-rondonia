@@ -1,6 +1,7 @@
 [
   {
     "titulo": "Réveillon 2019",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -15,6 +16,7 @@
   },
   {
     "titulo": "TACACÁ MUSICAL ESPECIAL – SEMANA DA CULTURA",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -29,6 +31,7 @@
   },
   {
     "titulo": "Karaokê na Praça Marechal Rondon",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -43,6 +46,7 @@
   },
   {
     "titulo": "SEMANA DA CULTURA",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -57,6 +61,7 @@
   },
   {
     "titulo": "OPORTUNIDADE",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -71,6 +76,7 @@
   },
   {
     "titulo": "Parceria Funcultural e Instituto Vigor",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -85,6 +91,7 @@
   },
   {
     "titulo": "PRORROGAÇÃO DO CHAMAMENTO PÚBLICO 005/2018",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -99,6 +106,7 @@
   },
   {
     "titulo": "12 DE OUTUBRO DE 2018",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -113,6 +121,7 @@
   },
   {
     "titulo": "104 Anos de Porto Velho",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -127,6 +136,7 @@
   },
   {
     "titulo": "Porto Velho completa 104 anos no próximo dia 02 de outubro.",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -141,6 +151,7 @@
   },
   {
     "titulo": "Prefeitura entrega três boxes do Mercado Cultural aos permissionários",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -155,6 +166,7 @@
   },
   {
     "titulo": "SOM LIVRE NO ESPAÇO ALTERNATIVO",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -169,6 +181,7 @@
   },
   {
     "titulo": "Solenidade de Entrega das Chaves",
+    "tag_evento": "Mercado Cultural",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -183,6 +196,7 @@
   },
   {
     "titulo": "Som Livre 16/09",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -197,6 +211,7 @@
   },
   {
     "titulo": "EDITAL DE CHAMAMENTO PÚBLICO N.o 005/2018",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -211,6 +226,7 @@
   },
   {
     "titulo": "Mercado Cultural",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -225,6 +241,7 @@
   },
   {
     "titulo": "Som Livre",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -239,6 +256,7 @@
   },
   {
     "titulo": "Festival de Praia Calderita",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -253,6 +271,7 @@
   },
   {
     "titulo": "Lo-Fi",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -267,6 +286,7 @@
   },
   {
     "titulo": "Acervo Projeto Som Livre",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -281,6 +301,7 @@
   },
   {
     "titulo": "PROJETO SOM LIVRE NO ESPAÇO ALTERNATIVO \"SUCESSO TOTAL\"",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -295,6 +316,7 @@
   },
   {
     "titulo": "NOTA DE ESCLARECIMENTO DA FUNCULTURAL",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -309,6 +331,7 @@
   },
   {
     "titulo": "Sambista carioca Juliana Diniz, fará participação especial no evento, Homenagem ao Menestrel especial Bainha 80 Anos.",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -323,6 +346,7 @@
   },
   {
     "titulo": "Tacacá Musical",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -337,6 +361,7 @@
   },
   {
     "titulo": "CHAMAMENTO PÚBLICO Inscrições abertas para permissão de uso e ocupação de boxes do Mercado Cultural",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",

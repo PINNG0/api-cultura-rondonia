@@ -1,6 +1,7 @@
 [
   {
     "titulo": "FUNCULTURAL EMITE NOTA",
+    "tag_evento": "LEI ALDIR BLANC",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -15,6 +16,7 @@
   },
   {
     "titulo": "EDITAL LEI ALDIR BLANC",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -29,6 +31,7 @@
   },
   {
     "titulo": "⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -43,6 +46,7 @@
   },
   {
     "titulo": "⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -57,6 +61,7 @@
   },
   {
     "titulo": "⠀⠀⠀⠀⠀⠀⠀⠀",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -71,6 +76,7 @@
   },
   {
     "titulo": "Tacacá Musical (Cultura e Gastronomia)",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -85,6 +91,7 @@
   },
   {
     "titulo": "EDITAL 001/2021",
+    "tag_evento": "RESULTADO FINAL DO CADASTRAMENTO DE ARTISTAS",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -99,6 +106,7 @@
   },
   {
     "titulo": "Ministro do Turismo afirma que potencial turístico de Porto Velho precisa ser conhecido",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -113,6 +121,7 @@
   },
   {
     "titulo": "TACACÁ MUSICAL",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -127,6 +136,7 @@
   },
   {
     "titulo": "FUNCULTURAL, ANAJUP E FEDERON DISCUTEM CERTAMES FOLCLÓRICOS",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -141,6 +151,7 @@
   },
   {
     "titulo": "CHAMAMENTO PÚBLICO 007/2021",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -155,6 +166,7 @@
   },
   {
     "titulo": "Edital de Chamamento Público 002/2021",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -169,6 +181,7 @@
   },
   {
     "titulo": "Edital de Chamamento Público 001/2021",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -183,6 +196,7 @@
   },
   {
     "titulo": "Reabertura do Mercado Cultural",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -197,6 +211,7 @@
   },
   {
     "titulo": "Pagamentos da Lei Aldir Blanc",
+    "tag_evento": "Comunicado 001/2021",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",

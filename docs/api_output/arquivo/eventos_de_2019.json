@@ -1,6 +1,7 @@
 [
   {
     "titulo": "Ballet FUNCULTURAL dia 24 de Novembro",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -15,6 +16,7 @@
   },
   {
     "titulo": "Dia Nacional da Cultura",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -29,6 +31,7 @@
   },
   {
     "titulo": "3a Edição da Copa de Fanfarras COFABAN",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -43,6 +46,7 @@
   },
   {
     "titulo": "Dia das Crianças 12/outubro no Parque dos Tanques",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -57,6 +61,7 @@
   },
   {
     "titulo": "Aniversário 105 anos de Porto Velho",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -71,6 +76,7 @@
   },
   {
     "titulo": "Seleção de bandas para o aniversário de Porto Velho",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -85,6 +91,7 @@
   },
   {
     "titulo": "No dia 14 de Setembro estará acontecendo o OBSERVATÓRIO SOLIDÁRIO em Nova Mutum Paraná.",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -99,6 +106,7 @@
   },
   {
     "titulo": "Nesta quarta dia 11/09 tem Tacacá musical com Lukas Vilar",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -113,6 +121,7 @@
   },
   {
     "titulo": "2a Feira de Mulheres Empreendedoras do Aponiã",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -127,6 +136,7 @@
   },
   {
     "titulo": "Festival de Praia de Calderita",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -141,6 +151,7 @@
   },
   {
     "titulo": "CMPC",
+    "tag_evento": "Evento de posse do novo Conselho Municipal de Políticas Culturais",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -155,6 +166,7 @@
   },
   {
     "titulo": "CMPC",
+    "tag_evento": "Resultado das eleições do Conselho Municipal de Políticas Culturais",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -169,6 +181,7 @@
   },
   {
     "titulo": "Biografando o Samba",
+    "tag_evento": "Tributo ao Menestrel",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -183,6 +196,7 @@
   },
   {
     "titulo": "XXII ARRAIAL COMUNIDADE DO SERTÃO",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -197,6 +211,7 @@
   },
   {
     "titulo": "II ARRAIAL DO ORGULHO DO MADEIRA",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -211,6 +226,7 @@
   },
   {
     "titulo": "Encontro com a classe cultural de Porto Velho",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -225,6 +241,7 @@
   },
   {
     "titulo": "Convocação pública Encontro com a Classe Cultural",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -239,6 +256,7 @@
   },
   {
     "titulo": "Rodas de conversas culturais: um debate sobre o Plano Municipal de Cultura",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -253,6 +271,7 @@
   },
   {
     "titulo": "4o Encontro de Bateristas de Porto Velho",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -267,6 +286,7 @@
   },
   {
     "titulo": "Reunião com os membros do Conselho Municipal de Cultura, e integrantes do movimento PACULTURA",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -281,6 +301,7 @@
   },
   {
     "titulo": "4o Encontro de Bateristas de Porto Velho",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -295,6 +316,7 @@
   },
   {
     "titulo": "Tacacá Musical",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -309,6 +331,7 @@
   },
   {
     "titulo": "Boto Rock Festival 2019",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -323,6 +346,7 @@
   },
   {
     "titulo": "Bandas de Porto Velho já podem se inscrever no Boto Rock Festival 2019",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -337,6 +361,7 @@
   },
   {
     "titulo": "Samba de enredo e marchinhas foram o destaque no Baile Municipal",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -351,6 +376,7 @@
   },
   {
     "titulo": "BAILE MUNICIPAL: Intérprete da Escola de Samba Estácio de Sá, do RJ, será a atração da festa",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -365,6 +391,7 @@
   },
   {
     "titulo": "MARCHINHAS: Carnaval da Confraria tenta resgatar antigas folias de bairro",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -379,6 +406,7 @@
   },
   {
     "titulo": "CARNAVAL: Baile Municipal será neste sábado,16, no Mercado Cultural",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -393,6 +421,7 @@
   },
   {
     "titulo": "CRIANÇAS E ADOLESCENTES: Funcultural apoiará campanha de prevenção à violência sexual durante o Carnaval",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -407,6 +436,7 @@
   },
   {
     "titulo": "FOLIA: Município promove três eventos de carnaval este ano",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -421,6 +451,7 @@
   },
   {
     "titulo": "CANTA MERCADO: Rapp e pop rock nesta terça no Mercado Cultural",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -435,6 +466,7 @@
   },
   {
     "titulo": "CARNAVAL: Funcultural confirma 3o Baile Municipal no próximo dia 16",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -449,6 +481,7 @@
   },
   {
     "titulo": "Último ensaio dos blocos de Carnaval de Porto Velho acontece neste sábado, 9",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -463,6 +496,7 @@
   },
   {
     "titulo": "Inscrições para compor a Corte do Rei Momo",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -477,6 +511,7 @@
   },
   {
     "titulo": "Festa de aniversário de Porto Velho terá quatro atrações artísticas",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -491,6 +526,7 @@
   },
   {
     "titulo": "A festa promovida Prefeitura de Porto Velho, terá 8 atrações locais",
+    "tag_evento": "Réveillon 2019",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -505,6 +541,7 @@
   },
   {
     "titulo": "Último Tacacá Musical de 2018",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -519,6 +556,7 @@
   },
   {
     "titulo": "Réveillon",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",

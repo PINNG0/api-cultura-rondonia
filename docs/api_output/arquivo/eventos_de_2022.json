@@ -1,6 +1,7 @@
 [
   {
     "titulo": "Natal Porto Luz 2022 encanta população de Porto Velho",
+    "tag_evento": "DECORAÇÃO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -15,6 +16,7 @@
   },
   {
     "titulo": "Dia Nacional do Samba será comemorado neste sábado (3) no Mercado Cultural",
+    "tag_evento": "COMEMORAÇÃO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -29,6 +31,7 @@
   },
   {
     "titulo": "Reabertura do Parque da Cidade terá chegada do Papai Noel e inauguração das luzes de Natal",
+    "tag_evento": "FIM DE ANO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -43,6 +46,7 @@
   },
   {
     "titulo": "Show de fogos e atrações culturais marcam a abertura do Festival de Praia em Jaci-Paraná",
+    "tag_evento": "EVENTO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -57,6 +61,7 @@
   },
   {
     "titulo": "Nova atração promete movimentar ainda mais o Festival de Praia de Jaci-Paraná",
+    "tag_evento": "EVENTO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -71,6 +76,7 @@
   },
   {
     "titulo": "Festival de Praia em Jaci-Paraná terá shows, esporte, lazer e empreendedorismo",
+    "tag_evento": "EVENTO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -85,6 +91,7 @@
   },
   {
     "titulo": "Programação cultural do Festival de Praia da Vila Calderita é divulgada",
+    "tag_evento": "LAZER",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -99,6 +106,7 @@
   },
   {
     "titulo": "Festival de Praia Circuito Beach terá ampla programação cultural",
+    "tag_evento": "EVENTO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -113,6 +121,7 @@
   },
   {
     "titulo": "Quadrilha junina JUABP recebe agasalhos padronizados para representar a capital em evento nacional",
+    "tag_evento": "APOIO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -127,6 +136,7 @@
   },
   {
     "titulo": "Público aprova projeto que mistura boa música e culinária regional",
+    "tag_evento": "TACACÁ MUSICAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -141,6 +151,7 @@
   },
   {
     "titulo": "Processo licitatório do Complexo da EFMM acontece nesta sexta-feira (24)",
+    "tag_evento": "CONCESSÃO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -155,6 +166,7 @@
   },
   {
     "titulo": "Especial GOspel",
+    "tag_evento": "Tacacá Musical",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -169,6 +181,7 @@
   },
   {
     "titulo": "Mercado Cultural terá programação especial na véspera do Dia dos Namorados",
+    "tag_evento": "Noite Romântica Cultural",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -183,6 +196,7 @@
   },
   {
     "titulo": "Arraial Municipal reúne grande público na abertura do Circuito Junino de Porto Velho",
+    "tag_evento": "4a EDIÇÃO",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -197,6 +211,7 @@
   },
   {
     "titulo": "Arraial Municipal começa na sexta-feira (20) e abre o Circuito Junino em Porto Velho",
+    "tag_evento": "FESTA JUNINA",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -211,6 +226,7 @@
   },
   {
     "titulo": "Programação",
+    "tag_evento": "Arraial Municipal de Porto Velho",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -225,6 +241,7 @@
   },
   {
     "titulo": "Projeto Arte no Entardecer contempla moradores do residencial Morar Melhor",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -239,6 +256,7 @@
   },
   {
     "titulo": "4° Edição do Arraial Municipal",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -253,6 +271,7 @@
   },
   {
     "titulo": "Edital de licitação para a concessão do Complexo da Estrada de Ferro Madeira-Mamoré é publicado",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -267,6 +286,7 @@
   },
   {
     "titulo": "Arte no Entardecer reúne famílias em especial de Páscoa",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -281,6 +301,7 @@
   },
   {
     "titulo": "⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -295,6 +316,7 @@
   },
   {
     "titulo": "Tacacá Musical",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -309,6 +331,7 @@
   },
   {
     "titulo": "CHAMAMENTO No 02/2022",
+    "tag_evento": "RESULTADO PARCIAL",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -323,6 +346,7 @@
   },
   {
     "titulo": "QUARTA É DIA DE TACACÁ MUSICAL",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -337,6 +361,7 @@
   },
   {
     "titulo": "TACACÁ MUSICAL",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -351,6 +376,7 @@
   },
   {
     "titulo": "PROJETO ARTE NO ENTARDECER",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -365,6 +391,7 @@
   },
   {
     "titulo": "(Edital para Ocupação de Boxes)",
+    "tag_evento": "MERCADO CULTURAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -379,6 +406,7 @@
   },
   {
     "titulo": "Dia Internacional das Mulheres",
+    "tag_evento": "8 de Março",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -393,6 +421,7 @@
   },
   {
     "titulo": "⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -407,6 +436,7 @@
   },
   {
     "titulo": "Credenciamento de Artistas e Grupos Culturais",
+    "tag_evento": "Edital 001/2022",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -421,6 +451,7 @@
   },
   {
     "titulo": "(CULTURA E GASTRONOMIA)",
+    "tag_evento": "TACACÁ MUSICAL",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -435,6 +466,7 @@
   },
   {
     "titulo": "CREDENCIAMENTO DE ARTISTAS",
+    "tag_evento": "EDITAL 001/2022",
     "blocos_conteudo": [
       {
         "type": "PARAGRAPH",
@@ -449,6 +481,7 @@
   },
   {
     "titulo": "CREDENCIAMENTO DE ARTISTAS",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -463,6 +496,7 @@
   },
   {
     "titulo": "PROJETO TACACÁ MUSICAL",
+    "tag_evento": "EM BREVE",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
@@ -477,6 +511,7 @@
   },
   {
     "titulo": "Carnaval 2022 é cancelado em Porto Velho",
+    "tag_evento": "Sem tag",
     "blocos_conteudo": [
       {
         "type": "SUBTITLE",
