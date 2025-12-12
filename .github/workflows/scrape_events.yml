@@ -90,5 +90,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
-      # versão corrigida e compatível com deploy
+      
         uses: actions/deploy-pages@v4
