@@ -1,174 +1,169 @@
 """
-Script principal do scraper da Funcultural.
+Script principal do projeto Funcultural Scraper.
 
 Responsável por:
+- Oferecer uma interface de linha de comando (CLI)
 - Executar a raspagem de eventos
-- Detectar mudanças nos dados
-- Salvar arquivos JSON e atualizar index.html
 - Arquivar eventos antigos
-- Realizar commit automático (se necessário)
+- Gerar o HTML final
+- Controlar o nível de logs (modo normal e modo debug)
 """
 
-import os
-import json
-import hashlib
-import subprocess
-import atexit
+import argparse
 import logging
+import json
+import os
 
 from scraping.runner import scrape_all
-from scraping.storage import save_only
-from scraping.config import LOCKFILE
 from scraping.archiver import ArquivadorEventos
-from scraping.html_generator import gerar_html_arquivos_por_ano
+from scraping.html_generator import gerar_html
 from scraping.logging_config import configurar_logging
 
 
 # ---------------------------------------------------------
-# Arquivos que devem ser adicionados ao Git
+# Salva eventos no arquivo principal
 # ---------------------------------------------------------
-FILES_TO_COMMIT = [
-    "docs/api_output/eventos.json",
-    "docs/api_output/arquivo/*.json",
-    "docs/index.html",
-    ".cache/hash_eventos.txt",
-]
+def salvar_eventos(eventos, caminho="docs/api_output/eventos.json"):
+    """
+    Salva a lista de eventos no arquivo JSON principal.
+    """
+    os.makedirs(os.path.dirname(caminho), exist_ok=True)
 
+    with open(caminho, "w", encoding="utf-8") as f:
+        json.dump(eventos, f, ensure_ascii=False, indent=2)
 
-# ---------------------------------------------------------
-# Verifica se está rodando no ambiente GitHub Actions
-# ---------------------------------------------------------
-def rodando_no_github():
-    return os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
+    logging.info("✅ %d eventos salvos em %s", len(eventos), caminho)
 
 
 # ---------------------------------------------------------
-# Gera hash determinístico dos eventos
+# Comando: raspagem de eventos
 # ---------------------------------------------------------
-def gerar_hash_eventos(eventos):
-    payload = json.dumps(eventos, ensure_ascii=False, sort_keys=True)
-    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
-
-
-# ---------------------------------------------------------
-# Executa git add, commit e push
-# ---------------------------------------------------------
-def commit_and_push(commit_message, files):
-    try:
-        for f in files:
-            subprocess.run(["git", "add", f], check=True)
-
-        result = subprocess.run(["git", "diff", "--cached", "--quiet"], check=False)
-
-        if result.returncode != 0:
-            subprocess.run(["git", "commit", "-m", commit_message], check=True)
-            subprocess.run(["git", "push"], check=True)
-            logging.info("✅ Commit e push automáticos concluídos com sucesso.")
-            return True
-        else:
-            logging.info("✔ Nenhum arquivo alterado. Pulando commit.")
-            return False
-
-    except subprocess.CalledProcessError as e:
-        logging.error("❌ Erro ao executar comando Git: %s", e)
-        return False
-
-
-# ---------------------------------------------------------
-# Remove o lock automaticamente ao sair (mesmo em erro ou CTRL+C)
-# ---------------------------------------------------------
-def remove_lock():
-    if os.path.exists(LOCKFILE):
-        os.remove(LOCKFILE)
-
-
-atexit.register(remove_lock)
-
-
-# ---------------------------------------------------------
-# Execução principal
-# ---------------------------------------------------------
-if __name__ == "__main__":
-    configurar_logging()
-    ignorar_lock = rodando_no_github()
-
-    # Lockfile só é respeitado em ambiente local
-    if os.path.exists(LOCKFILE) and not ignorar_lock:
-        logging.warning("⚠️ Já está rodando. Abortando.")
-        exit(1)
-
-    if not ignorar_lock:
-        with open(LOCKFILE, "w", encoding="utf-8") as f:
-            f.write("running")
-
+def comando_atualizar():
+    """
+    Executa a raspagem de eventos e atualiza o arquivo eventos.json.
+    """
     logging.info("🚀 Iniciando raspagem de eventos...")
+    eventos = scrape_all()
+    salvar_eventos(eventos)
+    logging.info("✅ Raspagem concluída.")
 
-    try:
-        # 1. Raspagem
-        eventos = scrape_all()
-        logging.info("✅ Raspagem concluída. Eventos coletados: %d", len(eventos))
 
-        # 2. Verificação de mudanças
-        logging.info("🔎 Verificando mudanças nos dados...")
-        novo_hash = gerar_hash_eventos(eventos)
-        hash_path = ".cache/hash_eventos.txt"
-        os.makedirs(".cache", exist_ok=True)
+# ---------------------------------------------------------
+# Comando: arquivar eventos antigos
+# ---------------------------------------------------------
+def comando_arquivar():
+    """
+    Executa o processo de arquivamento de eventos antigos.
+    """
+    logging.info("📦 Arquivando eventos antigos...")
+    ArquivadorEventos().arquivar()
+    logging.info("✅ Arquivamento concluído.")
 
-        antigo_hash = None
-        if os.path.exists(hash_path):
-            with open(hash_path, "r", encoding="utf-8") as f:
-                antigo_hash = f.read().strip()
 
-        mudou_eventos = antigo_hash != novo_hash
+# ---------------------------------------------------------
+# Comando: gerar HTML final
+# ---------------------------------------------------------
+def comando_gerar_html():
+    """
+    Gera o HTML final a partir do arquivo eventos.json.
+    """
+    logging.info("🖥️ Gerando HTML final...")
 
-        # 3. Salvamento e arquivamento
-        logging.info("💾 Salvando arquivos de eventos...")
-        save_only(eventos)
+    caminho = "docs/api_output/eventos.json"
+    if not os.path.exists(caminho):
+        logging.error("❌ eventos.json não encontrado. Rode --atualizar primeiro.")
+        return
 
-        logging.info("🧹 Arquivando eventos antigos...")
-        ArquivadorEventos().arquivar()
+    with open(caminho, "r", encoding="utf-8") as f:
+        eventos = json.load(f)
 
-        # 4. Atualização do index.html
-        logging.info("🧩 Atualizando index.html...")
-        index_path = "docs/index.html"
-        index_modificado = False
+    gerar_html(eventos)
+    logging.info("✅ HTML gerado com sucesso.")
 
-        if os.path.exists(index_path):
-            with open(index_path, "r", encoding="utf-8") as f:
-                conteudo = f.read()
 
-            html_anos = gerar_html_arquivos_por_ano()
-            if "<!-- anos -->" in conteudo:
-                novo_conteudo = conteudo.split("<!-- anos -->")[0] + "<!-- anos -->\n" + html_anos
-                if novo_conteudo != conteudo:
-                    index_modificado = True
-                    with open(index_path, "w", encoding="utf-8") as f:
-                        f.write(novo_conteudo)
-                    logging.info("✅ index.html atualizado!")
-                else:
-                    logging.info("✔ index.html sem mudanças.")
-            else:
-                logging.warning("⚠️ Marcador <!-- anos --> não encontrado no index.html.")
-        else:
-            logging.warning("⚠️ index.html não encontrado.")
+# ---------------------------------------------------------
+# Comando: executar tudo em sequência
+# ---------------------------------------------------------
+def comando_tudo():
+    """
+    Executa raspagem, arquivamento e geração de HTML em sequência.
+    """
+    comando_atualizar()
+    comando_arquivar()
+    comando_gerar_html()
 
-        # 5. Commit automático (somente local)
-        if mudou_eventos or index_modificado:
-            logging.info("📌 Mudanças detectadas. Preparando para commit...")
 
-            with open(hash_path, "w", encoding="utf-8") as f:
-                f.write(novo_hash)
+# ---------------------------------------------------------
+# Função principal da CLI
+# ---------------------------------------------------------
+def main():
+    """
+    Interpreta os argumentos da linha de comando e
+    executa o comando solicitado pelo usuário.
+    """
 
-            if not ignorar_lock:
-                commit_and_push("Dados de eventos atualizados (Execução Local)", FILES_TO_COMMIT)
-            else:
-                logging.info("📤 Execução no CI/CD. O Actions fará o commit.")
-        else:
-            logging.info("🟡 Nenhuma mudança detectada. Nenhuma ação de commit necessária.")
+    parser = argparse.ArgumentParser(
+        description=(
+            "Ferramenta CLI para o scraper da Funcultural.\n\n"
+            "Como usar:\n"
+            "  python scraper.py --atualizar\n"
+            "  python scraper.py --arquivar\n"
+            "  python scraper.py --gerar-html\n"
+            "  python scraper.py --tudo\n"
+            "  python scraper.py --tudo --debug\n\n"
+            "Observação:\n"
+            "  No Windows, sempre execute usando 'python scraper.py ...'.\n"
+        ),
+        formatter_class=argparse.RawTextHelpFormatter
+    )
 
-        logging.info("🎉 Processo finalizado com sucesso.")
+    parser.add_argument(
+        "--atualizar",
+        action="store_true",
+        help="Executa o scraping e atualiza eventos.json"
+    )
+    parser.add_argument(
+        "--arquivar",
+        action="store_true",
+        help="Arquiva eventos antigos"
+    )
+    parser.add_argument(
+        "--gerar-html",
+        action="store_true",
+        help="Gera o HTML final"
+    )
+    parser.add_argument(
+        "--tudo",
+        action="store_true",
+        help="Executa scraping + arquivamento + HTML"
+    )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Ativa modo debug (logs detalhados)"
+    )
 
-    finally:
-        # O remove_lock já está registrado no atexit, então aqui é só reforço
-        if os.path.exists(LOCKFILE) and not ignorar_lock:
-            os.remove(LOCKFILE)
+    args = parser.parse_args()
+
+    # Ativa modo debug via flag ou variável de ambiente
+    modo_debug = args.debug or os.getenv("DEBUG") == "1"
+    configurar_logging(debug=modo_debug)
+
+    if modo_debug:
+        logging.debug("Modo debug ativado.")
+
+    # Executa o comando solicitado
+    if args.atualizar:
+        comando_atualizar()
+    elif args.arquivar:
+        comando_arquivar()
+    elif args.gerar_html:
+        comando_gerar_html()
+    elif args.tudo:
+        comando_tudo()
+    else:
+        parser.print_help()
+
+
+if __name__ == "__main__":
+    main()

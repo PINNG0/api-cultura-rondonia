@@ -1,22 +1,1952 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>API Cultura Rondonia</title>
-  </head>
-  <body>
-    <h1>API Cultura Rondonia</h1>
-    <p>Arquivo de eventos: <a href="./api_output/eventos.json">eventos.json</a></p>
-    <p>Arquivo resumido: <a href="./api_output/eventos_index.json">eventos_index.json</a></p>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
 
-    <!-- anos -->
-<h2>Arquivos por ano</h2>
-<ul>
-  <li><a href="api_output/arquivo/eventos_de_2024.json">Eventos de 2024</a></li>
-  <li><a href="api_output/arquivo/eventos_de_2023.json">Eventos de 2023</a></li>
-  <li><a href="api_output/arquivo/eventos_de_2022.json">Eventos de 2022</a></li>
-  <li><a href="api_output/arquivo/eventos_de_2021.json">Eventos de 2021</a></li>
-  <li><a href="api_output/arquivo/eventos_de_2020.json">Eventos de 2020</a></li>
-  <li><a href="api_output/arquivo/eventos_de_2019.json">Eventos de 2019</a></li>
-  <li><a href="api_output/arquivo/eventos_de_2018.json">Eventos de 2018</a></li>
-</ul>
+    <!--
+        Página principal de exibição dos eventos culturais.
+
+        Responsável por:
+        - Carregar o CSS externo (estilos)
+        - Carregar o JS externo (busca e filtros)
+        - Exibir o conteúdo gerado automaticamente pelo html_generator.py
+    -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos Culturais de Porto Velho</title>
+
+    <!-- Arquivo de estilos -->
+    <link rel="stylesheet" href="assets/style.css">
+
+    <!-- Arquivo de scripts -->
+    <script src="assets/script.js" defer></script>
+</head>
+<body>
+
+<header>
+    <h1>Eventos Culturais de Porto Velho</h1>
+</header>
+
+<!-- Caixa de busca -->
+<div class="search-box">
+    <input id="busca" placeholder="Buscar eventos...">
+</div>
+
+<!-- Container onde o Python insere os cards -->
+<div id="eventos-container">
+    <!-- O html_generator.py substitui <div class="month-title">Outros</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/12/1765480658img-3719.JPG" alt="Imagem do evento">
+    <div class="event-title">Reunião no Prédio do Relógio define últimos ajustes para o Carnaval 2026</div>
+    <div class="event-tag">FOLIA À VISTA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52635/folia-a-vista-reuniao-no-predio-do-relogio-define-ultimos-ajustes-para-o-carnaval-2026" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/12/1764854607dsc06795.JPG" alt="Imagem do evento">
+    <div class="event-title">Celebração ao dia do samba movimenta o Mercado Cultural</div>
+    <div class="event-tag">COMEMORAÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52471/comemoracao-celebracao-ao-dia-do-samba-movimenta-o-mercado-cultural" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/12/176469580117613166931759625846edital-mercado-cultural-leandro-morais1.jpg" alt="Imagem do evento">
+    <div class="event-title">Mercado Cultural marca o Dia do Samba nesta quarta-feira (03)</div>
+    <div class="event-tag">SOM REGIONAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52434/som-regional-mercado-cultural-marca-o-dia-do-samba-nesta-quarta-feira-03" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/11/1764474310whatsapp-image-2025-11-29-at-234444.jpeg" alt="Imagem do evento">
+    <div class="event-title">Torcedores lotam espaço gastronômico para assistir à final da Libertadores</div>
+    <div class="event-tag">VILA NATALINA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52387/vila-natalina-torcedores-lotam-espaco-gastronomico-para-assistir-a-final-da-libertadores" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/11/1764471919unnamed-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Pavilhão do Mel recebe visitantes e apresenta produção apícola de Porto Velho</div>
+    <div class="event-tag">AGROTEC 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52381/agrotec-2025-pavilhao-do-mel-recebe-visitantes-e-apresenta-producao-apicola-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/11/1764470343img-4973.JPG" alt="Imagem do evento">
+    <div class="event-title">Pista de gelo é inaugurada no Parque da Cidade e reúne público em Porto Velho</div>
+    <div class="event-tag">NATAL PORTO VELHO LUZ 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52377/natal-porto-velho-luz-2025-pista-de-gelo-e-inaugurada-no-parque-da-cidade-e-reune-publico-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/11/1764335448dsc01874.JPG" alt="Imagem do evento">
+    <div class="event-title">Reunião define estratégias de segurança para o carnaval 2026</div>
+    <div class="event-tag">FOLIA ORGANIZADA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52340/folia-organizada-reuniao-define-estrategias-de-seguranca-para-o-carnaval-2026" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/11/3/1764256246whatsapp-image-2025-11-27-at-105948-3.jpeg" alt="Imagem do evento">
+    <div class="event-title">Agrotec 2025 começa hoje (27) na Estrada de Ferro Madeira-Mamoré</div>
+    <div class="event-tag">INOVAÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52325/inovacao-agrotec-2025-comeca-hoje-27-na-estrada-de-ferro-madeira-mamore" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/11/17636491721701443740natal-porto-luz-2023-parque-da-cidade-leandro-morais-009.jpg" alt="Imagem do evento">
+    <div class="event-title">Porto Velho Luz inicia programação de Natal neste sábado</div>
+    <div class="event-tag">CULTURA E TRADIÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52192/cultura-e-tradicao-porto-velho-luz-inicia-programacao-de-natal-neste-sabado" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/11/1763646744arte-agrotec-2025-11-1.jpeg" alt="Imagem do evento">
+    <div class="event-title">Shows marcam os quatro dias da Agrotec 2025</div>
+    <div class="event-tag">VAI SER HIT!</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52189/vai-ser-hit-shows-marcam-os-quatro-dias-da-agrotec-2025" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/11/176312813517320233441637539424encerramento-atividades-semana-da-consciencia-negra-leandro-morais-21.jpg" alt="Imagem do evento">
+    <div class="event-title">Sarau “Corpos que Falam, Vozes que Lutam” une arte, cultura e ativismo em Porto Velho</div>
+    <div class="event-tag">CONSCIÊNCIA NEGRA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52107/consciencia-negra-sarau-corpos-que-falam-vozes-que-lutam-une-arte-cultura-e-ativismo-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1761745806whatsapp-image-2025-10-27-at-095407-1.jpeg" alt="Imagem do evento">
+    <div class="event-title">Centro Municipal Jorge Andrade reúne músicos e apaixonados por percussão em Porto Velho</div>
+    <div class="event-tag">BATERA DAY</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51808/batera-day-centro-municipal-jorge-andrade-reune-musicos-e-apaixonados-por-percussao-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1761663166img-9340.PNG" alt="Imagem do evento">
+    <div class="event-title">Em noite de festa, Prefeitura de Porto Velho celebra o valor do servidor público</div>
+    <div class="event-tag">NO MERCADO CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51793/no-mercado-cultural-em-noite-de-festa-prefeitura-de-porto-velho-celebra-o-valor-do-servidor-publico" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/17613166931759625846edital-mercado-cultural-leandro-morais1.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho celebra o Dia do Servidor Público com festa no Mercado Cultural</div>
+    <div class="event-tag">COMEMORAÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51747/comemoracao-prefeitura-de-porto-velho-celebra-o-dia-do-servidor-publico-com-festa-no-mercado-cultural" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1760981239whatsapp-image-2025-10-18-at-232637.jpeg" alt="Imagem do evento">
+    <div class="event-title">Servidores da Seinfra são contemplados com atividades recreativas desenvolvidas pela Semtel</div>
+    <div class="event-tag">LAZER</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51662/lazer-servidores-da-seinfra-sao-contemplados-com-atividades-recreativas-desenvolvidas-pela-semtel" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1760965720img-2249.jpg" alt="Imagem do evento">
+    <div class="event-title">5a Conferência Municipal de Cultura planeja e fortalece a articulação cultural em Porto Velho</div>
+    <div class="event-tag">EVENTO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51639/evento-5a-conferencia-municipal-de-cultura-planeja-e-fortalece-a-articulacao-cultural-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1760964450img-0345.JPG" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho celebra o Dia da MPB com show em homenagem a Maria Bethânia</div>
+    <div class="event-tag">CULTURA BRASILEIRA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51636/cultura-brasileira-prefeitura-de-porto-velho-celebra-o-dia-da-mpb-com-show-em-homenagem-a-maria-bethania" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/17606262231743182398edital-chamamento-funcultural-leandro-morais-21.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura promove show especial em celebração ao Dia da MPB</div>
+    <div class="event-tag">NESTA SEXTA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51597/nesta-sexta-prefeitura-promove-show-especial-em-celebracao-ao-dia-da-mpb" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/17605361561653136928graca-carneiro-arraial-municipal-mercado-cultural-leandro-morais-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho realiza a 5a Conferência Municipal de Cultura</div>
+    <div class="event-tag">EVENTO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51572/evento-prefeitura-de-porto-velho-realiza-a-5a-conferencia-municipal-de-cultura" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1760229700dsc04274.JPG" alt="Imagem do evento">
+    <div class="event-title">Festa no Parque da Cidade é sucesso de público com show gratuito do Mundo Bita</div>
+    <div class="event-tag">DIA DAS CRIANÇAS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51509/dia-das-criancas-festa-no-parque-da-cidade-e-sucesso-de-publico-com-show-gratuito-do-mundo-bita" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1759946311imagem-do-whatsapp-de-2025-10-08-as-135544-0536fb8e.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura apresenta balanço final do aniversário de Porto Velho</div>
+    <div class="event-tag">SUCESSO DE PÚBLICO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51458/sucesso-de-publico-prefeitura-apresenta-balanco-final-do-aniversario-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1759858919aniversario-de-porto-velho-segunda-noite-leandro-morais-1-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Parceria da Prefeitura com a imprensa marca aniversário de 111 de Porto Velho</div>
+    <div class="event-tag">COMUNICAÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51432/comunicacao-parceria-da-prefeitura-com-a-imprensa-marca-aniversario-de-111-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1759724000whatsapp-image-2025-10-05-at-235840.jpeg" alt="Imagem do evento">
+    <div class="event-title">Atrações musicais no Mercado Cultural marcam o encerramento do aniversário de Porto Velho</div>
+    <div class="event-tag">111 ANOS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51393/111-anos-atracoes-musicais-no-mercado-cultural-marcam-o-encerramento-do-aniversario-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1759625846edital-mercado-cultural-leandro-morais1.jpg" alt="Imagem do evento">
+    <div class="event-title">Último dia de comemoração pelos 111 anos de Porto Velho tem esporte, lazer e festa no Mercado Cultural</div>
+    <div class="event-tag">VALORIZAÇÃO HISTÓRICA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51383/valorizacao-historica-ultimo-dia-de-comemoracao-pelos-111-anos-de-porto-velho-tem-esporte-lazer-e-festa-no-mercado-cultural" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1759676599aniversario-pvh-tres-palavrinhas-leandro-morais-66.jpg" alt="Imagem do evento">
+    <div class="event-title">Show infantil 3 Palavrinhas encanta crianças e famílias no aniversário de Porto Velho</div>
+    <div class="event-tag">111 ANOS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51388/111-anos-show-infantil-3-palavrinhas-encanta-criancas-e-familias-no-aniversario-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1759624454roda-literaria-00-03-34-14quadro004.jpg" alt="Imagem do evento">
+    <div class="event-title">Roda Literária celebra a cultura e destaca talentos locais nas comemorações dos 111 anos de Porto Velho</div>
+    <div class="event-tag">VALORIZAÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51380/valorizacao-roda-literaria-celebra-a-cultura-e-destaca-talentos-locais-nas-comemoracoes-dos-111-anos-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1759548944aniversario-de-porto-velho-segunda-noite-leandro-morais-157-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Quarto dia de festa reúne cultura, literatura, ciência e diversão para toda a família</div>
+    <div class="event-tag">ANIVERSÁRIO DE PVH</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51346/aniversario-de-pvh-quarto-dia-de-festa-reune-cultura-literatura-ciencia-e-diversao-para-toda-a-familia" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1759548184img-0186.jpg" alt="Imagem do evento">
+    <div class="event-title">Terceiro dia de festa de 111 anos celebra diversos ritmos regionais</div>
+    <div class="event-tag">BEIRADÃO CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51373/beiradao-cultural-terceiro-dia-de-festa-de-111-anos-celebra-diversos-ritmos-regionais" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1759495160aniversario-de-porto-velho-segunda-noite-leandro-morais-153.jpg" alt="Imagem do evento">
+    <div class="event-title">Beiradão Cultural anima o terceiro dia de festa com 12 horas de música</div>
+    <div class="event-tag">111 ANOS DE PVH</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51343/111-anos-de-pvh-beiradao-cultural-anima-o-terceiro-dia-de-festa-com-12-horas-de-musica" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1759460778imagem-do-whatsapp-de-2025-10-02-as-225705-c52de271.jpg" alt="Imagem do evento">
+    <div class="event-title">Aniversário de Porto Velho reúne milhares de pessoas em noite inesquecível com show de Joelma</div>
+    <div class="event-tag">111 ANOS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51368/111-anos-aniversario-de-porto-velho-reune-milhares-de-pessoas-em-noite-inesquecivel-com-show-de-joelma" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1759445584bolo-previa-3.jpeg" alt="Imagem do evento">
+    <div class="event-title">Distribuição do bolo dos 111 anos ocorreu de forma ordeira e satisfatória para a população de Porto Velho</div>
+    <div class="event-tag">ANIVERSÁRIO DE PORTO VELHO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51359/aniversario-de-porto-velho-distribuicao-do-bolo-dos-111-anos-ocorreu-de-forma-ordeira-e-satisfatoria-para-a-populacao-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1759434205dsc02986.JPG" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho entrega Comenda Madeira-Mamoré a personalidades que contribuem para o desenvolvimento da cidade</div>
+    <div class="event-tag">111 ANOS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51352/111-anos-prefeitura-de-porto-velho-entrega-comenda-madeira-mamore-a-personalidades-que-contribuem-para-o-desenvolvimento-da-cidade" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1759433518dsc02838.JPG" alt="Imagem do evento">
+    <div class="event-title">Praça Jonathas Pedrosa é entregue à sociedade durante aniversário da capital</div>
+    <div class="event-tag">EM TEMPO RECORDE</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51355/em-tempo-recorde-praca-jonathas-pedrosa-e-entregue-a-sociedade-durante-aniversario-da-capital" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1759427988imagem-do-whatsapp-de-2025-10-02-as-135516-62e721d5.jpg" alt="Imagem do evento">
+    <div class="event-title">Confira os nomes dos sorteados na promoção Você + Joelma no Camarim</div>
+    <div class="event-tag">PVH 111 ANOS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51340/pvh-111-anos-confira-os-nomes-dos-sorteados-na-promocao-voce-joelma-no-camarim" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1759421179aniversario-de-porto-velho-primeira-noite-leandro-morais-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Confira a programação do segundo dia das comemorações pelos 111 anos de Porto Velho</div>
+    <div class="event-tag">ANIVERSÁRIO DE PVH</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51337/aniversario-de-pvh-confira-a-programacao-do-segundo-dia-das-comemoracoes-pelos-111-anos-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1759417926whatsapp-image-2025-10-02-at-110548.jpeg" alt="Imagem do evento">
+    <div class="event-title">Começa a montagem do maior bolo da região Norte para o aniversário de Porto Velho</div>
+    <div class="event-tag">PVH 111 ANOS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51334/pvh-111-anos-comeca-a-montagem-do-maior-bolo-da-regiao-norte-para-o-aniversario-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/09/1758731290dsc01928-1.JPG" alt="Imagem do evento">
+    <div class="event-title">Estruturas começam a ser instaladas para a grande festa de aniversário de Porto Velho</div>
+    <div class="event-tag">RUMO AOS 111 ANOS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51173/rumo-aos-111-anos-estruturas-comecam-a-ser-instaladas-para-a-grande-festa-de-aniversario-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/09/1758558725imagem-do-whatsapp-de-2025-09-22-as-122614-77d72c37.jpg" alt="Imagem do evento">
+    <div class="event-title">Grupo 3 Palavrinhas é atração na comemoração de 111 anos de Porto Velho</div>
+    <div class="event-tag">PROGRAMAÇÃO INFANTIL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51138/programacao-infantil-grupo-3-palavrinhas-e-atracao-na-comemoracao-de-111-anos-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/09/1758126488whatsapp-image-2025-09-17-at-122209.jpeg" alt="Imagem do evento">
+    <div class="event-title">Cantora Joelma é uma das atrações confirmadas na comemoração de 111 anos de Porto Velho</div>
+    <div class="event-tag">SHOW NACIONAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51057/show-nacional-cantora-joelma-e-uma-das-atracoes-confirmadas-na-comemoracao-de-111-anos-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/09/3/1757959729imagem-do-whatsapp-de-2025-09-15-as-140511-c61f5ba4.jpg" alt="Imagem do evento">
+    <div class="event-title">Aniversário de Porto Velho terá festa com doze horas de música ao vivo</div>
+    <div class="event-tag">BEIRADÃO CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51027/beiradao-cultural-aniversario-de-porto-velho-tera-festa-com-doze-horas-de-musica-ao-vivo" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/09/1757948192dia-de-brincar-setembro-2025-15.jpeg" alt="Imagem do evento">
+    <div class="event-title">“Dia de Brincar” marcou o último sábado (13) para centenas de crianças da capital</div>
+    <div class="event-tag">PARQUE DA CIDADE</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51007/parque-da-cidade-dia-de-brincar-marcou-o-ultimo-sabado-13-para-centenas-de-criancas-da-capital" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/09/175734403122a75484-611b-47b1-adee-63dc5e79a37e.jpeg" alt="Imagem do evento">
+    <div class="event-title">Festival da Vila Calderita reúne 10 mil pessoas em dois dias de festa</div>
+    <div class="event-tag">CULTURA E LAZER</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50918/cultura-e-lazer-festival-da-vila-calderita-reune-10-mil-pessoas-em-dois-dias-de-festa" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/09/1757087896imagem-do-whatsapp-de-2025-07-28-as-09-04-45-a26ec2f1-11.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho valoriza cultura e garante apoio a eventos na capital</div>
+    <div class="event-tag">ENTRETENIMENTO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50862/entretenimento-prefeitura-de-porto-velho-valoriza-cultura-e-garante-apoio-a-eventos-na-capital" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/09/3/17568334831568042617whatsapp-image-2019-09-09-at-112101.jpeg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho disponibiliza estrutura e atrações artísticas para o Festival da Vila Calderita</div>
+    <div class="event-tag">EVENTO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50790/evento-prefeitura-de-porto-velho-disponibiliza-estrutura-e-atracoes-artisticas-para-o-festival-da-vila-calderita" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/08/1756490073imagem-do-whatsapp-de-2025-07-28-as-09-04-44-4507565a.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura fomenta 19 eventos neste final de semana; confira a programação</div>
+    <div class="event-tag">MOVIMENTO CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50749/movimento-cultural-prefeitura-fomenta-19-eventos-neste-final-de-semana-confira-a-programacao" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/08/1755879123arraial-mercado-25-07-2025-foto-jose-carlos-1-2.jpeg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho apoia agenda cultural e comunitária no mês de agosto</div>
+    <div class="event-tag">AGENDA CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50616/agenda-cultural-prefeitura-de-porto-velho-apoia-agenda-cultural-e-comunitaria-no-mes-de-agosto" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/08/1755269399arraial-mercado-25-07-2025-foto-jose-carlos-1-1.jpeg" alt="Imagem do evento">
+    <div class="event-title">Circuito Junino de Porto Velho mantém o ritmo com apoio da Prefeitura</div>
+    <div class="event-tag">VALORIZAÇÃO DA CULTURA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50477/valorizacao-da-cultura-circuito-junino-de-porto-velho-mantem-o-ritmo-com-apoio-da-prefeitura" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/08/3/1754235737img-2790.JPG" alt="Imagem do evento">
+    <div class="event-title">Com apoio da Prefeitura, Marcha para Jesus reúne multidão em Porto Velho</div>
+    <div class="event-tag">FÉ</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50251/fe-com-apoio-da-prefeitura-marcha-para-jesus-reune-multidao-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/08/175405609717532781721716213547arraial-municipal-ana-flavia-venancio-240517-13-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Com apoio da Prefeitura, 11 arraiais animam o final de semana em várias regiões da capital</div>
+    <div class="event-tag">PROGRAMAÇÃO CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50216/programacao-cultural-com-apoio-da-prefeitura-11-arraiais-animam-o-final-de-semana-em-varias-regioes-da-capital" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/07/1753712510imagem-do-whatsapp-de-2025-07-28-as-090445-a26ec2f1.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura apoia arraiais e valoriza a cultura regional em diversos pontos da capital</div>
+    <div class="event-tag">RESGATE DAS TRADIÇÕES</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50128/resgate-das-tradicoes-prefeitura-apoia-arraiais-e-valoriza-a-cultura-regional-em-diversos-pontos-da-capital" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/07/1753709770arraial-mercado-25-07-2025-foto-jose-carlos.JPG" alt="Imagem do evento">
+    <div class="event-title">Alegria e tradição marcaram o Arraial do Mercado Cultural em Porto Velho</div>
+    <div class="event-tag">FESTA JULINA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50122/festa-julina-alegria-e-tradicao-marcaram-o-arraial-do-mercado-cultural-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/07/17533790601716213550arraial-municipal-ana-flavia-venancio-240517-8-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Arraial do Mercado Cultural começa nesta sexta-feira (25) com quadrilhas, shows e muita diversão</div>
+    <div class="event-tag">VALORIZAÇÃO REGIONAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50096/valorizacao-regional-arraial-do-mercado-cultural-comeca-nesta-sexta-feira-25-com-quadrilhas-shows-e-muita-diversao" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/07/17532781721716213547arraial-municipal-ana-flavia-venancio-240517-13.jpg" alt="Imagem do evento">
+    <div class="event-title">Arraial do Mercado Cultural acontece nos dias 25 e 26 de julho em Porto Velho</div>
+    <div class="event-tag">FESTA JULINA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50058/festa-julina-arraial-do-mercado-cultural-acontece-nos-dias-25-e-26-de-julho-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/07/3/1752891386dia-do-servidor-saude-felipe-ribeiro-22-10-20-8.jpeg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho passa por processo de melhorias no atendimento à saúde do servidor</div>
+    <div class="event-tag">SAÚDE DO SERVIDOR</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49976/saude-do-servidor-prefeitura-de-porto-velho-passa-por-processo-de-melhorias-no-atendimento-a-saude-do-servidor" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/06/1750860987credito-luis-benedito-fundacao-itau-146.jpg" alt="Imagem do evento">
+    <div class="event-title">Evento apresenta dados de pesquisa inédita que revela hábitos culturais da população de Porto Velho</div>
+    <div class="event-tag">APOIO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49534/apoio-evento-apresenta-dados-de-pesquisa-inedita-que-revela-habitos-culturais-da-populacao-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/06/1750697705whatsapp-image-2025-06-23-at-124034.jpeg" alt="Imagem do evento">
+    <div class="event-title">Porto Velho recebe reitores das universidades federais da região Norte</div>
+    <div class="event-tag">APOIO INSTITUCIONAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49489/apoio-institucional-porto-velho-recebe-reitores-das-universidades-federais-da-regiao-norte" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/06/3/1750251458abertura-de-baile-municipal-wesley-pontes-04-02-23-711.jpg" alt="Imagem do evento">
+    <div class="event-title">Funcultural divulga resultado dos Projetos Selecionados em Chamamento Público com recursos da Lei Aldir Blanc</div>
+    <div class="event-tag">FOMENTO À CULTURA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49429/fomento-a-cultura-funcultural-divulga-resultado-dos-projetos-selecionados-em-chamamento-publico-com-recursos-da-lei-aldir-blanc" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/06/3/1750250464dsc01457.JPG" alt="Imagem do evento">
+    <div class="event-title">Feirantes de Porto Velho entram no clima das festas juninas e reforçam a venda de produtos típicos para esta época do ano</div>
+    <div class="event-tag">TRADIÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49427/tradicao-feirantes-de-porto-velho-entram-no-clima-das-festas-juninas-e-reforcam-a-venda-de-produtos-tipicos-para-esta-epoca-do-ano" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/06/3/17490478821686063407agenda-hildon-arraial-municipal-leandro-morais-50.jpg" alt="Imagem do evento">
+    <div class="event-title">III Arraial da Calderita acontece nos próximos dias 6 e 7 de junho</div>
+    <div class="event-tag">CIRCUITO JUNINO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49197/circuito-junino-iii-arraial-da-calderita-acontece-nos-proximos-dias-6-e-7-de-junho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/06/17491330901746640260teattro3.jpeg" alt="Imagem do evento">
+    <div class="event-title">Funcultural divulga lista de resultado das inscrições de Editais de Chamamento Público</div>
+    <div class="event-tag">FOMENTO À CULTURA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49218/fomento-a-cultura-funcultural-divulga-lista-de-resultado-das-inscricoes-de-editais-de-chamamento-publico" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/06/3/174905022417459336731743528079cult-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Funcultural publica resultado final de credenciamento de artistas e grupos culturais</div>
+    <div class="event-tag">CULTURA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49200/cultura-funcultural-publica-resultado-final-de-credenciamento-de-artistas-e-grupos-culturais" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/17485257771748098375mg-7777.jpg" alt="Imagem do evento">
+    <div class="event-title">Arraial Flor de Cacto acontece de 30 de maio a 8 de junho, na zona Sul de Porto Velho</div>
+    <div class="event-tag">CIRCUITO JUNINO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49089/circuito-junino-arraial-flor-de-cacto-acontece-de-30-de-maio-a-8-de-junho-na-zona-sul-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/3/1748356051whatsapp-image-2025-05-27-at-102136.jpeg" alt="Imagem do evento">
+    <div class="event-title">Vendedores ambulantes comemoram vendas no Arraiá da Prefs no Parque da Cidade</div>
+    <div class="event-tag">GERAÇÃO DE RENDA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49032/geracao-de-renda-vendedores-ambulantes-comemoram-vendas-no-arraia-da-prefs-no-parque-da-cidade" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/3/1748269648img-9521.jpg" alt="Imagem do evento">
+    <div class="event-title">Cerca de 70 mil pessoas se encantaram com a primeira edição do Arraiá da Prefs no Parque da Cidade</div>
+    <div class="event-tag">O MAIOR DO NORTE</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48993/o-maior-do-norte-cerca-de-70-mil-pessoas-se-encantaram-com-a-primeira-edicao-do-arraia-da-prefs-no-parque-da-cidade" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/3/1748098375mg-7777.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho abre oficialmente o calendário junino no Parque da Cidade com o Arraiá da Prefs</div>
+    <div class="event-tag">SUCESSO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48980/sucesso-prefeitura-de-porto-velho-abre-oficialmente-o-calendario-junino-no-parque-da-cidade-com-o-arraia-da-prefs" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1747921948dsc09841.JPG" alt="Imagem do evento">
+    <div class="event-title">Quadrilhas se preparam para encantar no Arraiá da Prefs</div>
+    <div class="event-tag">FESTA JUNINA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48911/festa-junina-quadrilhas-se-preparam-para-encantar-no-arraia-da-prefs" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1747919940whatsapp-image-2025-05-21-at-160928.jpeg" alt="Imagem do evento">
+    <div class="event-title">Semusb prepara o Parque da Cidade para receber o público no Arraiá da Prefs</div>
+    <div class="event-tag">LIMPEZA NO PARQUE</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48903/limpeza-no-parque-semusb-prepara-o-parque-da-cidade-para-receber-o-publico-no-arraia-da-prefs" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1747846375whatsapp-image-2025-05-21-at-112154.jpeg" alt="Imagem do evento">
+    <div class="event-title">Bois-bumbás resgatam tradição e identidade cultural no Arraiá da Prefs</div>
+    <div class="event-tag">VIVA A CULTURA POPULAR</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48886/viva-a-cultura-popular-bois-bumbas-resgatam-tradicao-e-identidade-cultural-no-arraia-da-prefs" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1747837875whatsapp-image-2025-05-21-at-100804.jpeg" alt="Imagem do evento">
+    <div class="event-title">Valorização dos artistas locais marca o Arraiá da Prefs</div>
+    <div class="event-tag">CULTURA REGIONAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48879/cultura-regional-valorizacao-dos-artistas-locais-marca-o-arraia-da-prefs" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1747754032img-1138.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho inicia montagem da estrutura para a 1a edição do Arraiá da Prefs</div>
+    <div class="event-tag">FESTA JUNINA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48853/festa-junina-prefeitura-de-porto-velho-inicia-montagem-da-estrutura-para-a-1a-edicao-do-arraia-da-prefs" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1747663098coletiva-de-imprensa-arraia-da-prefs-leandro-morais-32-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho divulga a programação do evento que inicia na próxima sexta-feira (23)</div>
+    <div class="event-tag">ARRAIÁ DA PREFS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48813/arraia-da-prefs-prefeitura-de-porto-velho-divulga-a-programacao-do-evento-que-inicia-na-proxima-sexta-feira-23" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/3/1747659639059a9291-1024x683.jpg" alt="Imagem do evento">
+    <div class="event-title">Sucessos nacionais, Ju Marques e Forró do Muído prometem grandes shows em Porto Velho</div>
+    <div class="event-tag">ARRAIÁ DA PREFS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48781/arraia-da-prefs-sucessos-nacionais-ju-marques-e-forro-do-muido-prometem-grandes-shows-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/3/1747157308whatsapp-image-2025-05-13-at-132717.jpeg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura lança Arraiá da Prefs e divulga calendário junino</div>
+    <div class="event-tag">MAIOR DO NORTE</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48714/maior-do-norte-prefeitura-lanca-arraia-da-prefs-e-divulga-calendario-junino" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1746640260teattro3.jpeg" alt="Imagem do evento">
+    <div class="event-title">Divulgado edital para credenciamento de seleção de espaços, ambientes e iniciativas artístico-culturais</div>
+    <div class="event-tag">ALDIR BLANC</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48611/aldir-blanc-divulgado-edital-para-credenciamento-de-selecao-de-espacos-ambientes-e-iniciativas-artistico-culturais" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1746638111171992423817189878691687628177agenda-fabricio-jurado-abertura-flor-do-maracuja-leandro-morais-81.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho lança edital da Política Nacional Aldir Blanc para fomentar pontos de cultura</div>
+    <div class="event-tag">CULTURA VIVA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48604/cultura-viva-prefeitura-de-porto-velho-lanca-edital-da-politica-nacional-aldir-blanc-para-fomentar-pontos-de-cultura" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1746636114mercado-cultural-wesley-pontes-24-01-25-21.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura altera edital para seleção de projetos que terão recursos do Ministério da Cultura</div>
+    <div class="event-tag">ERRATA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48597/errata-prefeitura-altera-edital-para-selecao-de-projetos-que-terao-recursos-do-ministerio-da-cultura" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/17466357201743085119agenda-hildon-arraial-municipal-leandro-morais-51-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho publica alterações no edital de chamamento público que deve premiar entidades culturais</div>
+    <div class="event-tag">ERRATA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48595/errata-prefeitura-de-porto-velho-publica-alteracoes-no-edital-de-chamamento-publico-que-deve-premiar-entidades-culturais" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/3/1746136048dsc07901-aprimorado-nr.jpg" alt="Imagem do evento">
+    <div class="event-title">Festival do Trabalhador celebra data com alegria e cultura</div>
+    <div class="event-tag">DIA DO TRABALHADOR</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48529/dia-do-trabalhador-festival-do-trabalhador-celebra-data-com-alegria-e-cultura" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/04/17459336731743528079cult.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura divulga edital para seleção de projetos culturais com apoio financeiro do Ministério da Cultura</div>
+    <div class="event-tag">ALDIR BLANC</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48487/aldir-blanc-prefeitura-divulga-edital-para-selecao-de-projetos-culturais-com-apoio-financeiro-do-ministerio-da-cultura" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/04/1745932751whatsapp-image-2025-04-29-at-091413.jpeg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura publica Edital de Chamamento Público com foco no desenvolvimento</div>
+    <div class="event-tag">PONTOS DE CULTURA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48485/pontos-de-cultura-prefeitura-publica-edital-de-chamamento-publico-com-foco-no-desenvolvimento" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/04/1744807894agenda-hildon-arraial-municipal-leandro-morais-24-2.jpg" alt="Imagem do evento">
+    <div class="event-title">Resgate da cultura de Porto Velho e valorização dos artistas regionais</div>
+    <div class="event-tag">ESPECIAL 100 DIAS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48310/especial-100-dias-resgate-da-cultura-de-porto-velho-e-valorizacao-dos-artistas-regionais" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/04/1744307163agenda-prefeito-cantata-de-natal-aluizio-ferreira-leandro-morais-6-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Inscrições para o credenciamento de artistas para eventos do Município encerram nesta sexta-feira (11)</div>
+    <div class="event-tag">CULTURA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48211/cultura-inscricoes-para-o-credenciamento-de-artistas-para-eventos-do-municipio-encerram-nesta-sexta-feira-11" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/03/3/1743085119agenda-hildon-arraial-municipal-leandro-morais-51.jpg" alt="Imagem do evento">
+    <div class="event-title">Inscrições para o credenciamento de artistas para eventos da Funcultural são prorrogadas até dia 11 de abril</div>
+    <div class="event-tag">CALENDÁRIO CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47934/calendario-cultural-inscricoes-para-o-credenciamento-de-artistas-para-eventos-da-funcultural-sao-prorrogadas-ate-dia-11-de-abril" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/03/3/1742404383arte-no-entardecer-wesley-pontes-17-03-24-11.jpg" alt="Imagem do evento">
+    <div class="event-title">Inscrições para credenciamento de artistas em diversas áreas culturais seguem até o dia 26</div>
+    <div class="event-tag">VALORIZAÇÃO CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47773/valorizacao-cultural-inscricoes-para-credenciamento-de-artistas-em-diversas-areas-culturais-seguem-ate-o-dia-26" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/03/1741880398arte-no-entardecer-wesley-pontes-17-03-24-17.jpg" alt="Imagem do evento">
+    <div class="event-title">Estão abertas as inscrições para credenciamento de artistas em diversas áreas culturais em Porto Velho</div>
+    <div class="event-tag">VALORIZAÇÃO CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47675/valorizacao-cultural-estao-abertas-as-inscricoes-para-credenciamento-de-artistas-em-diversas-areas-culturais-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/03/1741354050banda-do-vai-quem-quer-2025-leandro-morais-141.jpg" alt="Imagem do evento">
+    <div class="event-title">Programação dos desfiles carnavalescos continua neste final de semana em Porto Velho</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47569/carnaval-2025-programacao-dos-desfiles-carnavalescos-continua-neste-final-de-semana-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/17406607921707144738pirarucu-do-madeira-ana-flavia-venancio-240204-29-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho divulga programação completa dos desfiles carnavalescos a partir desta quinta-feira (27)</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47487/carnaval-2025-prefeitura-de-porto-velho-divulga-programacao-completa-dos-desfiles-carnavalescos-a-partir-desta-quinta-feira-27" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/1740065748baile-municipal-abertura-wesley-pontes-15-02-23-11.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura inicia festas momescas com segurança e sucesso de público</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47393/carnaval-2025-prefeitura-inicia-festas-momescas-com-seguranca-e-sucesso-de-publico" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/1740065220curumim-folia-leandro-morais-19.jpg" alt="Imagem do evento">
+    <div class="event-title">Confira a programação dos blocos carnavalescos e alteração no itinerário dos ônibus para este final de semana</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47390/carnaval-2025-confira-a-programacao-dos-blocos-carnavalescos-e-alteracao-no-itinerario-dos-onibus-para-este-final-de-semana" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/1739969205img-1097.JPG" alt="Imagem do evento">
+    <div class="event-title">Grupos folclóricos retomam espaços públicos após Prefeitura revogar proibição de utilização</div>
+    <div class="event-tag">RESPEITO À CULTURA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47354/respeito-a-cultura-grupos-folcloricos-retomam-espacos-publicos-apos-prefeitura-revogar-proibicao-de-utilizacao" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/3/1739798360curumim-folia-leandro-morais-55.jpg" alt="Imagem do evento">
+    <div class="event-title">Curumim Folia leva alegria, música, fantasia e diversão para crianças no Mercado Cultural</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47309/carnaval-2025-curumim-folia-leva-alegria-musica-fantasia-e-diversao-para-criancas-no-mercado-cultural" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/1739720665baile-municipal-abertura-wesley-pontes-15-02-23-12-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Baile Municipal abre o carnaval de Porto Velho e anima foliões com muita marchinha</div>
+    <div class="event-tag">TRADIÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47304/tradicao-baile-municipal-abre-o-carnaval-de-porto-velho-e-anima-folioes-com-muita-marchinha" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/1739553878whatsapp-image-2025-02-14-at-131726.jpeg" alt="Imagem do evento">
+    <div class="event-title">Fantasias e adereços da Corte do Rei Momo são confeccionados por artistas de Porto Velho</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47281/carnaval-2025-fantasias-e-aderecos-da-corte-do-rei-momo-sao-confeccionados-por-artistas-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/173954001617389368161705935818abertura-carnaval-wesley-pontes-20-01-24-9-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Baile Municipal e Curumim Folia abrem oficialmente o período momesco em Porto Velho</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47261/carnaval-2025-baile-municipal-e-curumim-folia-abrem-oficialmente-o-periodo-momesco-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/3/1739459093whatsapp-image-2025-02-13-at-092655-1.jpeg" alt="Imagem do evento">
+    <div class="event-title">Rei Momo e Rainha falam da expectativa para o Baile Municipal de Porto Velho</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47249/carnaval-2025-rei-momo-e-rainha-falam-da-expectativa-para-o-baile-municipal-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/3/1739457652dsc05415.jpg" alt="Imagem do evento">
+    <div class="event-title">Mercado Cultural já está sendo decorado para o Baile Municipal, a abertura oficial do carnaval em Porto Velho</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47245/carnaval-2025-mercado-cultural-ja-esta-sendo-decorado-para-o-baile-municipal-a-abertura-oficial-do-carnaval-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/17389368161705935818abertura-carnaval-wesley-pontes-20-01-24-9-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Baile Municipal abre oficialmente os festejos carnavalescos em Porto Velho no dia 15 de fevereiro, no Mercado Cultural</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47137/carnaval-2025-baile-municipal-abre-oficialmente-os-festejos-carnavalescos-em-porto-velho-no-dia-15-de-fevereiro-no-mercado-cultural" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/1738612376curumim-folia-felipe-ribeiro-240211-00030.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura divulga relação dos nomes escolhidos para a Corte do Rei Momo, costura e decoração</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47058/carnaval-2025-prefeitura-divulga-relacao-dos-nomes-escolhidos-para-a-corte-do-rei-momo-costura-e-decoracao" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/3/1738594249projeto-lazer-wesley-pontes-02-02-25-30.jpg" alt="Imagem do evento">
+    <div class="event-title">Moradores do Morar Melhor recebem a 1a edição do projeto Vem com a Prefeitura</div>
+    <div class="event-tag">CIDADANIA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47037/cidadania-moradores-do-morar-melhor-recebem-a-1a-edicao-do-projeto-vem-com-a-prefeitura" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/01/3/1738075158whatsapp-image-2024-01-17-at-12-59-13.jpeg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho define estratégias para o período momesco</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/46940/carnaval-2025-prefeitura-de-porto-velho-define-estrategias-para-o-periodo-momesco" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/01/3/1737817848mercado-cultural-wesley-pontes-24-01-25-2.jpg" alt="Imagem do evento">
+    <div class="event-title">Show de fogos e apresentações musicais encerram comemorações do aniversário de Porto Velho</div>
+    <div class="event-tag">110 ANOS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/46913/110-anos-show-de-fogos-e-apresentacoes-musicais-encerram-comemoracoes-do-aniversario-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/01/3/17375531091707741767curumim-folia-felipe-ribeiro-240211-00030.jpg" alt="Imagem do evento">
+    <div class="event-title">Calendário Oficial do Carnaval 2025 é divulgado pela Prefeitura de Porto Velho</div>
+    <div class="event-tag">PROGRAMAÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/46853/programacao-calendario-oficial-do-carnaval-2025-e-divulgado-pela-prefeitura-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/01/1737466453abertura-carnaval-wesley-pontes-20-01-24-26.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho lança edital para contratação de serviços especializados em decoração para o Baile Municipal</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/46835/carnaval-2025-prefeitura-de-porto-velho-lanca-edital-para-contratacao-de-servicos-especializados-em-decoracao-para-o-baile-municipal" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/01/3/17374712031672930133rei-momo.jpg" alt="Imagem do evento">
+    <div class="event-title">Chamamento público seleciona costureiro para confecção das fantasias da Corte do Rei Momo</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/46838/carnaval-2025-chamamento-publico-seleciona-costureiro-para-confeccao-das-fantasias-da-corte-do-rei-momo" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/01/3/1737402949abertura-de-baile-municipal-wesley-pontes-04-02-23-18.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho abre inscrição para selecionar a Corte do Rei Momo</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/46827/carnaval-2025-prefeitura-de-porto-velho-abre-inscricao-para-selecionar-a-corte-do-rei-momo" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2024/12/1734970469banda-do-vai-quem-quer-leandro-morais-78-1-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Município divulga regulamento para o carnaval de rua em 2025</div>
+    <div class="event-tag">NORMAS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/46556/normas-municipio-divulga-regulamento-para-o-carnaval-de-rua-em-2025" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+ por cards reais -->
+    <div class="month-title">Outros</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/12/1765480658img-3719.JPG" alt="Imagem do evento">
+    <div class="event-title">Reunião no Prédio do Relógio define últimos ajustes para o Carnaval 2026</div>
+    <div class="event-tag">FOLIA À VISTA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52635/folia-a-vista-reuniao-no-predio-do-relogio-define-ultimos-ajustes-para-o-carnaval-2026" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/12/1764854607dsc06795.JPG" alt="Imagem do evento">
+    <div class="event-title">Celebração ao dia do samba movimenta o Mercado Cultural</div>
+    <div class="event-tag">COMEMORAÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52471/comemoracao-celebracao-ao-dia-do-samba-movimenta-o-mercado-cultural" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/12/176469580117613166931759625846edital-mercado-cultural-leandro-morais1.jpg" alt="Imagem do evento">
+    <div class="event-title">Mercado Cultural marca o Dia do Samba nesta quarta-feira (03)</div>
+    <div class="event-tag">SOM REGIONAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52434/som-regional-mercado-cultural-marca-o-dia-do-samba-nesta-quarta-feira-03" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/11/1764474310whatsapp-image-2025-11-29-at-234444.jpeg" alt="Imagem do evento">
+    <div class="event-title">Torcedores lotam espaço gastronômico para assistir à final da Libertadores</div>
+    <div class="event-tag">VILA NATALINA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52387/vila-natalina-torcedores-lotam-espaco-gastronomico-para-assistir-a-final-da-libertadores" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/11/1764471919unnamed-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Pavilhão do Mel recebe visitantes e apresenta produção apícola de Porto Velho</div>
+    <div class="event-tag">AGROTEC 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52381/agrotec-2025-pavilhao-do-mel-recebe-visitantes-e-apresenta-producao-apicola-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/11/1764470343img-4973.JPG" alt="Imagem do evento">
+    <div class="event-title">Pista de gelo é inaugurada no Parque da Cidade e reúne público em Porto Velho</div>
+    <div class="event-tag">NATAL PORTO VELHO LUZ 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52377/natal-porto-velho-luz-2025-pista-de-gelo-e-inaugurada-no-parque-da-cidade-e-reune-publico-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/11/1764335448dsc01874.JPG" alt="Imagem do evento">
+    <div class="event-title">Reunião define estratégias de segurança para o carnaval 2026</div>
+    <div class="event-tag">FOLIA ORGANIZADA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52340/folia-organizada-reuniao-define-estrategias-de-seguranca-para-o-carnaval-2026" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/11/3/1764256246whatsapp-image-2025-11-27-at-105948-3.jpeg" alt="Imagem do evento">
+    <div class="event-title">Agrotec 2025 começa hoje (27) na Estrada de Ferro Madeira-Mamoré</div>
+    <div class="event-tag">INOVAÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52325/inovacao-agrotec-2025-comeca-hoje-27-na-estrada-de-ferro-madeira-mamore" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/11/17636491721701443740natal-porto-luz-2023-parque-da-cidade-leandro-morais-009.jpg" alt="Imagem do evento">
+    <div class="event-title">Porto Velho Luz inicia programação de Natal neste sábado</div>
+    <div class="event-tag">CULTURA E TRADIÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52192/cultura-e-tradicao-porto-velho-luz-inicia-programacao-de-natal-neste-sabado" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/11/1763646744arte-agrotec-2025-11-1.jpeg" alt="Imagem do evento">
+    <div class="event-title">Shows marcam os quatro dias da Agrotec 2025</div>
+    <div class="event-tag">VAI SER HIT!</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52189/vai-ser-hit-shows-marcam-os-quatro-dias-da-agrotec-2025" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/11/176312813517320233441637539424encerramento-atividades-semana-da-consciencia-negra-leandro-morais-21.jpg" alt="Imagem do evento">
+    <div class="event-title">Sarau “Corpos que Falam, Vozes que Lutam” une arte, cultura e ativismo em Porto Velho</div>
+    <div class="event-tag">CONSCIÊNCIA NEGRA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/52107/consciencia-negra-sarau-corpos-que-falam-vozes-que-lutam-une-arte-cultura-e-ativismo-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1761745806whatsapp-image-2025-10-27-at-095407-1.jpeg" alt="Imagem do evento">
+    <div class="event-title">Centro Municipal Jorge Andrade reúne músicos e apaixonados por percussão em Porto Velho</div>
+    <div class="event-tag">BATERA DAY</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51808/batera-day-centro-municipal-jorge-andrade-reune-musicos-e-apaixonados-por-percussao-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1761663166img-9340.PNG" alt="Imagem do evento">
+    <div class="event-title">Em noite de festa, Prefeitura de Porto Velho celebra o valor do servidor público</div>
+    <div class="event-tag">NO MERCADO CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51793/no-mercado-cultural-em-noite-de-festa-prefeitura-de-porto-velho-celebra-o-valor-do-servidor-publico" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/17613166931759625846edital-mercado-cultural-leandro-morais1.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho celebra o Dia do Servidor Público com festa no Mercado Cultural</div>
+    <div class="event-tag">COMEMORAÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51747/comemoracao-prefeitura-de-porto-velho-celebra-o-dia-do-servidor-publico-com-festa-no-mercado-cultural" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1760981239whatsapp-image-2025-10-18-at-232637.jpeg" alt="Imagem do evento">
+    <div class="event-title">Servidores da Seinfra são contemplados com atividades recreativas desenvolvidas pela Semtel</div>
+    <div class="event-tag">LAZER</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51662/lazer-servidores-da-seinfra-sao-contemplados-com-atividades-recreativas-desenvolvidas-pela-semtel" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1760965720img-2249.jpg" alt="Imagem do evento">
+    <div class="event-title">5a Conferência Municipal de Cultura planeja e fortalece a articulação cultural em Porto Velho</div>
+    <div class="event-tag">EVENTO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51639/evento-5a-conferencia-municipal-de-cultura-planeja-e-fortalece-a-articulacao-cultural-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1760964450img-0345.JPG" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho celebra o Dia da MPB com show em homenagem a Maria Bethânia</div>
+    <div class="event-tag">CULTURA BRASILEIRA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51636/cultura-brasileira-prefeitura-de-porto-velho-celebra-o-dia-da-mpb-com-show-em-homenagem-a-maria-bethania" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/17606262231743182398edital-chamamento-funcultural-leandro-morais-21.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura promove show especial em celebração ao Dia da MPB</div>
+    <div class="event-tag">NESTA SEXTA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51597/nesta-sexta-prefeitura-promove-show-especial-em-celebracao-ao-dia-da-mpb" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/17605361561653136928graca-carneiro-arraial-municipal-mercado-cultural-leandro-morais-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho realiza a 5a Conferência Municipal de Cultura</div>
+    <div class="event-tag">EVENTO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51572/evento-prefeitura-de-porto-velho-realiza-a-5a-conferencia-municipal-de-cultura" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1760229700dsc04274.JPG" alt="Imagem do evento">
+    <div class="event-title">Festa no Parque da Cidade é sucesso de público com show gratuito do Mundo Bita</div>
+    <div class="event-tag">DIA DAS CRIANÇAS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51509/dia-das-criancas-festa-no-parque-da-cidade-e-sucesso-de-publico-com-show-gratuito-do-mundo-bita" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1759946311imagem-do-whatsapp-de-2025-10-08-as-135544-0536fb8e.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura apresenta balanço final do aniversário de Porto Velho</div>
+    <div class="event-tag">SUCESSO DE PÚBLICO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51458/sucesso-de-publico-prefeitura-apresenta-balanco-final-do-aniversario-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1759858919aniversario-de-porto-velho-segunda-noite-leandro-morais-1-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Parceria da Prefeitura com a imprensa marca aniversário de 111 de Porto Velho</div>
+    <div class="event-tag">COMUNICAÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51432/comunicacao-parceria-da-prefeitura-com-a-imprensa-marca-aniversario-de-111-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1759724000whatsapp-image-2025-10-05-at-235840.jpeg" alt="Imagem do evento">
+    <div class="event-title">Atrações musicais no Mercado Cultural marcam o encerramento do aniversário de Porto Velho</div>
+    <div class="event-tag">111 ANOS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51393/111-anos-atracoes-musicais-no-mercado-cultural-marcam-o-encerramento-do-aniversario-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1759625846edital-mercado-cultural-leandro-morais1.jpg" alt="Imagem do evento">
+    <div class="event-title">Último dia de comemoração pelos 111 anos de Porto Velho tem esporte, lazer e festa no Mercado Cultural</div>
+    <div class="event-tag">VALORIZAÇÃO HISTÓRICA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51383/valorizacao-historica-ultimo-dia-de-comemoracao-pelos-111-anos-de-porto-velho-tem-esporte-lazer-e-festa-no-mercado-cultural" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1759676599aniversario-pvh-tres-palavrinhas-leandro-morais-66.jpg" alt="Imagem do evento">
+    <div class="event-title">Show infantil 3 Palavrinhas encanta crianças e famílias no aniversário de Porto Velho</div>
+    <div class="event-tag">111 ANOS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51388/111-anos-show-infantil-3-palavrinhas-encanta-criancas-e-familias-no-aniversario-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1759624454roda-literaria-00-03-34-14quadro004.jpg" alt="Imagem do evento">
+    <div class="event-title">Roda Literária celebra a cultura e destaca talentos locais nas comemorações dos 111 anos de Porto Velho</div>
+    <div class="event-tag">VALORIZAÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51380/valorizacao-roda-literaria-celebra-a-cultura-e-destaca-talentos-locais-nas-comemoracoes-dos-111-anos-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1759548944aniversario-de-porto-velho-segunda-noite-leandro-morais-157-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Quarto dia de festa reúne cultura, literatura, ciência e diversão para toda a família</div>
+    <div class="event-tag">ANIVERSÁRIO DE PVH</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51346/aniversario-de-pvh-quarto-dia-de-festa-reune-cultura-literatura-ciencia-e-diversao-para-toda-a-familia" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1759548184img-0186.jpg" alt="Imagem do evento">
+    <div class="event-title">Terceiro dia de festa de 111 anos celebra diversos ritmos regionais</div>
+    <div class="event-tag">BEIRADÃO CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51373/beiradao-cultural-terceiro-dia-de-festa-de-111-anos-celebra-diversos-ritmos-regionais" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1759495160aniversario-de-porto-velho-segunda-noite-leandro-morais-153.jpg" alt="Imagem do evento">
+    <div class="event-title">Beiradão Cultural anima o terceiro dia de festa com 12 horas de música</div>
+    <div class="event-tag">111 ANOS DE PVH</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51343/111-anos-de-pvh-beiradao-cultural-anima-o-terceiro-dia-de-festa-com-12-horas-de-musica" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1759460778imagem-do-whatsapp-de-2025-10-02-as-225705-c52de271.jpg" alt="Imagem do evento">
+    <div class="event-title">Aniversário de Porto Velho reúne milhares de pessoas em noite inesquecível com show de Joelma</div>
+    <div class="event-tag">111 ANOS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51368/111-anos-aniversario-de-porto-velho-reune-milhares-de-pessoas-em-noite-inesquecivel-com-show-de-joelma" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1759445584bolo-previa-3.jpeg" alt="Imagem do evento">
+    <div class="event-title">Distribuição do bolo dos 111 anos ocorreu de forma ordeira e satisfatória para a população de Porto Velho</div>
+    <div class="event-tag">ANIVERSÁRIO DE PORTO VELHO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51359/aniversario-de-porto-velho-distribuicao-do-bolo-dos-111-anos-ocorreu-de-forma-ordeira-e-satisfatoria-para-a-populacao-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1759434205dsc02986.JPG" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho entrega Comenda Madeira-Mamoré a personalidades que contribuem para o desenvolvimento da cidade</div>
+    <div class="event-tag">111 ANOS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51352/111-anos-prefeitura-de-porto-velho-entrega-comenda-madeira-mamore-a-personalidades-que-contribuem-para-o-desenvolvimento-da-cidade" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1759433518dsc02838.JPG" alt="Imagem do evento">
+    <div class="event-title">Praça Jonathas Pedrosa é entregue à sociedade durante aniversário da capital</div>
+    <div class="event-tag">EM TEMPO RECORDE</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51355/em-tempo-recorde-praca-jonathas-pedrosa-e-entregue-a-sociedade-durante-aniversario-da-capital" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/3/1759427988imagem-do-whatsapp-de-2025-10-02-as-135516-62e721d5.jpg" alt="Imagem do evento">
+    <div class="event-title">Confira os nomes dos sorteados na promoção Você + Joelma no Camarim</div>
+    <div class="event-tag">PVH 111 ANOS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51340/pvh-111-anos-confira-os-nomes-dos-sorteados-na-promocao-voce-joelma-no-camarim" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1759421179aniversario-de-porto-velho-primeira-noite-leandro-morais-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Confira a programação do segundo dia das comemorações pelos 111 anos de Porto Velho</div>
+    <div class="event-tag">ANIVERSÁRIO DE PVH</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51337/aniversario-de-pvh-confira-a-programacao-do-segundo-dia-das-comemoracoes-pelos-111-anos-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/10/1759417926whatsapp-image-2025-10-02-at-110548.jpeg" alt="Imagem do evento">
+    <div class="event-title">Começa a montagem do maior bolo da região Norte para o aniversário de Porto Velho</div>
+    <div class="event-tag">PVH 111 ANOS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51334/pvh-111-anos-comeca-a-montagem-do-maior-bolo-da-regiao-norte-para-o-aniversario-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/09/1758731290dsc01928-1.JPG" alt="Imagem do evento">
+    <div class="event-title">Estruturas começam a ser instaladas para a grande festa de aniversário de Porto Velho</div>
+    <div class="event-tag">RUMO AOS 111 ANOS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51173/rumo-aos-111-anos-estruturas-comecam-a-ser-instaladas-para-a-grande-festa-de-aniversario-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/09/1758558725imagem-do-whatsapp-de-2025-09-22-as-122614-77d72c37.jpg" alt="Imagem do evento">
+    <div class="event-title">Grupo 3 Palavrinhas é atração na comemoração de 111 anos de Porto Velho</div>
+    <div class="event-tag">PROGRAMAÇÃO INFANTIL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51138/programacao-infantil-grupo-3-palavrinhas-e-atracao-na-comemoracao-de-111-anos-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/09/1758126488whatsapp-image-2025-09-17-at-122209.jpeg" alt="Imagem do evento">
+    <div class="event-title">Cantora Joelma é uma das atrações confirmadas na comemoração de 111 anos de Porto Velho</div>
+    <div class="event-tag">SHOW NACIONAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51057/show-nacional-cantora-joelma-e-uma-das-atracoes-confirmadas-na-comemoracao-de-111-anos-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/09/3/1757959729imagem-do-whatsapp-de-2025-09-15-as-140511-c61f5ba4.jpg" alt="Imagem do evento">
+    <div class="event-title">Aniversário de Porto Velho terá festa com doze horas de música ao vivo</div>
+    <div class="event-tag">BEIRADÃO CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51027/beiradao-cultural-aniversario-de-porto-velho-tera-festa-com-doze-horas-de-musica-ao-vivo" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/09/1757948192dia-de-brincar-setembro-2025-15.jpeg" alt="Imagem do evento">
+    <div class="event-title">“Dia de Brincar” marcou o último sábado (13) para centenas de crianças da capital</div>
+    <div class="event-tag">PARQUE DA CIDADE</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/51007/parque-da-cidade-dia-de-brincar-marcou-o-ultimo-sabado-13-para-centenas-de-criancas-da-capital" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/09/175734403122a75484-611b-47b1-adee-63dc5e79a37e.jpeg" alt="Imagem do evento">
+    <div class="event-title">Festival da Vila Calderita reúne 10 mil pessoas em dois dias de festa</div>
+    <div class="event-tag">CULTURA E LAZER</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50918/cultura-e-lazer-festival-da-vila-calderita-reune-10-mil-pessoas-em-dois-dias-de-festa" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/09/1757087896imagem-do-whatsapp-de-2025-07-28-as-09-04-45-a26ec2f1-11.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho valoriza cultura e garante apoio a eventos na capital</div>
+    <div class="event-tag">ENTRETENIMENTO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50862/entretenimento-prefeitura-de-porto-velho-valoriza-cultura-e-garante-apoio-a-eventos-na-capital" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/09/3/17568334831568042617whatsapp-image-2019-09-09-at-112101.jpeg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho disponibiliza estrutura e atrações artísticas para o Festival da Vila Calderita</div>
+    <div class="event-tag">EVENTO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50790/evento-prefeitura-de-porto-velho-disponibiliza-estrutura-e-atracoes-artisticas-para-o-festival-da-vila-calderita" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/08/1756490073imagem-do-whatsapp-de-2025-07-28-as-09-04-44-4507565a.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura fomenta 19 eventos neste final de semana; confira a programação</div>
+    <div class="event-tag">MOVIMENTO CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50749/movimento-cultural-prefeitura-fomenta-19-eventos-neste-final-de-semana-confira-a-programacao" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/08/1755879123arraial-mercado-25-07-2025-foto-jose-carlos-1-2.jpeg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho apoia agenda cultural e comunitária no mês de agosto</div>
+    <div class="event-tag">AGENDA CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50616/agenda-cultural-prefeitura-de-porto-velho-apoia-agenda-cultural-e-comunitaria-no-mes-de-agosto" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/08/1755269399arraial-mercado-25-07-2025-foto-jose-carlos-1-1.jpeg" alt="Imagem do evento">
+    <div class="event-title">Circuito Junino de Porto Velho mantém o ritmo com apoio da Prefeitura</div>
+    <div class="event-tag">VALORIZAÇÃO DA CULTURA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50477/valorizacao-da-cultura-circuito-junino-de-porto-velho-mantem-o-ritmo-com-apoio-da-prefeitura" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/08/3/1754235737img-2790.JPG" alt="Imagem do evento">
+    <div class="event-title">Com apoio da Prefeitura, Marcha para Jesus reúne multidão em Porto Velho</div>
+    <div class="event-tag">FÉ</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50251/fe-com-apoio-da-prefeitura-marcha-para-jesus-reune-multidao-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/08/175405609717532781721716213547arraial-municipal-ana-flavia-venancio-240517-13-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Com apoio da Prefeitura, 11 arraiais animam o final de semana em várias regiões da capital</div>
+    <div class="event-tag">PROGRAMAÇÃO CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50216/programacao-cultural-com-apoio-da-prefeitura-11-arraiais-animam-o-final-de-semana-em-varias-regioes-da-capital" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/07/1753712510imagem-do-whatsapp-de-2025-07-28-as-090445-a26ec2f1.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura apoia arraiais e valoriza a cultura regional em diversos pontos da capital</div>
+    <div class="event-tag">RESGATE DAS TRADIÇÕES</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50128/resgate-das-tradicoes-prefeitura-apoia-arraiais-e-valoriza-a-cultura-regional-em-diversos-pontos-da-capital" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/07/1753709770arraial-mercado-25-07-2025-foto-jose-carlos.JPG" alt="Imagem do evento">
+    <div class="event-title">Alegria e tradição marcaram o Arraial do Mercado Cultural em Porto Velho</div>
+    <div class="event-tag">FESTA JULINA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50122/festa-julina-alegria-e-tradicao-marcaram-o-arraial-do-mercado-cultural-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/07/17533790601716213550arraial-municipal-ana-flavia-venancio-240517-8-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Arraial do Mercado Cultural começa nesta sexta-feira (25) com quadrilhas, shows e muita diversão</div>
+    <div class="event-tag">VALORIZAÇÃO REGIONAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50096/valorizacao-regional-arraial-do-mercado-cultural-comeca-nesta-sexta-feira-25-com-quadrilhas-shows-e-muita-diversao" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/07/17532781721716213547arraial-municipal-ana-flavia-venancio-240517-13.jpg" alt="Imagem do evento">
+    <div class="event-title">Arraial do Mercado Cultural acontece nos dias 25 e 26 de julho em Porto Velho</div>
+    <div class="event-tag">FESTA JULINA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/50058/festa-julina-arraial-do-mercado-cultural-acontece-nos-dias-25-e-26-de-julho-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/07/3/1752891386dia-do-servidor-saude-felipe-ribeiro-22-10-20-8.jpeg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho passa por processo de melhorias no atendimento à saúde do servidor</div>
+    <div class="event-tag">SAÚDE DO SERVIDOR</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49976/saude-do-servidor-prefeitura-de-porto-velho-passa-por-processo-de-melhorias-no-atendimento-a-saude-do-servidor" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/06/1750860987credito-luis-benedito-fundacao-itau-146.jpg" alt="Imagem do evento">
+    <div class="event-title">Evento apresenta dados de pesquisa inédita que revela hábitos culturais da população de Porto Velho</div>
+    <div class="event-tag">APOIO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49534/apoio-evento-apresenta-dados-de-pesquisa-inedita-que-revela-habitos-culturais-da-populacao-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/06/1750697705whatsapp-image-2025-06-23-at-124034.jpeg" alt="Imagem do evento">
+    <div class="event-title">Porto Velho recebe reitores das universidades federais da região Norte</div>
+    <div class="event-tag">APOIO INSTITUCIONAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49489/apoio-institucional-porto-velho-recebe-reitores-das-universidades-federais-da-regiao-norte" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/06/3/1750251458abertura-de-baile-municipal-wesley-pontes-04-02-23-711.jpg" alt="Imagem do evento">
+    <div class="event-title">Funcultural divulga resultado dos Projetos Selecionados em Chamamento Público com recursos da Lei Aldir Blanc</div>
+    <div class="event-tag">FOMENTO À CULTURA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49429/fomento-a-cultura-funcultural-divulga-resultado-dos-projetos-selecionados-em-chamamento-publico-com-recursos-da-lei-aldir-blanc" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/06/3/1750250464dsc01457.JPG" alt="Imagem do evento">
+    <div class="event-title">Feirantes de Porto Velho entram no clima das festas juninas e reforçam a venda de produtos típicos para esta época do ano</div>
+    <div class="event-tag">TRADIÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49427/tradicao-feirantes-de-porto-velho-entram-no-clima-das-festas-juninas-e-reforcam-a-venda-de-produtos-tipicos-para-esta-epoca-do-ano" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/06/3/17490478821686063407agenda-hildon-arraial-municipal-leandro-morais-50.jpg" alt="Imagem do evento">
+    <div class="event-title">III Arraial da Calderita acontece nos próximos dias 6 e 7 de junho</div>
+    <div class="event-tag">CIRCUITO JUNINO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49197/circuito-junino-iii-arraial-da-calderita-acontece-nos-proximos-dias-6-e-7-de-junho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/06/17491330901746640260teattro3.jpeg" alt="Imagem do evento">
+    <div class="event-title">Funcultural divulga lista de resultado das inscrições de Editais de Chamamento Público</div>
+    <div class="event-tag">FOMENTO À CULTURA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49218/fomento-a-cultura-funcultural-divulga-lista-de-resultado-das-inscricoes-de-editais-de-chamamento-publico" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/06/3/174905022417459336731743528079cult-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Funcultural publica resultado final de credenciamento de artistas e grupos culturais</div>
+    <div class="event-tag">CULTURA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49200/cultura-funcultural-publica-resultado-final-de-credenciamento-de-artistas-e-grupos-culturais" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/17485257771748098375mg-7777.jpg" alt="Imagem do evento">
+    <div class="event-title">Arraial Flor de Cacto acontece de 30 de maio a 8 de junho, na zona Sul de Porto Velho</div>
+    <div class="event-tag">CIRCUITO JUNINO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49089/circuito-junino-arraial-flor-de-cacto-acontece-de-30-de-maio-a-8-de-junho-na-zona-sul-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/3/1748356051whatsapp-image-2025-05-27-at-102136.jpeg" alt="Imagem do evento">
+    <div class="event-title">Vendedores ambulantes comemoram vendas no Arraiá da Prefs no Parque da Cidade</div>
+    <div class="event-tag">GERAÇÃO DE RENDA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/49032/geracao-de-renda-vendedores-ambulantes-comemoram-vendas-no-arraia-da-prefs-no-parque-da-cidade" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/3/1748269648img-9521.jpg" alt="Imagem do evento">
+    <div class="event-title">Cerca de 70 mil pessoas se encantaram com a primeira edição do Arraiá da Prefs no Parque da Cidade</div>
+    <div class="event-tag">O MAIOR DO NORTE</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48993/o-maior-do-norte-cerca-de-70-mil-pessoas-se-encantaram-com-a-primeira-edicao-do-arraia-da-prefs-no-parque-da-cidade" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/3/1748098375mg-7777.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho abre oficialmente o calendário junino no Parque da Cidade com o Arraiá da Prefs</div>
+    <div class="event-tag">SUCESSO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48980/sucesso-prefeitura-de-porto-velho-abre-oficialmente-o-calendario-junino-no-parque-da-cidade-com-o-arraia-da-prefs" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1747921948dsc09841.JPG" alt="Imagem do evento">
+    <div class="event-title">Quadrilhas se preparam para encantar no Arraiá da Prefs</div>
+    <div class="event-tag">FESTA JUNINA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48911/festa-junina-quadrilhas-se-preparam-para-encantar-no-arraia-da-prefs" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1747919940whatsapp-image-2025-05-21-at-160928.jpeg" alt="Imagem do evento">
+    <div class="event-title">Semusb prepara o Parque da Cidade para receber o público no Arraiá da Prefs</div>
+    <div class="event-tag">LIMPEZA NO PARQUE</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48903/limpeza-no-parque-semusb-prepara-o-parque-da-cidade-para-receber-o-publico-no-arraia-da-prefs" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1747846375whatsapp-image-2025-05-21-at-112154.jpeg" alt="Imagem do evento">
+    <div class="event-title">Bois-bumbás resgatam tradição e identidade cultural no Arraiá da Prefs</div>
+    <div class="event-tag">VIVA A CULTURA POPULAR</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48886/viva-a-cultura-popular-bois-bumbas-resgatam-tradicao-e-identidade-cultural-no-arraia-da-prefs" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1747837875whatsapp-image-2025-05-21-at-100804.jpeg" alt="Imagem do evento">
+    <div class="event-title">Valorização dos artistas locais marca o Arraiá da Prefs</div>
+    <div class="event-tag">CULTURA REGIONAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48879/cultura-regional-valorizacao-dos-artistas-locais-marca-o-arraia-da-prefs" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1747754032img-1138.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho inicia montagem da estrutura para a 1a edição do Arraiá da Prefs</div>
+    <div class="event-tag">FESTA JUNINA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48853/festa-junina-prefeitura-de-porto-velho-inicia-montagem-da-estrutura-para-a-1a-edicao-do-arraia-da-prefs" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1747663098coletiva-de-imprensa-arraia-da-prefs-leandro-morais-32-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho divulga a programação do evento que inicia na próxima sexta-feira (23)</div>
+    <div class="event-tag">ARRAIÁ DA PREFS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48813/arraia-da-prefs-prefeitura-de-porto-velho-divulga-a-programacao-do-evento-que-inicia-na-proxima-sexta-feira-23" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/3/1747659639059a9291-1024x683.jpg" alt="Imagem do evento">
+    <div class="event-title">Sucessos nacionais, Ju Marques e Forró do Muído prometem grandes shows em Porto Velho</div>
+    <div class="event-tag">ARRAIÁ DA PREFS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48781/arraia-da-prefs-sucessos-nacionais-ju-marques-e-forro-do-muido-prometem-grandes-shows-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/3/1747157308whatsapp-image-2025-05-13-at-132717.jpeg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura lança Arraiá da Prefs e divulga calendário junino</div>
+    <div class="event-tag">MAIOR DO NORTE</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48714/maior-do-norte-prefeitura-lanca-arraia-da-prefs-e-divulga-calendario-junino" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1746640260teattro3.jpeg" alt="Imagem do evento">
+    <div class="event-title">Divulgado edital para credenciamento de seleção de espaços, ambientes e iniciativas artístico-culturais</div>
+    <div class="event-tag">ALDIR BLANC</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48611/aldir-blanc-divulgado-edital-para-credenciamento-de-selecao-de-espacos-ambientes-e-iniciativas-artistico-culturais" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1746638111171992423817189878691687628177agenda-fabricio-jurado-abertura-flor-do-maracuja-leandro-morais-81.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho lança edital da Política Nacional Aldir Blanc para fomentar pontos de cultura</div>
+    <div class="event-tag">CULTURA VIVA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48604/cultura-viva-prefeitura-de-porto-velho-lanca-edital-da-politica-nacional-aldir-blanc-para-fomentar-pontos-de-cultura" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/1746636114mercado-cultural-wesley-pontes-24-01-25-21.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura altera edital para seleção de projetos que terão recursos do Ministério da Cultura</div>
+    <div class="event-tag">ERRATA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48597/errata-prefeitura-altera-edital-para-selecao-de-projetos-que-terao-recursos-do-ministerio-da-cultura" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/17466357201743085119agenda-hildon-arraial-municipal-leandro-morais-51-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho publica alterações no edital de chamamento público que deve premiar entidades culturais</div>
+    <div class="event-tag">ERRATA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48595/errata-prefeitura-de-porto-velho-publica-alteracoes-no-edital-de-chamamento-publico-que-deve-premiar-entidades-culturais" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/05/3/1746136048dsc07901-aprimorado-nr.jpg" alt="Imagem do evento">
+    <div class="event-title">Festival do Trabalhador celebra data com alegria e cultura</div>
+    <div class="event-tag">DIA DO TRABALHADOR</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48529/dia-do-trabalhador-festival-do-trabalhador-celebra-data-com-alegria-e-cultura" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/04/17459336731743528079cult.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura divulga edital para seleção de projetos culturais com apoio financeiro do Ministério da Cultura</div>
+    <div class="event-tag">ALDIR BLANC</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48487/aldir-blanc-prefeitura-divulga-edital-para-selecao-de-projetos-culturais-com-apoio-financeiro-do-ministerio-da-cultura" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/04/1745932751whatsapp-image-2025-04-29-at-091413.jpeg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura publica Edital de Chamamento Público com foco no desenvolvimento</div>
+    <div class="event-tag">PONTOS DE CULTURA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48485/pontos-de-cultura-prefeitura-publica-edital-de-chamamento-publico-com-foco-no-desenvolvimento" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/04/1744807894agenda-hildon-arraial-municipal-leandro-morais-24-2.jpg" alt="Imagem do evento">
+    <div class="event-title">Resgate da cultura de Porto Velho e valorização dos artistas regionais</div>
+    <div class="event-tag">ESPECIAL 100 DIAS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48310/especial-100-dias-resgate-da-cultura-de-porto-velho-e-valorizacao-dos-artistas-regionais" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/04/1744307163agenda-prefeito-cantata-de-natal-aluizio-ferreira-leandro-morais-6-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Inscrições para o credenciamento de artistas para eventos do Município encerram nesta sexta-feira (11)</div>
+    <div class="event-tag">CULTURA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/48211/cultura-inscricoes-para-o-credenciamento-de-artistas-para-eventos-do-municipio-encerram-nesta-sexta-feira-11" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/03/3/1743085119agenda-hildon-arraial-municipal-leandro-morais-51.jpg" alt="Imagem do evento">
+    <div class="event-title">Inscrições para o credenciamento de artistas para eventos da Funcultural são prorrogadas até dia 11 de abril</div>
+    <div class="event-tag">CALENDÁRIO CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47934/calendario-cultural-inscricoes-para-o-credenciamento-de-artistas-para-eventos-da-funcultural-sao-prorrogadas-ate-dia-11-de-abril" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/03/3/1742404383arte-no-entardecer-wesley-pontes-17-03-24-11.jpg" alt="Imagem do evento">
+    <div class="event-title">Inscrições para credenciamento de artistas em diversas áreas culturais seguem até o dia 26</div>
+    <div class="event-tag">VALORIZAÇÃO CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47773/valorizacao-cultural-inscricoes-para-credenciamento-de-artistas-em-diversas-areas-culturais-seguem-ate-o-dia-26" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/03/1741880398arte-no-entardecer-wesley-pontes-17-03-24-17.jpg" alt="Imagem do evento">
+    <div class="event-title">Estão abertas as inscrições para credenciamento de artistas em diversas áreas culturais em Porto Velho</div>
+    <div class="event-tag">VALORIZAÇÃO CULTURAL</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47675/valorizacao-cultural-estao-abertas-as-inscricoes-para-credenciamento-de-artistas-em-diversas-areas-culturais-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/03/1741354050banda-do-vai-quem-quer-2025-leandro-morais-141.jpg" alt="Imagem do evento">
+    <div class="event-title">Programação dos desfiles carnavalescos continua neste final de semana em Porto Velho</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47569/carnaval-2025-programacao-dos-desfiles-carnavalescos-continua-neste-final-de-semana-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/17406607921707144738pirarucu-do-madeira-ana-flavia-venancio-240204-29-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho divulga programação completa dos desfiles carnavalescos a partir desta quinta-feira (27)</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47487/carnaval-2025-prefeitura-de-porto-velho-divulga-programacao-completa-dos-desfiles-carnavalescos-a-partir-desta-quinta-feira-27" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/1740065748baile-municipal-abertura-wesley-pontes-15-02-23-11.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura inicia festas momescas com segurança e sucesso de público</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47393/carnaval-2025-prefeitura-inicia-festas-momescas-com-seguranca-e-sucesso-de-publico" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/1740065220curumim-folia-leandro-morais-19.jpg" alt="Imagem do evento">
+    <div class="event-title">Confira a programação dos blocos carnavalescos e alteração no itinerário dos ônibus para este final de semana</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47390/carnaval-2025-confira-a-programacao-dos-blocos-carnavalescos-e-alteracao-no-itinerario-dos-onibus-para-este-final-de-semana" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/1739969205img-1097.JPG" alt="Imagem do evento">
+    <div class="event-title">Grupos folclóricos retomam espaços públicos após Prefeitura revogar proibição de utilização</div>
+    <div class="event-tag">RESPEITO À CULTURA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47354/respeito-a-cultura-grupos-folcloricos-retomam-espacos-publicos-apos-prefeitura-revogar-proibicao-de-utilizacao" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/3/1739798360curumim-folia-leandro-morais-55.jpg" alt="Imagem do evento">
+    <div class="event-title">Curumim Folia leva alegria, música, fantasia e diversão para crianças no Mercado Cultural</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47309/carnaval-2025-curumim-folia-leva-alegria-musica-fantasia-e-diversao-para-criancas-no-mercado-cultural" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/1739720665baile-municipal-abertura-wesley-pontes-15-02-23-12-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Baile Municipal abre o carnaval de Porto Velho e anima foliões com muita marchinha</div>
+    <div class="event-tag">TRADIÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47304/tradicao-baile-municipal-abre-o-carnaval-de-porto-velho-e-anima-folioes-com-muita-marchinha" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/1739553878whatsapp-image-2025-02-14-at-131726.jpeg" alt="Imagem do evento">
+    <div class="event-title">Fantasias e adereços da Corte do Rei Momo são confeccionados por artistas de Porto Velho</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47281/carnaval-2025-fantasias-e-aderecos-da-corte-do-rei-momo-sao-confeccionados-por-artistas-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/173954001617389368161705935818abertura-carnaval-wesley-pontes-20-01-24-9-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Baile Municipal e Curumim Folia abrem oficialmente o período momesco em Porto Velho</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47261/carnaval-2025-baile-municipal-e-curumim-folia-abrem-oficialmente-o-periodo-momesco-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/3/1739459093whatsapp-image-2025-02-13-at-092655-1.jpeg" alt="Imagem do evento">
+    <div class="event-title">Rei Momo e Rainha falam da expectativa para o Baile Municipal de Porto Velho</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47249/carnaval-2025-rei-momo-e-rainha-falam-da-expectativa-para-o-baile-municipal-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/3/1739457652dsc05415.jpg" alt="Imagem do evento">
+    <div class="event-title">Mercado Cultural já está sendo decorado para o Baile Municipal, a abertura oficial do carnaval em Porto Velho</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47245/carnaval-2025-mercado-cultural-ja-esta-sendo-decorado-para-o-baile-municipal-a-abertura-oficial-do-carnaval-em-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/17389368161705935818abertura-carnaval-wesley-pontes-20-01-24-9-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Baile Municipal abre oficialmente os festejos carnavalescos em Porto Velho no dia 15 de fevereiro, no Mercado Cultural</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47137/carnaval-2025-baile-municipal-abre-oficialmente-os-festejos-carnavalescos-em-porto-velho-no-dia-15-de-fevereiro-no-mercado-cultural" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/1738612376curumim-folia-felipe-ribeiro-240211-00030.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura divulga relação dos nomes escolhidos para a Corte do Rei Momo, costura e decoração</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47058/carnaval-2025-prefeitura-divulga-relacao-dos-nomes-escolhidos-para-a-corte-do-rei-momo-costura-e-decoracao" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/02/3/1738594249projeto-lazer-wesley-pontes-02-02-25-30.jpg" alt="Imagem do evento">
+    <div class="event-title">Moradores do Morar Melhor recebem a 1a edição do projeto Vem com a Prefeitura</div>
+    <div class="event-tag">CIDADANIA</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/47037/cidadania-moradores-do-morar-melhor-recebem-a-1a-edicao-do-projeto-vem-com-a-prefeitura" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/01/3/1738075158whatsapp-image-2024-01-17-at-12-59-13.jpeg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho define estratégias para o período momesco</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/46940/carnaval-2025-prefeitura-de-porto-velho-define-estrategias-para-o-periodo-momesco" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/01/3/1737817848mercado-cultural-wesley-pontes-24-01-25-2.jpg" alt="Imagem do evento">
+    <div class="event-title">Show de fogos e apresentações musicais encerram comemorações do aniversário de Porto Velho</div>
+    <div class="event-tag">110 ANOS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/46913/110-anos-show-de-fogos-e-apresentacoes-musicais-encerram-comemoracoes-do-aniversario-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/01/3/17375531091707741767curumim-folia-felipe-ribeiro-240211-00030.jpg" alt="Imagem do evento">
+    <div class="event-title">Calendário Oficial do Carnaval 2025 é divulgado pela Prefeitura de Porto Velho</div>
+    <div class="event-tag">PROGRAMAÇÃO</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/46853/programacao-calendario-oficial-do-carnaval-2025-e-divulgado-pela-prefeitura-de-porto-velho" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/01/1737466453abertura-carnaval-wesley-pontes-20-01-24-26.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho lança edital para contratação de serviços especializados em decoração para o Baile Municipal</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/46835/carnaval-2025-prefeitura-de-porto-velho-lanca-edital-para-contratacao-de-servicos-especializados-em-decoracao-para-o-baile-municipal" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/01/3/17374712031672930133rei-momo.jpg" alt="Imagem do evento">
+    <div class="event-title">Chamamento público seleciona costureiro para confecção das fantasias da Corte do Rei Momo</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/46838/carnaval-2025-chamamento-publico-seleciona-costureiro-para-confeccao-das-fantasias-da-corte-do-rei-momo" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2025/01/3/1737402949abertura-de-baile-municipal-wesley-pontes-04-02-23-18.jpg" alt="Imagem do evento">
+    <div class="event-title">Prefeitura de Porto Velho abre inscrição para selecionar a Corte do Rei Momo</div>
+    <div class="event-tag">CARNAVAL 2025</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/46827/carnaval-2025-prefeitura-de-porto-velho-abre-inscricao-para-selecionar-a-corte-do-rei-momo" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+<div class="event-card">
+    <img src="/uploads/_thumbs/editor/capas/2024/12/1734970469banda-do-vai-quem-quer-leandro-morais-78-1-1.jpg" alt="Imagem do evento">
+    <div class="event-title">Município divulga regulamento para o carnaval de rua em 2025</div>
+    <div class="event-tag">NORMAS</div>
+    <div class="event-content">
+        <a href="https://funcultural.portovelho.ro.gov.br/artigo/46556/normas-municipio-divulga-regulamento-para-o-carnaval-de-rua-em-2025" target="_blank">Ver detalhes</a>
+    </div>
+</div>
+
+</div>
+
+</body>
+</html>

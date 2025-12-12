@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: raspar-eventos-culturais
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   scrape:
@@ -44,9 +44,24 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      # 3. EXECUTAR SCRAPER VIA DOCKER
-      - name: Rodar Scraper via Contêiner Docker
-        run: docker run --rm -v ${{ github.workspace }}:/app cultural-scraper
+      # 3. EXECUTAR SCRAPER VIA DOCKER COM RETRY
+      - name: Rodar Scraper via Contêiner Docker com retry
+        run: |
+          success=0
+          for i in 1 2 3; do
+            echo "Tentativa $i..."
+            if docker run --rm -v ${{ github.workspace }}:/app cultural-scraper; then
+              success=1
+              break
+            fi
+            echo "Falhou, tentando novamente..."
+            sleep 5
+          done
+
+          if [ "$success" -ne 1 ]; then
+            echo "Falha após 3 tentativas."
+            exit 1
+          fi
 
       # 4. COMMIT APENAS SE OS JSON ALTERARAM
       - name: Commit output only if changed
@@ -68,7 +83,7 @@ jobs:
           fi
 
           git commit -m "Atualiza eventos culturais via Action [skip ci]"
-          git push origin HEAD:main
+          git push --force-with-lease origin HEAD:main
 
           echo "has_docs=true" >> $GITHUB_OUTPUT
 
@@ -90,5 +105,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
-      
         uses: actions/deploy-pages@v4
