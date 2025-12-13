@@ -1,117 +1,161 @@
-/*
-    Arquivo de estilos principais do site.
-
-    Responsável por:
-    - Layout geral
-    - Estilização dos cards
-    - Responsividade
-    - Dark mode automático
-    - Animações suaves
-*/
-
-/* --------------------------- */
-/* Estilos gerais do documento */
-/* --------------------------- */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background: #f5f5f5;
-    color: #333;
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #121212;
+  color: #eee;
 }
 
-/* --------------------------- */
-/* Cabeçalho principal         */
-/* --------------------------- */
 header {
-    background: #4a148c;
-    color: white;
-    padding: 20px;
-    text-align: center;
+  background: linear-gradient(135deg, #311b92, #512da8);
+  color: white;
+  padding: 50px 20px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
 }
 
-/* --------------------------- */
-/* Caixa de busca              */
-/* --------------------------- */
+h1 {
+  margin: 0;
+  font-size: 38px;
+  font-weight: 700;
+}
+
+header p {
+  margin-top: 12px;
+  opacity: 0.95;
+  font-size: 17px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+/* Busca */
 .search-box {
-    margin: 20px auto;
-    max-width: 600px;
-    text-align: center;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .search-box input {
-    width: 90%;
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1px solid #444;
+  background: #1e1e1e;
+  color: #eee;
+  font-size: 16px;
+  outline: none;
+  transition: 0.2s;
 }
 
-/* --------------------------- */
-/* Título do mês               */
-/* --------------------------- */
-.month-title {
-    font-size: 26px;
-    margin: 40px 20px 10px;
-    color: #4a148c;
-    font-weight: bold;
+.search-box input:focus {
+  border-color: #7C4DFF;
+  box-shadow: 0 0 6px rgba(124,77,255,0.4);
 }
 
-/* --------------------------- */
-/* Card de evento              */
-/* --------------------------- */
-.event-card {
-    background: white;
-    margin: 15px;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-
-    /* Animação suave ao passar o mouse */
-    transition: transform .2s ease, box-shadow .2s ease;
+/* Cards */
+.card {
+  background: #1e1e1e;
+  padding: 25px;
+  margin-bottom: 30px;
+  border-radius: 14px;
+  border: 1px solid #333;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  transition: transform .15s ease, box-shadow .15s ease;
 }
 
-.event-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
 }
 
-/* Imagem do card */
-.event-card img {
-    max-width: 100%;
-    border-radius: 8px;
+.card h2 {
+  margin-top: 0;
+  color: #bb86fc;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-/* Título do evento */
-.event-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-top: 10px;
+.card ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 15px;
 }
 
-/* Tag do evento */
-.event-tag {
-    display: inline-block;
-    background: #e1bee7;
-    color: #4a148c;
-    padding: 4px 10px;
-    border-radius: 6px;
-    margin-top: 5px;
-    font-size: 14px;
+.card li {
+  margin: 12px 0;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #444;
 }
 
-/* Conteúdo do card */
-.event-content {
-    margin-top: 10px;
-    font-size: 15px;
-    line-height: 1.5;
+.card li:last-child {
+  border-bottom: none;
 }
 
-/* --------------------------- */
-/* Dark mode automático        */
-/* --------------------------- */
-@media (prefers-color-scheme: dark) {
-    body { background: #121212; color: #eee; }
-    .event-card { background: #1e1e1e; }
-    .month-title { color: #bb86fc; }
+.card a {
+  color: #82b1ff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.card a:hover {
+  text-decoration: underline;
+}
+
+/* Botões */
+.btns {
+  display: flex;
+  gap: 8px;
+}
+
+.open-btn {
+  background: #7C4DFF;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background .2s, transform .2s;
+}
+
+.copy-btn {
+  background: #00BCD4;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background .2s, transform .2s;
+}
+
+.open-btn:hover, .copy-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+/* Feedback de cópia */
+.copied {
+  background: #4caf50 !important;
+  color: white !important;
+}
+
+/* Rodapé */
+footer {
+  text-align: center;
+  padding: 25px;
+  margin-top: 40px;
+  color: #aaa;
+  font-size: 14px;
 }

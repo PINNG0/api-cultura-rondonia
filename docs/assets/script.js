@@ -1,24 +1,19 @@
-/*
-    Script principal do site.
+function copiar(url, btn) {
+  navigator.clipboard.writeText(url);
+  btn.classList.add("copied");
+  btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+  setTimeout(() => {
+    btn.classList.remove("copied");
+    btn.innerHTML = '<i class="fa-solid fa-copy"></i>';
+  }, 1200);
+}
 
-    Responsável por:
-    - Busca instantânea
-    - Filtragem de cards
-    - Interações leves de UX
-*/
+function filtrar() {
+  const termo = document.getElementById("busca").value.toLowerCase();
+  const itens = document.querySelectorAll("li");
 
-/* --------------------------- */
-/* Busca instantânea           */
-/* --------------------------- */
-
-document.addEventListener("input", () => {
-    const termo = document.getElementById("busca").value.toLowerCase();
-    const cards = document.querySelectorAll(".event-card");
-
-    cards.forEach(card => {
-        const texto = card.innerText.toLowerCase();
-
-        // Exibe ou oculta o card conforme o termo digitado
-        card.style.display = texto.includes(termo) ? "block" : "none";
-    });
-});
+  itens.forEach(li => {
+    const texto = li.innerText.toLowerCase();
+    li.style.display = texto.includes(termo) ? "flex" : "none";
+  });
+}
