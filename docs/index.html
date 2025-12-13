@@ -5,147 +5,192 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>API Cultura Rondônia</title>
 
-  <!-- Ícones -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- CSS externo -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="assets/style.css">
 </head>
 
 <body>
 
   <header>
-    <h1><i class="fa-solid fa-database"></i> API Cultura Rondônia</h1>
-    <p>Dados públicos atualizados automaticamente</p>
+    <div class="header-content">
+        <h1><i class="fa-solid fa-database"></i> API Cultura Rondônia</h1>
+        <p>Dados públicos atualizados automaticamente</p>
+    </div>
   </header>
 
   <div class="container">
 
-    <!-- Busca -->
-    <div class="search-box">
-      <input id="busca" type="text" placeholder="Buscar arquivos..." oninput="filtrar()">
+    <div class="search-container">
+        <div class="search-box-wrapper">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input id="busca" type="text" placeholder="Buscar arquivos..." oninput="filtrar()">
+        </div>
+        <button class="filter-btn">
+            <i class="fa-solid fa-filter"></i> Filtrar
+        </button>
     </div>
 
-    <!-- Arquivos principais -->
-    <div class="card">
-      <h2><i class="fa-solid fa-folder-open"></i> Arquivos principais</h2>
-      <ul>
-        <li>
-          <a href="api_output/eventos.json">eventos.json</a>
-          <div class="btns">
-            <button class="open-btn" onclick="window.open('api_output/eventos.json')">
-              <i class="fa-solid fa-up-right-from-square"></i>
-            </button>
-            <button class="copy-btn" onclick="copiar('api_output/eventos.json', this)">
-              <i class="fa-solid fa-copy"></i>
-            </button>
+    <div class="cards-grid">
+        
+        <div class="card">
+          <div class="card-header">
+              <h2><i class="fa-regular fa-folder-open"></i> Arquivos principais</h2>
           </div>
-        </li>
-
-        <li>
-          <a href="api_output/eventos_index.json">eventos_index.json</a>
-          <div class="btns">
-            <button class="open-btn" onclick="window.open('api_output/eventos_index.json')">
-              <i class="fa-solid fa-up-right-from-square"></i>
-            </button>
-            <button class="copy-btn" onclick="copiar('api_output/eventos_index.json', this)">
-              <i class="fa-solid fa-copy"></i>
-            </button>
+          <ul>
+            <li>
+              <div class="file-info">
+                  <i class="fa-solid fa-code"></i>
+                  <a href="api_output/eventos.json">eventos.json</a>
+              </div>
+              <div class="btns">
+                <button class="open-btn" onclick="window.open('api_output/eventos.json')">
+                  Abrir <i class="fa-solid fa-up-right-from-square"></i>
+                </button>
+                <button class="copy-btn" onclick="copiar('api_output/eventos.json', this)">
+                  Copiar <i class="fa-regular fa-copy"></i>
+                </button>
+              </div>
+            </li>
+    
+            <li>
+              <div class="file-info">
+                  <i class="fa-solid fa-code"></i>
+                  <a href="api_output/eventos_index.json">eventos_index.json</a>
+              </div>
+              <div class="btns">
+                <button class="open-btn" onclick="window.open('api_output/eventos_index.json')">
+                  Abrir <i class="fa-solid fa-up-right-from-square"></i>
+                </button>
+                <button class="copy-btn" onclick="copiar('api_output/eventos_index.json', this)">
+                  Copiar <i class="fa-regular fa-copy"></i>
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+    
+        <div class="card">
+          <div class="card-header">
+              <h2><i class="fa-regular fa-calendar"></i> Arquivos por ano</h2>
+              <select class="year-select">
+                  <option value="todos">Todos</option>
+                  <option value="2024">2024</option>
+                  <option value="2023">2023</option>
+                  <option value="antigos">Antigos</option>
+              </select>
           </div>
-        </li>
-      </ul>
-    </div>
+          
+          <ul>
+            <li>
+              <div class="file-info">
+                  <i class="fa-regular fa-calendar-days"></i>
+                  <a href="api_output/arquivo/eventos_de_2024.json">Eventos de 2024</a>
+              </div>
+              <div class="btns">
+                <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2024.json')">
+                  Abrir <i class="fa-solid fa-up-right-from-square"></i>
+                </button>
+                <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2024.json', this)">
+                  Copiar <i class="fa-regular fa-copy"></i>
+                </button>
+              </div>
+            </li>
 
-    <!-- Arquivos por ano -->
-    <div class="card">
-      <h2><i class="fa-solid fa-calendar"></i> Arquivos por ano</h2>
-      <ul>
+            <li>
+                <div class="file-info">
+                    <i class="fa-regular fa-calendar-days"></i>
+                    <a href="api_output/arquivo/eventos_de_2023.json">Eventos de 2023</a>
+                </div>
+                <div class="btns">
+                  <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2023.json')">
+                    Abrir <i class="fa-solid fa-up-right-from-square"></i>
+                  </button>
+                  <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2023.json', this)">
+                    Copiar <i class="fa-regular fa-copy"></i>
+                  </button>
+                </div>
+              </li>
 
-        <li>
-          <a href="api_output/arquivo/eventos_de_2024.json">Eventos de 2024</a>
-          <div class="btns">
-            <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2024.json')">
-              <i class="fa-solid fa-up-right-from-square"></i>
-            </button>
-            <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2024.json', this)">
-              <i class="fa-solid fa-copy"></i>
-            </button>
-          </div>
-        </li>
+            <li>
+                <div class="file-info">
+                    <i class="fa-regular fa-calendar-days"></i>
+                    <a href="api_output/arquivo/eventos_de_2022.json">Eventos de 2022</a>
+                </div>
+                <div class="btns">
+                  <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2022.json')">
+                    Abrir <i class="fa-solid fa-up-right-from-square"></i>
+                  </button>
+                  <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2022.json', this)">
+                    Copiar <i class="fa-regular fa-copy"></i>
+                  </button>
+                </div>
+              </li>
 
-        <li>
-          <a href="api_output/arquivo/eventos_de_2023.json">Eventos de 2023</a>
-          <div class="btns">
-            <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2023.json')">
-              <i class="fa-solid fa-up-right-from-square"></i>
-            </button>
-            <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2023.json', this)">
-              <i class="fa-solid fa-copy"></i>
-            </button>
-          </div>
-        </li>
+            <li>
+                <div class="file-info">
+                    <i class="fa-regular fa-calendar-days"></i>
+                    <a href="api_output/arquivo/eventos_de_2021.json">Eventos de 2021</a>
+                </div>
+                <div class="btns">
+                  <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2021.json')">
+                    Abrir <i class="fa-solid fa-up-right-from-square"></i>
+                  </button>
+                  <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2021.json', this)">
+                    Copiar <i class="fa-regular fa-copy"></i>
+                  </button>
+                </div>
+              </li>
 
-        <li>
-          <a href="api_output/arquivo/eventos_de_2022.json">Eventos de 2022</a>
-          <div class="btns">
-            <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2022.json')">
-              <i class="fa-solid fa-up-right-from-square"></i>
-            </button>
-            <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2022.json', this)">
-              <i class="fa-solid fa-copy"></i>
-            </button>
-          </div>
-        </li>
+            <li>
+                <div class="file-info">
+                    <i class="fa-regular fa-calendar-days"></i>
+                    <a href="api_output/arquivo/eventos_de_2020.json">Eventos de 2020</a>
+                </div>
+                <div class="btns">
+                  <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2020.json')">
+                    Abrir <i class="fa-solid fa-up-right-from-square"></i>
+                  </button>
+                  <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2020.json', this)">
+                    Copiar <i class="fa-regular fa-copy"></i>
+                  </button>
+                </div>
+              </li>
 
-        <li>
-          <a href="api_output/arquivo/eventos_de_2021.json">Eventos de 2021</a>
-          <div class="btns">
-            <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2021.json')">
-              <i class="fa-solid fa-up-right-from-square"></i>
-            </button>
-            <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2021.json', this)">
-              <i class="fa-solid fa-copy"></i>
-            </button>
-          </div>
-        </li>
+            <li>
+                <div class="file-info">
+                    <i class="fa-regular fa-calendar-days"></i>
+                    <a href="api_output/arquivo/eventos_de_2019.json">Eventos de 2019</a>
+                </div>
+                <div class="btns">
+                  <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2019.json')">
+                    Abrir <i class="fa-solid fa-up-right-from-square"></i>
+                  </button>
+                  <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2019.json', this)">
+                    Copiar <i class="fa-regular fa-copy"></i>
+                  </button>
+                </div>
+              </li>
 
-        <li>
-          <a href="api_output/arquivo/eventos_de_2020.json">Eventos de 2020</a>
-          <div class="btns">
-            <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2020.json')">
-              <i class="fa-solid fa-up-right-from-square"></i>
-            </button>
-            <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2020.json', this)">
-              <i class="fa-solid fa-copy"></i>
-            </button>
-          </div>
-        </li>
+            <li>
+                <div class="file-info">
+                    <i class="fa-regular fa-calendar-days"></i>
+                    <a href="api_output/arquivo/eventos_de_2018.json">Eventos de 2018</a>
+                </div>
+                <div class="btns">
+                  <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2018.json')">
+                    Abrir <i class="fa-solid fa-up-right-from-square"></i>
+                  </button>
+                  <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2018.json', this)">
+                    Copiar <i class="fa-regular fa-copy"></i>
+                  </button>
+                </div>
+              </li>
 
-        <li>
-          <a href="api_output/arquivo/eventos_de_2019.json">Eventos de 2019</a>
-          <div class="btns">
-            <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2019.json')">
-              <i class="fa-solid fa-up-right-from-square"></i>
-            </button>
-            <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2019.json', this)">
-              <i class="fa-solid fa-copy"></i>
-            </button>
-          </div>
-        </li>
-
-        <li>
-          <a href="api_output/arquivo/eventos_de_2018.json">Eventos de 2018</a>
-          <div class="btns">
-            <button class="open-btn" onclick="window.open('api_output/arquivo/eventos_de_2018.json')">
-              <i class="fa-solid fa-up-right-from-square"></i>
-            </button>
-            <button class="copy-btn" onclick="copiar('api_output/arquivo/eventos_de_2018.json', this)">
-              <i class="fa-solid fa-copy"></i>
-            </button>
-          </div>
-        </li>
-
-      </ul>
+          </ul>
+        </div>
     </div>
 
   </div>
@@ -154,11 +199,7 @@
     API Cultura Rondônia • Gerado automaticamente
   </footer>
 
-  <!-- JS externo -->
   <script src="assets/script.js"></script>
 
 </body>
 </html>
-<!-- rebuild: forçar atualização do GitHub Pages -->
-
-"<!-- rebuild -->" 
